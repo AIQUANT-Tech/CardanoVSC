@@ -1,0 +1,38 @@
+{
+  "name": "Plutus",
+  "scopeName": "source.plutus",
+  "fileTypes": ["plutus"],
+  "patterns": [
+    {
+      "begin": "\\{",
+      "end": "\\}",
+      "name": "meta.structure.key-value.plutus",
+      "patterns": [
+        {
+          "name": "keyword.key.plutus",
+          "match": "\\\"[a-zA-Z_][a-zA-Z0-9_]*\\\"(?=\\s*:)\\b"
+        },
+        {
+          "begin": ":\\s*",
+          "end": "(?=,|\\})",
+          "patterns": [
+            {
+              "name": "string.quoted.double.plutus",
+              "match": "\\\".*?\\\""
+            }
+          ]
+        },
+        {
+          "name": "punctuation.separator.key-value.plutus",
+          "match": ":"
+        },
+        {
+          "name": "punctuation.separator.comma.plutus",
+          "match": ","
+        }
+      ]
+    }
+  ],
+  "repository": {},
+  "uuid": "123e4567-e89b-12d3-a456-426614174002"
+}

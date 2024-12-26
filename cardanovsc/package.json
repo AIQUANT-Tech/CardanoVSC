@@ -21,6 +21,10 @@
       {
         "command": "cardanovsc.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "cardanovsc.get_block_details",
+        "title": "get_block_details"
       }
     ],
     "viewsContainers": {
@@ -41,6 +45,33 @@
           "name": ""
         }
       ]
+    },
+    "languages": [
+      {
+        "id": "plutus",
+        "extensions": [".plutus"]
+      }
+    ],
+    "grammars": [
+      {
+        "language": "plutus",
+        "scopeName": "source.plutus",
+        "path": "./syntaxes/plutus.tmLanguage.json"
+        
+      }
+    ],
+    "configurationDefaults": {
+      "editor.tokenColorCustomizations": {
+  "textMateRules": [
+    {
+      "scope": "meta.structure.key-value",
+      "settings": {
+        "foreground": "#9CDCFE",
+        "fontStyle": "bold"
+      }
+    }
+  ]
+}
     }
   },
   "scripts": {
