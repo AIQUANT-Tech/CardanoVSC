@@ -2,10 +2,7 @@
 import path from 'path';
 import * as fs from 'fs';
 import childprocess from 'child_process';
-<<<<<<< HEAD
 import { extensionCommand } from './registerCommand';
-=======
->>>>>>> 139087b9cb6d8c5a86d1313bb99924d204456cc3
 
 import * as vscode from 'vscode';
 class MyWebviewViewProvider implements vscode.WebviewViewProvider {
@@ -171,50 +168,8 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.commands.registerCommand('cardanovsc.helloWorld', () => {	
 		vscode.window.showInformationMessage('Hello World from CardanoVSC!');
 	}));
-<<<<<<< HEAD
 	new extensionCommand(context);
 
-=======
-	context.subscriptions.push(vscode.commands.registerCommand('cardanovsc.get_block_details', () => {	
-		// Retrieve the API key from the global state
-		// const config = vscode.workspace.getConfiguration('cardano');
-		// const apiKey = config.get<string>('apiKey');
-		const storedNetwork = extensionContext.globalState.get<string>('cardano.network');
-		const storedApiKey = extensionContext.globalState.get<string>('cardano.apiKey');
-		
-		if (!storedApiKey) {
-			vscode.window.showErrorMessage('API key not found! Please set your API key first.');
-			return;
-		}
-		
-		const apiKey = storedApiKey;
-
-		// Define the curl command with --apiKey as a custom header
-		const curlCommand = `curl -X GET "https://api.cardanoscan.io/api/v1/block/latest" --header "apiKey: ${apiKey}"`;
-
-		// Execute the curl command using child_process
-		childprocess.exec(curlCommand, (error, stdout, stderr) => {
-			if (error) {
-				vscode.window.showErrorMessage(`Error fetching block details: ${stderr || error.message}`);
-				return;
-			}
-
-			try {
-				// Parse the response and format it as JSON
-				const jsonResponse = JSON.parse(stdout); 
-				
-				const formattedJson = JSON.stringify(jsonResponse, null, 2); // Beautify JSON with 2-space indentation
-
-				// Show the formatted JSON in the Output panel
-				const outputChannel = vscode.window.createOutputChannel('Cardano API Response');
-				outputChannel.clear();
-				outputChannel.appendLine(formattedJson);
-				outputChannel.show();
-			} catch (parseError) {
-				vscode.window.showErrorMessage('Failed to parse API response as JSON.');
-			}});
-	}));
->>>>>>> 139087b9cb6d8c5a86d1313bb99924d204456cc3
 }
 
 
