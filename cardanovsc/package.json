@@ -24,7 +24,6 @@
       },
       {
         "command": "cardanovsc.get_block_details",
-<<<<<<< HEAD
         "title": "Get Block Details"
       },
       {
@@ -38,9 +37,7 @@
       {
         "command": "cardanovsc.get_pool_details",
         "title": "Get Pool Details"
-=======
-        "title": "get_block_details"
->>>>>>> 139087b9cb6d8c5a86d1313bb99924d204456cc3
+        
       }
     ],
     "viewsContainers": {
@@ -80,7 +77,6 @@
       "editor.tokenColorCustomizations": {
   "textMateRules": [
     {
-<<<<<<< HEAD
       "scope": "keyword.key",
       "settings": {
         "foreground": "#569CD6",
@@ -91,11 +87,6 @@
       "scope":"punctuation.separator",
       "settings": {
         "foreground": "#D4D4D4",
-=======
-      "scope": "meta.structure.key-value",
-      "settings": {
-        "foreground": "#9CDCFE",
->>>>>>> 139087b9cb6d8c5a86d1313bb99924d204456cc3
         "fontStyle": "bold"
       }
     }
