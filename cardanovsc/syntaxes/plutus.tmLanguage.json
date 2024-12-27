@@ -10,7 +10,11 @@
       "patterns": [
         {
           "name": "keyword.key.plutus",
+<<<<<<< HEAD
           "match": "\\\"[a-zA-Z_][a-zA-Z0-9_]*\\\"(?=\\s*:)"
+=======
+          "match": "\\\"[a-zA-Z_][a-zA-Z0-9_]*\\\"(?=\\s*:)\\b"
+>>>>>>> 139087b9cb6d8c5a86d1313bb99924d204456cc3
         },
         {
           "begin": ":\\s*",
@@ -18,7 +22,11 @@
           "patterns": [
             {
               "name": "string.quoted.double.plutus",
+<<<<<<< HEAD
               "match": "\\\"(?:\\\\.|[^\"])*\\\""
+=======
+              "match": "\\\".*?\\\""
+>>>>>>> 139087b9cb6d8c5a86d1313bb99924d204456cc3
             }
           ]
         },
@@ -29,6 +37,7 @@
         {
           "name": "punctuation.separator.comma.plutus",
           "match": ","
+<<<<<<< HEAD
         },
         {
           "name": "punctuation.definition.dictionary.begin.plutus",
@@ -37,6 +46,8 @@
         {
           "name": "punctuation.definition.dictionary.end.plutus",
           "match": "\\}"
+=======
+>>>>>>> 139087b9cb6d8c5a86d1313bb99924d204456cc3
         }
       ]
     }
