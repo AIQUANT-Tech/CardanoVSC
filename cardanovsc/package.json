@@ -21,6 +21,22 @@
       {
         "command": "cardanovsc.helloWorld",
         "title": "Hello World"
+      },
+      {
+        "command": "cardanovsc.get_block_details",
+        "title": "Get Block Details"
+      },
+      {
+        "command": "cardanovsc.get_latest_block_details",
+        "title": "Get Latest Block Details"
+      },
+      {
+        "command": "cardanovsc.get_address_balance",
+        "title": "Get Address Balance"
+      },
+      {
+        "command": "cardanovsc.get_pool_details",
+        "title": "Get Pool Details"
       }
     ],
     "viewsContainers": {
@@ -41,6 +57,40 @@
           "name": ""
         }
       ]
+    },
+    "languages": [
+      {
+        "id": "plutus",
+        "extensions": [".plutus"]
+      }
+    ],
+    "grammars": [
+      {
+        "language": "plutus",
+        "scopeName": "source.plutus",
+        "path": "./syntaxes/plutus.tmLanguage.json"
+        
+      }
+    ],
+    "configurationDefaults": {
+      "editor.tokenColorCustomizations": {
+  "textMateRules": [
+    {
+      "scope": "keyword.key",
+      "settings": {
+        "foreground": "#569CD6",
+        "fontStyle": "bold"
+      }
+    },
+    {
+      "scope":"punctuation.separator",
+      "settings": {
+        "foreground": "#D4D4D4",
+        "fontStyle": "bold"
+      }
+    }
+  ]
+}
     }
   },
   "scripts": {
