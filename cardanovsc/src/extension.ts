@@ -1,9 +1,4 @@
-
-import path from 'path';
-import * as fs from 'fs';
-import childprocess from 'child_process';
 import { extensionCommand } from './registerCommand';
-
 import * as vscode from 'vscode';
 class MyWebviewViewProvider implements vscode.WebviewViewProvider {
 	public static readonly viewType = 'cardanovsc.webview';

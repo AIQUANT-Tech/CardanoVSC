@@ -38,7 +38,98 @@
         "command": "cardanovsc.get_pool_details",
         "title": "Get Pool Details"
         
+      },
+      {
+        "command": "cardanovsc.get_pool_stats",
+        "title": "Get Pool Stats"
+      },
+      {
+        "command": "cardanovsc.get_pools_list",
+        "title": "Get Pools List"
+      },
+      {
+        "command": "cardanovsc.get_pools_expiring",
+        "title": "Get Pools Expiring"
+      },
+      {
+        "command": "cardanovsc.get_pools_expired",
+        "title": "Get Pools Expired"
+      },
+      {
+        "command": "cardanovsc.get_asset_details",
+        "title": "Get Asset Details"
+      },
+      {
+        "command": "cardanovsc.get_assets_by_policyId",
+        "title": "Get Assets by PolicyId"
+      },
+      {
+        "command": "cardanovsc.get_assets_by_address",
+        "title": "Get Assets by Address"
+      },
+      {
+        "command": "cardanovsc.get_transaction_details",
+        "title": "Get Transaction Details"
+      },
+      {
+        "command": "cardanovsc.get_transaction_list_by_address",
+        "title": "Get Transaction List by Address"
+      },
+      {
+        "command": "cardanovsc.get_stake_key_details",
+        "title": "Get Stake Key Details"
+      },
+      {
+        "command": "cardanovsc.get_governance_action",
+        "title": "Get Governance Action"
+      },
+      {
+        "command": "cardanovsc.get_dreps_list",
+        "title": "Get dReps List"
+      },
+      {
+        "command": "cardanovsc.get_drep_information",
+        "title": "Get dRep Information"
+      },
+      {
+        "command": "cardanovsc.get_committee_members",
+        "title": "Get Committee Members"
+      },
+      {
+        "command": "cardanovsc.get_committee_information",
+        "title": "Get Committee Information"
+      },
+      {
+        "command": "cardanovsc.get_cc_member_details",
+        "title": "Get CCMember Details"
+      },
+      {
+        "command": "cardanovsc.get_cc_hot_details",
+        "title": "Get CCHot Details"
+      },
+      {
+        "command": "cardanovsc.get_network_protocol_details",
+        "title": "Get Network Protocol Details"
+      },
+      {
+        "command": "cardanovsc.get_network_details",
+        "title": "Get Network Details"
+      },
+      {
+        "command": "cardanovsc.get_addresses_associated_with_stake_key",
+        "title": "Get Addresses Associated with Stake Key"
+      },
+      {
+        "command": "cardanovsc.get_stake_key_details",
+        "title": "Get Stake Key Details"
+      },
+      {
+        "command": "cardanovsc.get_transaction_list_by_address",
+        "title": "Get Transaction List by Address"
       }
+                                                                              
+      
+      
     ],
     "viewsContainers": {
      
