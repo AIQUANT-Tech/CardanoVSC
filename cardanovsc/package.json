@@ -3,6 +3,14 @@
   "displayName": "CardanoVSC",
   "description": "supports in cardano development",
   "version": "0.0.1",
+  "keywords": [
+    "CardanoVSC",
+    "cardanovsc",
+    "cardano",
+    "blockchain",
+    "haskell",
+    "plutus"    
+  ],
   "engines": {
     "vscode": "^1.96.0"
   },
@@ -10,6 +18,10 @@
     "Other"
   ],
   "icon": "media/icon1.png",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AIQUANT-Tech/CardanoVSC"
+  },
   "activationEvents": ["onLanguage:haskell"],
   "extensionDependencies": [
       "justusadam.language-haskell"
