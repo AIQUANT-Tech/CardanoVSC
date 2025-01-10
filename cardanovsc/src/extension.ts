@@ -1,5 +1,7 @@
 import { extensionCommand } from './registerCommand';
 import * as vscode from 'vscode';
+import { haskellProvider } from './completion';
+
 class MyWebviewViewProvider implements vscode.WebviewViewProvider {
 	public static readonly viewType = 'cardanovsc.webview';
   
@@ -22,12 +24,7 @@ class MyWebviewViewProvider implements vscode.WebviewViewProvider {
   
 	  webviewView.webview.onDidReceiveMessage(async (message) => {
 		switch (message.command) {
-		  case 'createWallet':
-			vscode.window.showInformationMessage('Creating wallet...');
-			
-			break;
-			
-  
+		   
 		  case 'apiIntegration':
 			
 			
@@ -108,9 +105,9 @@ class MyWebviewViewProvider implements vscode.WebviewViewProvider {
 			  padding: 10px;
 			  font-size: 16px;
 			  color: #fff;
-			  background-color: #007acc; /* Blue color */
+			  background-color: #385FFF; /* Blue color */
 			  border: none;
-			  border-radius: 5px;
+			  border-radius: 8px;
 			  width: 80%; /* Width for responsiveness */
 			  max-width: 250px;
 			  cursor: pointer;
@@ -131,17 +128,15 @@ class MyWebviewViewProvider implements vscode.WebviewViewProvider {
 		</head>
 		<body>
 		  
-		  <button id="createWalletButton">Create Wallet</button>
-		  <button id="apiIntegrationButton">API Integration</button>
-		  <div>CardanoScan <div>
-		   <button id="openCardanoScan">Go to website</button>
+		
+		  <button id="apiIntegrationButton">Cardano API Integration</button>
+		  
+		   <button id="openCardanoScan">Go to cardanoScan
+        Website </button>
 		  <script>
 			const vscode = acquireVsCodeApi();
 	
-			document.getElementById('createWalletButton').addEventListener('click', () => {
-			  vscode.postMessage({ command: 'createWallet' });
-			});
-	
+			
 			document.getElementById('apiIntegrationButton').addEventListener('click', () => {
 			  vscode.postMessage({ command: 'apiIntegration' });
 			});
@@ -163,6 +158,7 @@ export function activate(context: vscode.ExtensionContext) {
 	context.subscriptions.push(vscode.commands.registerCommand('cardanovsc.helloWorld', () => {	
 		vscode.window.showInformationMessage('Hello World from CardanoVSC!');
 	}));
+    context.subscriptions.push(haskellProvider);
 	new extensionCommand(context);
 
 }

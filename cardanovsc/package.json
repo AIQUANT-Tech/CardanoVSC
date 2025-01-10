@@ -10,7 +10,7 @@
     "Other"
   ],
   "icon": "media/icon1.png",
-  "activationEvents": [],
+  "activationEvents": ["onLanguage:haskell"],
   "extensionDependencies": [
       "justusadam.language-haskell"
     ]
@@ -147,6 +147,13 @@
         {
           "id": "plutus",
           "extensions": [".plutus"]
+        },
+        {
+          "id": "haskell",
+          "extensions": [
+            ".hs"
+          ]
+
         }
       ],
       "grammars": [
@@ -154,6 +161,12 @@
           "language": "plutus",
           "scopeName": "source.plutus",
           "path": "./syntaxes/plutus.tmLanguage.json"
+        }
+      ],
+      "snippets": [
+        {
+          "language": "haskell",
+          "path": "./snippets/haskell.json"
         }
       ],
       "configurationDefaults": {
