@@ -40,7 +40,7 @@ class MyWebviewViewProvider implements vscode.WebviewViewProvider {
 			  if (selectedNetwork) {
 				// Ask for API key once the network is selected
 				const apiKey = await vscode.window.showInputBox({
-				  prompt: 'Enter your Cardano API key',
+				  prompt: 'Enter your CardanoScan API key',
 				  ignoreFocusOut: true
 				});
 	
