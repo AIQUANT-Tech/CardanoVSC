@@ -3,6 +3,8 @@
   "displayName": "CardanoVSC",
   "description": "supports in cardano development",
   "version": "0.0.1",
+  "publisher": "AIQUANT-TECHNOLOGIES",
+  "license":"MIT",
   "keywords": [
     "CardanoVSC",
     "cardanovsc",
