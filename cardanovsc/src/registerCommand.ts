@@ -4,7 +4,7 @@ import * as childprocess from 'child_process';
 export class extensionCommand {
   private extensionContext: vscode.ExtensionContext;
   private outputChannel: vscode.OutputChannel;
-  private baseUrl: string = 'https://api.cardanoscan.io/api/v1'; // Base URL for API requests
+   baseUrl: string = 'https://api.cardanoscan.io/api/v1'; // Base URL for API requests
 
   constructor(context: vscode.ExtensionContext) {
     this.extensionContext = context;
@@ -12,7 +12,7 @@ export class extensionCommand {
     this.registerCommands();
   }
 
-  private registerCommands(): void {
+ private  registerCommands(): void {
     const commands = [
       { command: 'cardanovsc.get_block_details', callback: this.getBlockDetails.bind(this) },
       { command: 'cardanovsc.get_pool_details', callback: this.getPoolDetails.bind(this) },
@@ -46,16 +46,43 @@ export class extensionCommand {
     });
   }
 
-  private getApiKey(): string | null {
+  // public getApiKey(): string | null {
+  //   const storedApiKey = this.extensionContext.globalState.get<string>('cardano.apiKey');
+  //   if (!storedApiKey) {
+  //     vscode.window.showErrorMessage('API key not found! Please set up API integration first.');
+  //     return null;
+  //   }
+  //   return storedApiKey;
+  // }
+
+  public  getApiKey(): string | null {
     const storedApiKey = this.extensionContext.globalState.get<string>('cardano.apiKey');
+    
     if (!storedApiKey) {
-      vscode.window.showErrorMessage('API key not found! Please set up API integration first.');
-      return null;
+      // Notify the user and execute the API integration command
+      vscode.window.showErrorMessage(
+        'API key not found! Starting API integration setup...'
+      );
+  
+      // Execute the API integration command
+       vscode.commands.executeCommand('cardano.apiIntegration');
+  
+      // Check again after the command completes
+      const updatedApiKey = this.extensionContext.globalState.get<string>('cardano.apiKey');
+      
+      if (!updatedApiKey) {
+        vscode.window.showErrorMessage('API integration setup failed or was canceled.');
+        return null;
+      }
+  
+      return updatedApiKey;
     }
+  
     return storedApiKey;
   }
+  
 
-  private executeCurlCommand(apiUrl: string, apiKey: string, onSuccess: (response: any) => void): void {
+  public executeCurlCommand(apiUrl: string, apiKey: string, onSuccess: (response: any) => void): void {
     const curlCommand = `curl -X GET "${apiUrl}" --header "apiKey: ${apiKey}"`;
 
     childprocess.exec(curlCommand, (error, stdout, stderr) => {
@@ -73,7 +100,7 @@ export class extensionCommand {
     });
   }
 
-  private displayOutput(jsonResponse: any): void {
+  public displayOutput(jsonResponse: any): void {
     const formattedJson = JSON.stringify(jsonResponse, null, 2);
     this.outputChannel.clear();
     this.outputChannel.appendLine(formattedJson);
@@ -180,7 +207,7 @@ export class extensionCommand {
     });
   }
 
-  private getLatestBlockDetails(): void {
+  public getLatestBlockDetails(): void {
     const apiKey = this.getApiKey();
     if (!apiKey) {return;}
 

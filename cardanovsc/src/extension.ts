@@ -159,9 +159,50 @@ export function activate(context: vscode.ExtensionContext) {
 		vscode.window.showInformationMessage('Hello World from CardanoVSC!');
 	}));
     context.subscriptions.push(haskellProvider);
+	context.subscriptions.push(vscode.commands.registerCommand('cardano.apiIntegration', async () => {
+		vscode.window.showInformationMessage('API Integration started');
+	
+		try {
+		  // Show network selection
+		  const selectedNetwork = await vscode.window.showQuickPick(
+			['Mainnet', 'Preprod', 'Preview'],
+			{
+			  placeHolder: 'Select the network',
+			}
+		  );
+	
+		  if (!selectedNetwork) {
+			vscode.window.showErrorMessage('No network selected!');
+			return;
+		  }
+	
+		  // Ask for API key once the network is selected
+		  const apiKey = await vscode.window.showInputBox({
+			prompt: 'Enter your CardanoScan API key',
+			ignoreFocusOut: true,
+			validateInput: (value) =>
+			  value.trim().length === 0 ? 'API key cannot be empty' : null,
+		  });
+	
+		  if (!apiKey) {
+			vscode.window.showErrorMessage('API key is required!');
+			return;
+		  }
+	
+		  // Store the selected network and API key in globalState
+		  await context.globalState.update('cardano.network', selectedNetwork);
+		  await context.globalState.update('cardano.apiKey', apiKey);
+	
+		  // Confirmation message
+		  vscode.window.showInformationMessage(
+			`API integration successful! Network: ${selectedNetwork}, API Key saved.`
+		  );
+		} catch (error) {
+		  vscode.window.showErrorMessage(`An error occurred: ${error}`);
+		}
+	  }));
+	
 	new extensionCommand(context);
 
 }
-
-
 export function deactivate() {}

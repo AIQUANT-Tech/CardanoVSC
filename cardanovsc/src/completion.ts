@@ -117,6 +117,8 @@ export const haskellProvider = vscode.languages.registerCompletionItemProvider(
                 ];
                 keywords.forEach(keyword => {
                     const item = new vscode.CompletionItem(keyword, vscode.CompletionItemKind.Keyword);
+                    item.label=keyword;
+                    item.detail="haskell keyword";
                     completions.push(item);
                 });
     
@@ -238,7 +240,7 @@ export const haskellProvider = vscode.languages.registerCompletionItemProvider(
             return completions;
     }
 },
-'.'
+'.',' '
 
 
 );
