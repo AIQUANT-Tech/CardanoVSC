@@ -1,5 +1,7 @@
 import * as vscode from "vscode";
-
+import * as path from 'path';
+import * as glob from 'glob';
+import fs from 'fs';
 export const haskellProvider = vscode.languages.registerCompletionItemProvider(
   { language: "haskell", scheme: "file" },
   {
@@ -11,6 +13,79 @@ export const haskellProvider = vscode.languages.registerCompletionItemProvider(
     ): Promise<vscode.CompletionItem[]> {
       const completions: vscode.CompletionItem[] = [];
 
+          //module name after import or qualified
+          const workspaceFolders = vscode.workspace.workspaceFolders;
+          if (!workspaceFolders) {
+            return completions;
+        }
+        let linePrefix = document.lineAt(position).text.substr(0, position.character).trim();
+        
+        if (!linePrefix.startsWith('import') && !linePrefix.startsWith('import qualified')) {
+          // Only provide completion suggestions after 'import'
+            return completions;
+        }else{
+  
+        const rootPath = workspaceFolders[0].uri.fsPath;
+        const hsFiles = glob.sync(path.join(rootPath, '**', '*.hs')); // Search for .hs files in all folders
+  
+        hsFiles.forEach(file => {
+            const filePath = path.normalize(file);
+  
+            let moduleName = extractModuleName(filePath);
+  
+           
+            if (moduleName) {
+              const completionItem = new vscode.CompletionItem(moduleName, vscode.CompletionItemKind.Module);
+              completionItem.insertText = moduleName; // Insert the module name
+              completionItem.sortText = "0";
+              completionItem.detail = `Module: ${moduleName}`;
+              // Convert file path to a clickable link
+              const fileUri = vscode.Uri.file(filePath);
+              completionItem.documentation = new vscode.MarkdownString(`[Open File](${fileUri.toString()})`);
+          
+              completions.push(completionItem);
+          }
+          
+        });
+  
+        // Modules
+        const modules = [
+          "Caradano.Api",
+          "Data.List",
+          "Control.Monad",
+          "Prelude",
+          "Plutus.Contract",
+          "Plutus.V2.Ledger.Contexts",
+          "Data.Maybe",
+          "Data.Either",
+          "Control.Applicative",
+          "Data.Functor",
+          "Data.Tuple",
+          "Control.Concurrent",
+          "System.IO",
+          "Data.Text",
+          "Data.Map",
+          "Data.Set",
+          "Control.Monad.Trans",
+          "Control.Monad.State",
+          "Ledger.Value",
+          "Plutus.V2.Ledger.Api",
+          "Data.ByteString",
+          "PlutusTx.Builtins.Internal",
+        ];
+        modules.forEach((module) => {
+          const item = new vscode.CompletionItem(
+            module,
+            vscode.CompletionItemKind.Module
+          );
+          item.insertText=module;
+          item.detail = "Haskell Module";
+          item.sortText='1';
+          item.documentation = `Import the ${module} module into your Haskell file.`;
+          completions.push(item);
+        });
+  
+        }
       // Functions
       const functions = [
         {
@@ -55,39 +130,8 @@ export const haskellProvider = vscode.languages.registerCompletionItemProvider(
         completions.push(item);
       });
 
-      // Modules
-      const modules = [
-        "Data.List",
-        "Control.Monad",
-        "Prelude",
-        "Plutus.Contract",
-        "Plutus.V2.Ledger.Contexts",
-        "Data.Maybe",
-        "Data.Either",
-        "Control.Applicative",
-        "Data.Functor",
-        "Data.Tuple",
-        "Control.Concurrent",
-        "System.IO",
-        "Data.Text",
-        "Data.Map",
-        "Data.Set",
-        "Control.Monad.Trans",
-        "Control.Monad.State",
-        "Ledger.Value",
-        "Plutus.V2.Ledger.Api",
-        "Data.ByteString.Char8",
-        "PlutusTx.Builtins.Internal",
-      ];
-      modules.forEach((module) => {
-        const item = new vscode.CompletionItem(
-          module,
-          vscode.CompletionItemKind.Module
-        );
-        item.detail = "Haskell Module";
-        item.documentation = `Import the ${module} module into your Haskell file.`;
-        completions.push(item);
-      });
+  
+   
 
       // Pragmas
       const pragmas = [
@@ -108,6 +152,7 @@ export const haskellProvider = vscode.languages.registerCompletionItemProvider(
         "LANGUAGE TypeFamilies",
         "LANGUAGE MultiParamTypeClasses",
         "#-}",
+        "{-#",
         "Prelude",
       ];
       pragmas.forEach((pragma) => {
@@ -119,16 +164,10 @@ export const haskellProvider = vscode.languages.registerCompletionItemProvider(
         item.documentation = `Insert the ${pragma.trim()} pragma.`;
         item.insertText = pragma;
         completions.push(item);
-      });
+      });  
+    
 
-      // Add Closing Pragma
-      const closingPragma = new vscode.CompletionItem(
-        "#-}",
-        vscode.CompletionItemKind.Snippet
-      );
-      closingPragma.detail = "Close pragma";
-      closingPragma.insertText = "#-}";
-      completions.push(closingPragma);
+      
 
       // Keywords
       const keywords = [
@@ -387,6 +426,8 @@ export const haskellProvider = vscode.languages.registerCompletionItemProvider(
           vscode.CompletionItemKind.Keyword
         );
         item.label = keyword;
+        item.sortText='2';
+
         item.detail = "haskell keyword";
         completions.push(item);
       });
@@ -438,6 +479,8 @@ export const haskellProvider = vscode.languages.registerCompletionItemProvider(
           vscode.CompletionItemKind.Operator
         );
         item.detail = op.detail;
+        item.sortText='3';
+
         completions.push(item);
       });
 
@@ -582,3 +625,17 @@ export const haskellProvider = vscode.languages.registerCompletionItemProvider(
   ".",
   " "
 );
+
+// Function to extract the module name from the Haskell source file
+function extractModuleName(filePath: string) {
+  try {
+      const fileContent = fs.readFileSync(filePath, 'utf8');
+      const moduleMatch = fileContent.match(/^\s*module\s+([\w\.]+)\s*(?:where)?/m); 
+      if (moduleMatch && moduleMatch[1]) {
+          return moduleMatch[1]; // Return the module name
+      }
+  } catch (err) {
+      console.error(`Error reading file ${filePath}:`, err);
+  }
+  return null;
+}
