@@ -91,7 +91,10 @@ async function integrateCardanoAPI(
 // }
 function executeCurlCommand(apiUrl: string, apiKey: string|undefined): Promise<any> {
   return new Promise((resolve, reject) => {
-    const curlCommand = `curl -X GET "${apiUrl}" --header "apiKey: ${apiKey}"`;
+    const curlCommand = `curl -X GET "${apiUrl}" \
+  --header "apiKey: ${apiKey}" \
+  --header "Accept: application/json" \
+  --header "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"`;
 
     exec(curlCommand, (error, stdout, stderr) => {
       if (error) {
