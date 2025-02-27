@@ -4,21 +4,10 @@ import { exec } from "child_process";
 async function integrateCardanoAPI(
   vscode: any,
   extensionContext: vscode.ExtensionContext
-): Promise<boolean|undefined> {
+): Promise<boolean | undefined> {
   vscode.window.showInformationMessage("API integration");
 
   try {
-    // Ask the user to select a network
-    const selectedNetwork = await vscode.window.showQuickPick(
-      ["Mainnet", "Preprod", "Preview"],
-      { placeHolder: "Select the network" }
-    );
-
-    if (!selectedNetwork) {
-      vscode.window.showErrorMessage("No network selected!");
-      return false;
-    }
-
     // Ask the user to enter their API key
     const apiKey = await vscode.window.showInputBox({
       prompt: "Enter your CardanoScan API key",
@@ -32,8 +21,7 @@ async function integrateCardanoAPI(
     console.log("API key received");
 
     // Validate the API key by sending a test request via curl
-    const isValidApiKey = await validateApiKey(apiKey, selectedNetwork);
-    console.log("API key validation:", isValidApiKey);
+    const isValidApiKey = await validateApiKey(apiKey);
 
     if (!isValidApiKey) {
       vscode.window.showErrorMessage(
@@ -45,13 +33,12 @@ async function integrateCardanoAPI(
     // Only update globalState after API key is valid
 
     if (extensionContext && extensionContext.globalState) {
-      extensionContext.globalState.update("cardano.network", selectedNetwork);
       extensionContext.globalState.update("cardano.apiKey", apiKey);
       console.log("Global state updated");
 
       // Show confirmation message
       vscode.window.showInformationMessage(
-        `API integration selected for ${selectedNetwork} with API key: ${apiKey}`
+        'API integration successful!'
       );
     } else {
       console.error("GlobalState is not available in extensionContext");
@@ -66,7 +53,7 @@ async function integrateCardanoAPI(
 }
 
 
-function executeCurlCommand(apiUrl: string, apiKey: string|undefined): Promise<any> {
+function executeCurlCommand(apiUrl: string, apiKey: string | undefined): Promise<any> {
   return new Promise((resolve, reject) => {
     const curlCommand = `curl -X GET "${apiUrl}" \
   --header "apiKey: ${apiKey}" \
@@ -89,7 +76,7 @@ function executeCurlCommand(apiUrl: string, apiKey: string|undefined): Promise<a
 }
 
 
-async function validateApiKey(apiKey: string |undefined, network: string): Promise<boolean> {
+async function validateApiKey(apiKey: string): Promise<boolean> {
   const baseUrl = "https://api.cardanoscan.io/api/v1"; // Corrected base URL for the API
   const endpoint = `${baseUrl}/block/latest`; // Replace with actual endpoint for validation
 
@@ -102,13 +89,13 @@ async function validateApiKey(apiKey: string |undefined, network: string): Promi
       console.error("Unexpected response format");
       return false;
     }
-  } catch (error:any) {
+  } catch (error: any) {
     console.error(error.message);
     return false;
   }
 }
 
-export { integrateCardanoAPI ,validateApiKey};
+export { integrateCardanoAPI, validateApiKey };
 
 
 

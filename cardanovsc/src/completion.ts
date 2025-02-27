@@ -2,6 +2,7 @@ import * as vscode from "vscode";
 import * as path from 'path';
 import * as glob from 'glob';
 import fs from 'fs';
+import { log } from "console";
 export const haskellProvider = vscode.languages.registerCompletionItemProvider(
   { language: "haskell", scheme: "file" },
   {
@@ -13,41 +14,46 @@ export const haskellProvider = vscode.languages.registerCompletionItemProvider(
     ): Promise<vscode.CompletionItem[]> {
       const completions: vscode.CompletionItem[] = [];
 
-          //module name after import or qualified
-          const workspaceFolders = vscode.workspace.workspaceFolders;
-          if (!workspaceFolders) {
-            return completions;
-        }
-        let linePrefix = document.lineAt(position).text.substr(0, position.character).trim();
-        
-        if (!linePrefix.startsWith('import') && !linePrefix.startsWith('import qualified')) {
-          // Only provide completion suggestions after 'import'
-            return completions;
-        }else{
-  
+      //module name after import or qualified
+      const workspaceFolders = vscode.workspace.workspaceFolders;
+      if (!workspaceFolders) {
+        return completions;
+      }
+      let linePrefix = document.lineAt(position).text.substr(0, position.character).trim();
+      console.log(linePrefix);
+
+      if (!linePrefix.startsWith('import') && !linePrefix.startsWith('import qualified')) {
+        // Only provide completion suggestions after 'import'
+        return completions;
+      } else {
+
         const rootPath = workspaceFolders[0].uri.fsPath;
-        const hsFiles = glob.sync(path.join(rootPath, '**', '*.hs')); // Search for .hs files in all folders
-  
-        hsFiles.forEach(file => {
-            const filePath = path.normalize(file);
-  
-            let moduleName = extractModuleName(filePath);
-  
-           
-            if (moduleName) {
-              const completionItem = new vscode.CompletionItem(moduleName, vscode.CompletionItemKind.Module);
-              completionItem.insertText = moduleName; // Insert the module name
-              completionItem.sortText = "0";
-              completionItem.detail = `Module: ${moduleName}`;
-              // Convert file path to a clickable link
-              const fileUri = vscode.Uri.file(filePath);
-              completionItem.documentation = new vscode.MarkdownString(`[Open File](${fileUri.toString()})`);
-          
-              completions.push(completionItem);
+        // const hsFiles = glob.sync(path.join(rootPath, '/**/*.hs')); // Search for .hs files in all folders
+        const hsFiles = glob.sync("**/*.hs", { cwd: rootPath, absolute: true, windowsPathsNoEscape: true });
+
+        console.log("Found Haskell files:", hsFiles);
+        console.log(rootPath);
+
+        hsFiles.forEach((file: string) => {
+          const filePath = path.normalize(file);
+
+          let moduleName = extractModuleName(filePath);
+
+
+          if (moduleName) {
+            const completionItem = new vscode.CompletionItem(moduleName, vscode.CompletionItemKind.Module);
+            completionItem.insertText = moduleName; // Insert the module name
+            completionItem.sortText = "0";
+            completionItem.detail = `Module: ${moduleName}`;
+            // Convert file path to a clickable link
+            const fileUri = vscode.Uri.file(filePath);
+            completionItem.documentation = new vscode.MarkdownString(`[Open File](${fileUri.toString()})`);
+
+            completions.push(completionItem);
           }
-          
+
         });
-  
+
         // Modules
         const modules = [
           "Caradano.Api",
@@ -78,14 +84,14 @@ export const haskellProvider = vscode.languages.registerCompletionItemProvider(
             module,
             vscode.CompletionItemKind.Module
           );
-          item.insertText=module;
+          item.insertText = module;
           item.detail = "Haskell Module";
-          item.sortText='1';
+          item.sortText = '1';
           item.documentation = `Import the ${module} module into your Haskell file.`;
           completions.push(item);
         });
-  
-        }
+
+      }
       // Functions
       const functions = [
         {
@@ -130,8 +136,8 @@ export const haskellProvider = vscode.languages.registerCompletionItemProvider(
         completions.push(item);
       });
 
-  
-   
+
+
 
       // Pragmas
       const pragmas = [
@@ -164,10 +170,10 @@ export const haskellProvider = vscode.languages.registerCompletionItemProvider(
         item.documentation = `Insert the ${pragma.trim()} pragma.`;
         item.insertText = pragma;
         completions.push(item);
-      });  
-    
+      });
 
-      
+
+
 
       // Keywords
       const keywords = [
@@ -419,6 +425,8 @@ export const haskellProvider = vscode.languages.registerCompletionItemProvider(
         "xor",
         "zip3",
         "zip4",
+        "Num",
+        "foldl'"
       ];
       keywords.forEach((keyword) => {
         const item = new vscode.CompletionItem(
@@ -426,7 +434,7 @@ export const haskellProvider = vscode.languages.registerCompletionItemProvider(
           vscode.CompletionItemKind.Keyword
         );
         item.label = keyword;
-        item.sortText='2';
+        item.sortText = '2';
 
         item.detail = "haskell keyword";
         completions.push(item);
@@ -479,7 +487,7 @@ export const haskellProvider = vscode.languages.registerCompletionItemProvider(
           vscode.CompletionItemKind.Operator
         );
         item.detail = op.detail;
-        item.sortText='3';
+        item.sortText = '3';
 
         completions.push(item);
       });
@@ -629,13 +637,13 @@ export const haskellProvider = vscode.languages.registerCompletionItemProvider(
 // Function to extract the module name from the Haskell source file
 function extractModuleName(filePath: string) {
   try {
-      const fileContent = fs.readFileSync(filePath, 'utf8');
-      const moduleMatch = fileContent.match(/^\s*module\s+([\w\.]+)\s*(?:where)?/m); 
-      if (moduleMatch && moduleMatch[1]) {
-          return moduleMatch[1]; // Return the module name
-      }
+    const fileContent = fs.readFileSync(filePath, 'utf8');
+    const moduleMatch = fileContent.match(/^\s*module\s+([\w\.]+)\s*(?:where)?/m);
+    if (moduleMatch && moduleMatch[1]) {
+      return moduleMatch[1]; // Return the module name
+    }
   } catch (err) {
-      console.error(`Error reading file ${filePath}:`, err);
+    console.error(`Error reading file ${filePath}:`, err);
   }
   return null;
 }
