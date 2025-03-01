@@ -41,7 +41,6 @@ async function integrateCardanoAPI(
       );
       return true;
     }
-
     // Only update globalState after API key is valid
     console.log("hi");
 
@@ -67,28 +66,7 @@ async function integrateCardanoAPI(
 }
 
 
-// Function to execute a curl command
-// async function executeCurlCommand(
-//   apiUrl: string,
-//   apiKey: string,
-//   onSuccess: (response: any) => void
-// ): void {
-//   const curlCommand = `curl -X GET "${apiUrl}" --header "apiKey: ${apiKey}"`;
 
-//   exec(curlCommand, (error, stdout, stderr) => {
-//     if (error) {
-//       vscode.window.showErrorMessage(`Error: ${stderr || error.message}`);
-//       return;
-//     }
-
-//     try {
-//       const jsonResponse = JSON.parse(stdout);
-//       onSuccess(jsonResponse); // Callback upon success
-//     } catch (parseError) {
-//       vscode.window.showErrorMessage("Failed to parse API response as JSON.");
-//     }
-//   });
-// }
 function executeCurlCommand(apiUrl: string, apiKey: string|undefined): Promise<any> {
   return new Promise((resolve, reject) => {
     const curlCommand = `curl -X GET "${apiUrl}" --header "apiKey: ${apiKey}"`;
@@ -109,28 +87,7 @@ function executeCurlCommand(apiUrl: string, apiKey: string|undefined): Promise<a
 }
 
 
-// Function to validate the API key by sending a test request via curl
-// async function validateApiKey(
-//   apiKey: string,
-//   network: string
-// ): Promise<boolean> {
-//   const baseUrl = "https://api.cardanoscan.io/api/v1"; // Corrected base URL for the API
 
-//   // Construct the endpoint URL based on the network selection
-//   const endpoint = `${baseUrl}/block/latest`; // Replace with actual endpoint for validation
-
-//   return new Promise<boolean>((resolve, reject) => {
-//     executeCurlCommand(endpoint, apiKey, (response) => {
-//       if (response.hash) {
-//         console.log("Valid API key!");
-//         resolve(true);
-//       } else {
-//         console.error("Unexpected response format");
-//         resolve(false);
-//       }
-//     });
-//   });
-// }
 async function validateApiKey(apiKey: string |undefined, network: string): Promise<boolean> {
   const baseUrl = "https://api.cardanoscan.io/api/v1"; // Corrected base URL for the API
   const endpoint = `${baseUrl}/block/latest`; // Replace with actual endpoint for validation

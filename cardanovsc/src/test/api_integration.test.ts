@@ -1,12 +1,12 @@
 import * as vscode from "vscode";
 import * as sinon from "sinon";
-import * as dotenv from "dotenv";
+import  dotenv from "dotenv";
 dotenv.config(); // Load environment variables from .env
 
 import {
   integrateCardanoAPI,
   validateApiKey,
-} from "../config/cardanoApiIntegration";
+} from "../config/cardanoApiIntegration.js";
 
 import("chai").then((chai) => {
   const expect = chai.expect;

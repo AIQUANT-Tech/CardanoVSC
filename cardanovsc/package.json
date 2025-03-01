@@ -34,8 +34,9 @@
   "contributes": {
     "commands": [
       {
-        "command": "cardanovsc.helloWorld",
-        "title": "cardanovsc: Hello World"
+        "command": "select_plutus_file",
+        "title": "select plutus file",
+        "category": "contract_deployment"
       },
       {
         "command": "cardanovsc.get_block_details",
@@ -140,6 +141,14 @@
       {
         "command": "cardano.apiIntegration",
         "title": "cardanovsc: cardanoScan api integration"
+      },
+      {
+        "command": "cardanovsc.integrateCardanoNode",
+        "title": "cardanovsc: cardano node integration"
+      },
+      {
+        "command": "cardanovsc.switchNetwork",
+        "title": "cardanovsc: switch_existing _Network"
       }
     ],
     "viewsContainers": {
@@ -179,6 +188,11 @@
         "language": "plutus",
         "scopeName": "source.plutus",
         "path": "./syntaxes/plutus.tmLanguage.json"
+      },
+      {
+        "language": "haskell",
+        "path": "./syntaxes/haskell.tmLanguage.json",
+        "scopeName": "source.haskell"
       }
     ],
     "snippets": [
@@ -222,19 +236,23 @@
     "@types/node": "^20.17.14",
     "@types/sinon": "^17.0.3",
     "@types/vscode": "^1.96.0",
-    "@typescript-eslint/eslint-plugin": "^8.17.0",
-    "@typescript-eslint/parser": "^8.17.0",
+    "@typescript-eslint/eslint-plugin": "^8.25.0",
+    "@typescript-eslint/parser": "^8.25.0",
     "@vscode/test-cli": "^0.0.10",
     "@vscode/test-electron": "^2.4.1",
     "chai": "^5.1.2",
     "eslint": "^9.16.0",
     "mocha": "^11.0.1",
     "sinon": "^19.0.2",
-    "typescript": "^5.7.2",
+    "typescript": "5.7",
     "vscode-test": "^1.6.1"
   },
   "dependencies": {
+    "@blockfrost/blockfrost-js": "^5.7.0",
     "axios": "^1.7.9",
-    "dotenv": "^16.4.7"
+    "dotenv": "^16.4.7",
+    "lru-cache": "^11.0.2",
+    "lucid-cardano": "^0.10.11",
+    "uuid": "^11.0.5"
   }
 }

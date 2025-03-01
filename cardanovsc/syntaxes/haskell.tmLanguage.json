@@ -1,0 +1,72 @@
+{
+    "name": "haskell",
+    "scopeName": "source.haskell",
+    "fileTypes": ["hs"],
+    "patterns": [
+      {
+        "name": "comment.line.double-dash.haskell",
+        "match": "--.*$",
+        "comment": "Single-line comments in Haskell"
+      },
+      {
+        "name": "comment.block.haskell",
+        "begin": "\\{-",
+        "end": "-\\}",
+        "comment": "Multi-line comments in Haskell"
+      },
+      {
+        "name": "keyword.control.haskell",
+        "match": "\\b(if|as|then|else|case|of|let|in|where|do|module|import|data|type|newtype|class|instance|deriving|main)\\b",
+        "comment": "Haskell control keywords"
+      },
+      {
+        "name": "keyword.operator.haskell",
+        "match": "\\b(->|=>|::|\\|\\||&&|\\+|-|\\*|/|==|/=|<|>|<=|>=)\\b",
+        "comment": "Haskell operators"
+      },
+      {
+        "name": "storage.type.haskell",
+        "match": "\\b(Int|Integer|Bool|Char|String|Maybe|Either|IO|FilePath|BuiltinData)\\b",
+        "comment": "Haskell type names"
+      },
+      {
+        "name": "entity.name.function.haskell",
+        "match": "^(\\s*)([a-z][a-zA-Z0-9_']*)\\s*(?=\\(|::|\\s*=)",
+        "captures": {
+          "2": { "name": "entity.name.function.haskell" }
+        },
+        "comment": "Function name in definitions and type declarations"
+      },
+      {
+        "name": "variable.parameter.haskell",
+        "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b(?=\\s*=)",
+        "comment": "Function arguments in definitions"
+      },
+      {
+        "name": "variable.parameter.haskell",
+        "match": "\\b([A-Z][a-zA-Z]*)\\b(?=\\s*->)",
+        "comment": "Function arguments in type signatures"
+      },
+      {
+        "name": "variable.return-type.haskell",
+        "match": "\\b([A-Z][a-zA-Z]*)\\b(?=\\s*$)",
+        "comment": "Return type in type signature"
+      },
+      {
+        "name": "support.function.haskell",
+        "match": "\\b(putStrLn|show|createDirectoryIfMissing|takeDirectory|writeFileTextEnvelope|serialise|compile|validator)\\b",
+        "comment": "Built-in and commonly used functions"
+      },
+      {
+        "name": "support.module.haskell",
+        "match": "\\b([A-Z][a-zA-Z0-9]*(\\.[A-Z][a-zA-Z0-9]*)*)\\b",
+        "comment": "Haskell module names"
+      },
+      {
+        "name": "constant.numeric.haskell",
+        "match": "\\b\\d+(\\.\\d+)?\\b",
+        "comment": "Numeric literals"
+      }
+    ]
+  }
+  
