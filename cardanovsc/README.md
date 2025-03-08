@@ -1,5 +1,5 @@
 # ⚡ CardanoVSC 🚀
-
+[![Version](https://vsmarketplacebadges.dev/version/AIQUANT-TECHNOLOGIES.cardanovsc.svg)](https://marketplace.visualstudio.com/items?itemName=AIQUANT-TECHNOLOGIES.cardanovsc)  [![Downloads](https://vsmarketplacebadges.dev/downloads/AIQUANT-TECHNOLOGIES.cardanovsc.svg)]([https://marketplace.visualstudio.com/items?itemName=juanblanco.solidity](https://marketplace.visualstudio.com/items?itemName=AIQUANT-TECHNOLOGIES.cardanovsc)) [![Installs](https://vsmarketplacebadges.dev/installs/AIQUANT-TECHNOLOGIES.cardanovsc.svg)](https://marketplace.visualstudio.com/items?itemName=AIQUANT-TECHNOLOGIES.cardanovsc)
 ## ✨ Features
 
 CardanoVSC is a powerful Visual Studio Code extension that provides seamless support for Haskell and Plutus development. It is designed to enhance developer productivity by offering:
@@ -45,6 +45,8 @@ factorial n = n * factorial (n - 1)
 main :: IO ()
 main = print (factorial 5)
 ```
+Create a .env file on working directory and put your API key from cardanoscan\
+CARDANO_API_KEY=your_api_key_here 
 
 To run tests:
 ```sh
