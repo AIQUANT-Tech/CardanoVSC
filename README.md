@@ -1,5 +1,5 @@
 # ⚡ CardanoVSC 🚀
-
+[![Version](https://vsmarketplacebadges.dev/version/AIQUANT-TECHNOLOGIES.cardanovsc.svg)](https://marketplace.visualstudio.com/items?itemName=AIQUANT-TECHNOLOGIES.cardanovsc)  [![Downloads](https://vsmarketplacebadges.dev/downloads/AIQUANT-TECHNOLOGIES.cardanovsc.svg)]([https://marketplace.visualstudio.com/items?itemName=juanblanco.solidity](https://marketplace.visualstudio.com/items?itemName=AIQUANT-TECHNOLOGIES.cardanovsc)) [![Installs](https://vsmarketplacebadges.dev/installs/AIQUANT-TECHNOLOGIES.cardanovsc.svg)](https://marketplace.visualstudio.com/items?itemName=AIQUANT-TECHNOLOGIES.cardanovsc)
 ## ✨ Features
 
 CardanoVSC is a powerful Visual Studio Code extension that provides seamless support for Haskell and Plutus development. It is designed to enhance developer productivity by offering:
@@ -45,6 +45,8 @@ factorial n = n * factorial (n - 1)
 main :: IO ()
 main = print (factorial 5)
 ```
+Create a .env file on working directory and put your API key from cardanoscan\
+CARDANO_API_KEY=your_api_key_here 
 
 To run tests:
 ```sh
@@ -55,7 +57,7 @@ npm run test
 ### cardanovsc extension's sidebar webview
 The Webview in CardanoVSC provides a dedicated sidebar interface within Visual Studio Code, offering a centralized hub for blockchain api interactions , development tools .
 
-![webview](image-7.png)
+![webview](/cardanovsc/docs/cardanovsc_sidebar_webview.png)
 
 ### 📜 Commands
 CardanoVSC provides several commands to interact with the Cardano blockchain:
@@ -67,26 +69,26 @@ CardanoVSC provides several commands to interact with the Cardano blockchain:
 
 To access these commands, open the Command Palette (`Ctrl+Shift+P`), type `CardanoVSC`, and select the desired command.
 
-![command0](docs/cardanovsc_command.gif)
+![command0](/cardanovsc/docs/cardanovsc_command.gif)
 
-![command1](docs/cardanovsc_command.png)
+![command1](/cardanovsc/docs/cardanovsc_command.png)
 
 ## 🔗 API Integration
 CardanoVSC integrates with Cardano APIs using cardanoscan API keys. 
 CardanoVSC integrates with the Cardano API to provide real-time blockchain interaction directly within the IDE. Developers can fetch blockchain data, such as block details, transaction information, and wallet balances, without leaving Visual Studio Code. The API integration is powered by Cardanoscan API keys, ensuring secure and efficient access to Cardano blockchain data.
 
-![api](docs/api_integration.png)
+![api](/cardanovsc/docs/api_integration.png)
 ## 🔗 Auto Completion
 The Auto Completion feature in CardanoVSC enhances developer productivity by providing intelligent code suggestions as you type. It supports Haskell and Plutus syntax, offering context-aware recommendations for functions, variables, and modules. This feature reduces errors and speeds up coding by predicting and completing code snippets, making it easier to write complex smart contracts and blockchain-related logic.
 
-![auto_completion0](docs/cardanovsc_command.png)
+![auto_completion0](/cardanovsc/docs/cardanovsc_command.png)
 
-![auto_completion1](docs/cardanovsc_command.gif)
+![auto_completion1](/cardanovsc/docs/cardanovsc_command.gif)
 
 ## 🔗 syntax highlighting
 The Syntax Highlighting feature improves code readability by visually distinguishing different elements of Haskell and Plutus code. Keywords, functions, variables, and operators are color-coded, making it easier to identify and debug code. This feature is particularly useful for developers working on complex smart contracts, as it helps maintain clarity and structure in the codebase.
 
-![highlight](docs/syntax_highlight.png)
+![highlight](/cardanovsc/docs/syntax_highlight.png)
 
 ## 🤝 Contributing
 Contributions are welcome! Please open an issue or pull request on GitHub.
