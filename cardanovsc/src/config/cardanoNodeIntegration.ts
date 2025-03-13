@@ -96,6 +96,7 @@ export async function integrateCardanoNodeAPI(extensionContext: vscode.Extension
 
         // Store the selected network and API key in the global state
         await storeNetworkConfig(selectedNetwork, apiKey, extensionContext);
+        updateStatusBar(selectedNetwork); // Update status bar with selected network
 
         
 
@@ -134,7 +135,9 @@ export async function integrateCardanoNodeAPI(extensionContext: vscode.Extension
         reorderedConfigs.unshift(selectedConfig);
         await extensionContext.globalState.update('cardano.node', reorderedConfigs);
         new OpenWalletManagementWebview(extensionContext, _extensionUri).showCurrentNetworkStatus();
+        const firstConfig = getFirstNetworkConfig(extensionContext);
 
+        updateStatusBar(firstConfig?.network || "No Network");
         console.log(`🔄 Connected to ${network} `);
         return true;
       } else {
@@ -148,3 +151,34 @@ export async function integrateCardanoNodeAPI(extensionContext: vscode.Extension
     }
   }
   
+  export function registerNetworkCommand(context: vscode.ExtensionContext) {
+    context.subscriptions.push(vscode.commands.registerCommand('cardano.switchNetwork', async () => {
+      
+        const networks = await getNetworkConfigs(context);
+        const selectedNetwork = await vscode.window.showQuickPick(networks.map(n => n.network), {
+            placeHolder: "Select a network to switch"
+        });
+
+        if (selectedNetwork) {
+            await setNetwork(selectedNetwork, context, vscode.Uri.parse(""));
+        }
+    }));
+}
+let statusBarItem: vscode.StatusBarItem;
+
+function updateStatusBar(network: string) {
+  if (statusBarItem) {
+      statusBarItem.text = `$(plug) Cardano: ${network}`;
+  }
+}
+export function createStatusBarItem(extensionContext: vscode.ExtensionContext) {
+  statusBarItem = vscode.window.createStatusBarItem(vscode.StatusBarAlignment.Right, 100);
+  statusBarItem.command = 'cardano.switchNetwork';
+  statusBarItem.tooltip = "Click to switch Cardano network";
+  statusBarItem.show();
+
+  const firstConfig = getFirstNetworkConfig(extensionContext);
+  updateStatusBar(firstConfig?.network || "No Network");
+
+  extensionContext.subscriptions.push(statusBarItem);
+}

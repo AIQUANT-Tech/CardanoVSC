@@ -80,6 +80,7 @@ export class OpenWalletManagementWebview {
             }
             break;
             case "checkBalance":
+              
               firstConfig = getFirstNetworkConfig(this.context);
 
               if (!firstConfig) {
@@ -107,9 +108,11 @@ export class OpenWalletManagementWebview {
                 firstConfig.network,
                 firstConfig.apiKey
               );
+              this.panel.webview.html = await this._getWalletManagementHtml();
+              this.showCurrentNetworkStatus();
             } else {
               vscode.window.showErrorMessage(
-                "No seed found. Please tryb again."
+                "No seed found. Please try again."
               );
             }
 
@@ -361,6 +364,7 @@ export class OpenWalletManagementWebview {
           vscode.postMessage({ command: 'getSeedphrase' });
         });
         document.getElementById('checkBalance').addEventListener('click', () => {
+        
           vscode.postMessage({ command: 'checkBalance' });
         });
         document.getElementById('sendButton').addEventListener('click', () => {
@@ -441,13 +445,16 @@ export class OpenWalletManagementWebview {
       <button id="backButton" class="button back">Back</button>
       <button id="restoreButton" class="button" disabled>Restore Wallet</button>
      </div>
-      <script>
+     <script>
         const vscode = acquireVsCodeApi();
          document.querySelectorAll('input').forEach(input => {
           input.addEventListener('input', () => {
             document.getElementById('restoreButton').disabled = !allFieldsFilled();
           });
         });
+        function allFieldsFilled() {
+  return Array.from(document.querySelectorAll('input')).every(input => input.value.trim() !== '');
+}
         document.getElementById('restoreButton').addEventListener('click', () => {
           const seedPhrase = Array.from({ length: 24 }, (_, i) => document.getElementById('word' + (i + 1)).value.trim()).join(' ');
 
@@ -456,8 +463,9 @@ export class OpenWalletManagementWebview {
             return;
           }
 
-          vscode.postMessage({ command: 'restoreWallet', seedPhrase, network: "${selectedNetwork}" });
+         await vscode.postMessage({ command: 'restoreWallet', seedPhrase, network: "${selectedNetwork}" });
         });
+        
             document.getElementById('backButton').addEventListener('click', () => {
           vscode.postMessage({ command: 'home' });
         });
@@ -560,6 +568,4 @@ private _getSendTransactionHtml(selectedNetwork: string): string {
     </html>
   `;
 }
-
-
 }

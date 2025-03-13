@@ -149,7 +149,16 @@
       {
         "command": "cardanovsc.switchNetwork",
         "title": "cardanovsc: switch_existing _Network"
-      }
+      },
+      {
+        "command": "extension.runCardanoNode",
+        "title": "Run Cardano Node"
+    },
+    {
+      "command": "cardanoCli.start",
+      "title": "Run cardanoCli"
+  }
+      
     ],
     "viewsContainers": {
       "activitybar": [

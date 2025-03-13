@@ -3,8 +3,10 @@ import*as vscode from "vscode";
 //import { haskellProvider } from "./completion";
 import { integrateCardanoAPI } from "./config/cardanoApiIntegration";
 import { MyWebviewViewProvider } from "./webviewProvider.js";
-import {  integrateCardanoNodeAPI} from "./config/cardanoNodeIntegration";
+import {  createStatusBarItem, integrateCardanoNodeAPI, registerNetworkCommand} from "./config/cardanoNodeIntegration";
 import { selectFile } from "./implementation/deployment";
+import { startCardanoCli } from "./cardanoCli";
+import { deactivate, runCardanoNode } from "./runCardanoNode";
 
 
 export function activate(context: vscode.ExtensionContext,_extensionUri:vscode.Uri) {
@@ -16,7 +18,16 @@ export function activate(context: vscode.ExtensionContext,_extensionUri:vscode.U
           })
       );
   
-   
+    // status bar 
+        createStatusBarItem(context);
+        registerNetworkCommand(context);
+    ///node 
+    context.subscriptions.push( vscode.commands.registerCommand('cardanoCli.start', () => {
+      startCardanoCli(context);
+  }));
+    
+  context.subscriptions.push(vscode.commands.registerCommand('extension.runCardanoNode', runCardanoNode));
+
   context.subscriptions.push(
     vscode.window.registerWebviewViewProvider(
       MyWebviewViewProvider.viewType,
@@ -41,6 +52,4 @@ export function activate(context: vscode.ExtensionContext,_extensionUri:vscode.U
  selectFile(context);
   
 }
-export function deactivate() {
-
-}
+deactivate();

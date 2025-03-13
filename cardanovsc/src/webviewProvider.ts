@@ -187,7 +187,8 @@ export class MyWebviewViewProvider implements vscode.WebviewViewProvider {
           const valid = await integrateCardanoAPI(vscode, this.context);
           break;
           case "nodeIntegration":
-            console.log("hjs");
+            await integrateCardanoNodeAPI(this.context);
+
             break;
         case "openCardanoScan":
           vscode.env.openExternal(vscode.Uri.parse("https://cardanoscan.io/"));
@@ -246,6 +247,7 @@ export class MyWebviewViewProvider implements vscode.WebviewViewProvider {
         <button id="openCardanoScan">Go to CardanoScan Website</button>
         <button id="walletManagementButton">Wallet Management</button>
         <button id="nodeIntegrationButton">Cardano Node Connection</button>
+        <button id="deploySmartContract">Deploy Smart Contract</button>
 
         <script>
           const vscode = acquireVsCodeApi();
@@ -261,6 +263,9 @@ export class MyWebviewViewProvider implements vscode.WebviewViewProvider {
           document.getElementById('nodeIntegrationButton').addEventListener('click', () => {
             vscode.postMessage({ command: 'nodeIntegration' });
           });
+          document.getElementById('deploySmartContract').addEventListener('click',()=>{
+            
+          })
         </script>
       </body>
       </html>`;

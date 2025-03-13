@@ -86,15 +86,36 @@ export async function restoreWallet(seedPhrase: string,selectedNetwork: string, 
         // Select the wallet from the generated mnemonic
         lucid.selectWalletFromSeed(mnemonic);
         const address = await lucid.wallet.address();
-        // Create the wallet_details folder if it doesn't exist
-        const walletFolderPath = path.join(vscode.workspace.workspaceFolders?.[0].uri.fsPath || '', 'wallet_details',selectedNetwork);
-        if (!fs.existsSync(walletFolderPath)) {
-            fs.mkdirSync(walletFolderPath);
+        // // Create the wallet_details folder if it doesn't exist
+        // const walletFolderPath = path.join(vscode.workspace.workspaceFolders?.[0].uri.fsPath || '', 'wallet_details',selectedNetwork);
+        // if (!fs.existsSync(walletFolderPath)) {
+        //     fs.mkdirSync(walletFolderPath);
+        // }
+          
+         // Ensure workspace exists
+         if (!vscode.workspace.workspaceFolders || vscode.workspace.workspaceFolders.length === 0) {
+            vscode.window.showErrorMessage("No workspace folder is open. Please open a workspace before creating a wallet.");
+            return;
+        }
+
+        // Define folder paths
+        const workspacePath = vscode.workspace.workspaceFolders[0].uri.fsPath;
+        const walletBaseFolderPath = path.join(workspacePath, 'wallet_details');
+        const walletNetworkFolderPath = path.join(walletBaseFolderPath, selectedNetwork);
+
+        // Ensure 'wallet_details' folder exists
+        if (!fs.existsSync(walletBaseFolderPath)) {
+            fs.mkdirSync(walletBaseFolderPath);
+        }
+
+        // Ensure network-specific folder exists
+        if (!fs.existsSync(walletNetworkFolderPath)) {
+            fs.mkdirSync(walletNetworkFolderPath);
         }
 
         // Sanitize the address to use it as a filename
         const sanitizedAddress = address.replace(/[^a-zA-Z0-9]/g, "_");
-        const walletFilePath = path.join(walletFolderPath, `${sanitizedAddress}.txt`);
+        const walletFilePath = path.join(walletNetworkFolderPath, `${sanitizedAddress}.txt`);
 
         // Prepare wallet data including the network
         const walletData = `Address: ${address}\nNetwork: ${selectedNetwork}\nEncrypted Seed: ${encryptedMnemonic}`;
@@ -213,8 +234,7 @@ export async function createWallet(selectedNetwork: string, apiKey: string): Pro
         fs.writeFileSync(walletFilePath, walletData, { encoding: 'utf-8' });
 
         vscode.window.showInformationMessage(`Wallet created successfully on ${selectedNetwork}! Address: ${address}. Wallet file saved in: wallet_details/${selectedNetwork}/${sanitizedAddress}.txt`);
-        console.log(`Wallet created successfully! Address: ${address}`);
-        console.log(`Mnemonic (for development): ${mnemonic}`); // Remove this in production.
+       
         
         return mnemonic;
     } catch (error: any) {
@@ -308,7 +328,7 @@ export async function sendTransaction(senderAddress:string,recipientAddress:stri
 
         const lucid = await initializeLucid(selectedNetwork, apiKey);
         lucid.selectWalletFromSeed(mnemonic);
-
+          
         const tx = await lucid.newTx()
             .payToAddress(recipientAddress, { lovelace: BigInt(Number(amount) * 1_000_000) })
             .complete();
