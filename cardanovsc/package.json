@@ -234,7 +234,7 @@
     "vscode-test": "^1.6.1"
   },
   "dependencies": {
-    "axios": "^1.7.9",
+    "axios": "^1.8.2",
     "dotenv": "^16.4.7",
     "fs": "^0.0.1-security",
     "glob": "^11.0.1",
