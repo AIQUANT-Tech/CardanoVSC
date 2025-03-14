@@ -54,47 +54,47 @@ npm run test
 ```
 ## FOLDER STRUCTURE
 
-── CardanoVSC
-    ├── cardanovsc
-    │   ├── CHANGELOG.md
-    │   ├── docs
-    │   │   ├── api_integration.png
-    │   │   ├── auto_completion.gif
-    │   │   ├── auto_completion.png
-    │   │   ├── cardanovsc_command.gif
-    │   │   ├── cardanovsc_command.png
-    │   │   ├── cardanovsc_sidebar_webview.png
-    │   │   └── syntax_highlight.png
-    │   ├── eslint.config.mjs
-    │   ├── License
-    │   ├── media
-    │   │   ├── icon1.png
-    │   │   └── icon1.svg
-    │   ├── package.json
-    │   ├── package-lock.json
-    │   ├── README.md
-    │   ├── snippets
-    │   │   └── haskell.json
-    │   ├── src
-    │   │   ├── completion.ts
-    │   │   ├── config
-    │   │   │   └── cardanoApiIntegration.ts
-    │   │   ├── extension.ts
-    │   │   ├── registerCommand.ts
-    │   │   ├── test
-    │   │   │   ├── api_integration.test.ts
-    │   │   │   ├── extension.test.ts
-    │   │   │   ├── h_completion.test.ts
-    │   │   │   └── s_highlight.test.ts
-    │   │   └── webviewProvider.ts
-    │   ├── syntaxes
-    │   │   └── plutus.tmLanguage.json
-    │   ├── tsconfig.json
-    │   └── vsc-extension-quickstart.md
-    ├── DesignDocs
-    │   ├── CardanoVSC-Scope_Design_Document.pdf
-    │   └── Postman_CardanoVSC_CardanoscanAPI.json
-    ├── LICENSE
+── CardanoVSC\
+    ├── cardanovsc\
+    │   ├── CHANGELOG.md\
+    │   ├── docs\
+    │   │   ├── api_integration.png\
+    │   │   ├── auto_completion.gif\
+    │   │   ├── auto_completion.png\
+    │   │   ├── cardanovsc_command.gif\
+    │   │   ├── cardanovsc_command.png\
+    │   │   ├── cardanovsc_sidebar_webview.png\
+    │   │   └── syntax_highlight.png\
+    │   ├── eslint.config.mjs\
+    │   ├── License\
+    │   ├── media\
+    │   │   ├── icon1.png\
+    │   │   └── icon1.svg\
+    │   ├── package.json\
+    │   ├── package-lock.json\
+    │   ├── README.md\
+    │   ├── snippets\
+    │   │   └── haskell.json\
+    │   ├── src\
+    │   │   ├── completion.ts\
+    │   │   ├── config\
+    │   │   │   └── cardanoApiIntegration.ts\
+    │   │   ├── extension.ts\
+    │   │   ├── registerCommand.ts\
+    │   │   ├── test\
+    │   │   │   ├── api_integration.test.ts\
+    │   │   │   ├── extension.test.ts\
+    │   │   │   ├── h_completion.test.ts\
+    │   │   │   └── s_highlight.test.ts\
+    │   │   └── webviewProvider.ts\
+    │   ├── syntaxes\
+    │   │   └── plutus.tmLanguage.json\
+    │   ├── tsconfig.json\
+    │   └── vsc-extension-quickstart.md\
+    ├── DesignDocs\
+    │   ├── CardanoVSC-Scope_Design_Document.pdf\
+    │   └── Postman_CardanoVSC_CardanoscanAPI.json\
+    ├── LICENSE\
     └── README.md
 
 
