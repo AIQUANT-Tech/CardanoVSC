@@ -58,7 +58,7 @@ npm run test
 The Webview in CardanoVSC provides a dedicated sidebar interface within Visual Studio Code, offering a centralized hub for blockchain api interactions , development tools.
 
 
-[![cardanovsc-sidebar-webview.png](https://i.postimg.cc/9XL20Gms/cardanovsc-sidebar-webview.png)](https://postimg.cc/SjY3tYzG)
+[cardanovsc-sidebar-webview.png](https://i.postimg.cc/9XL20Gms/cardanovsc-sidebar-webview.png)](https://postimg.cc/SjY3tYzG)
 
 
 ### 📜 Commands
