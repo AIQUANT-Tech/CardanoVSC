@@ -58,7 +58,7 @@ npm run test
 The Webview in CardanoVSC provides a dedicated sidebar interface within Visual Studio Code, offering a centralized hub for blockchain api interactions , development tools.
 
 
-![webview](https://github.com/AIQUANT-Tech/CardanoVSC/blob/main/.github/images/cardanovsc_sidebar_webview.png)
+![webview](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/.github/images/cardanovsc_sidebar_webview.png)
 
 
 ### 📜 Commands
@@ -71,26 +71,26 @@ CardanoVSC provides several commands to interact with the Cardano blockchain:
 
 To access these commands, open the Command Palette (`Ctrl+Shift+P`), type `CardanoVSC`, and select the desired command.
 
-![command0](https://github.com/AIQUANT-Tech/CardanoVSC/blob/ac7b7b1202ec9050f6e6b355d81c4ef0b9dddffa/.github/images/cardanovsc_command.gif)
+![command0](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/.github/images/cardanovsc_command.gif)
 
-![command1](https://github.com/AIQUANT-Tech/CardanoVSC/blob/ac7b7b1202ec9050f6e6b355d81c4ef0b9dddffa/.github/images/cardanovsc_command.png)
+![command1](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/.github/images/cardanovsc_command.png)
 
 ## 🔗 API Integration
 CardanoVSC integrates with Cardano APIs using cardanoscan API keys. 
 CardanoVSC integrates with the Cardano API to provide real-time blockchain interaction directly within the IDE. Developers can fetch blockchain data, such as block details, transaction information, and wallet balances, without leaving Visual Studio Code. The API integration is powered by Cardanoscan API keys, ensuring secure and efficient access to Cardano blockchain data.
 
-![api](https://github.com/AIQUANT-Tech/CardanoVSC/blob/ac7b7b1202ec9050f6e6b355d81c4ef0b9dddffa/.github/images/api_integration.png)
+![api](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/.github/images/api_integration.png)
 ## 🔗 Auto Completion
 The Auto Completion feature in CardanoVSC enhances developer productivity by providing intelligent code suggestions as you type. It supports Haskell and Plutus syntax, offering context-aware recommendations for functions, variables, and modules. This feature reduces errors and speeds up coding by predicting and completing code snippets, making it easier to write complex smart contracts and blockchain-related logic.
 
-![auto_completion0](https://github.com/AIQUANT-Tech/CardanoVSC/blob/ac7b7b1202ec9050f6e6b355d81c4ef0b9dddffa/.github/images/auto_completion.gif)
+![auto_completion0](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/.github/images/auto_completion.gif)
 
-![auto_completion1](https://github.com/AIQUANT-Tech/CardanoVSC/blob/ac7b7b1202ec9050f6e6b355d81c4ef0b9dddffa/.github/images/auto_completion.png)
+![auto_completion1](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/.github/images/auto_completion.png)
 
 ## 🔗 syntax highlighting
 The Syntax Highlighting feature improves code readability by visually distinguishing different elements of Haskell and Plutus code. Keywords, functions, variables, and operators are color-coded, making it easier to identify and debug code. This feature is particularly useful for developers working on complex smart contracts, as it helps maintain clarity and structure in the codebase.
 
-![highlight](https://github.com/AIQUANT-Tech/CardanoVSC/blob/ac7b7b1202ec9050f6e6b355d81c4ef0b9dddffa/.github/images/syntax_highlight.png)
+![highlight](https://github.com/AIQUANT-Tech/CardanoVSC/blob/main/.github/images/syntax_highlight.png?raw=true)
 
 ## 🤝 Contributing
 Contributions are welcome! Please open an issue or pull request on GitHub.
