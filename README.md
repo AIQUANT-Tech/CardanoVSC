@@ -126,9 +126,9 @@ CardanoVSC integrates with the Cardano API to provide real-time blockchain inter
 ## 🔗 Auto Completion
 The Auto Completion feature in CardanoVSC enhances developer productivity by providing intelligent code suggestions as you type. It supports Haskell and Plutus syntax, offering context-aware recommendations for functions, variables, and modules. This feature reduces errors and speeds up coding by predicting and completing code snippets, making it easier to write complex smart contracts and blockchain-related logic.
 
-![auto_completion0](/cardanovsc/docs/cardanovsc_command.png)
+![auto_completion0](/cardanovsc/docs/auto_completion.png)
 
-![auto_completion1](/cardanovsc/docs/cardanovsc_command.gif)
+![auto_completion1](/cardanovsc/docs/auto_completion.gif)
 
 ## 🔗 syntax highlighting
 The Syntax Highlighting feature improves code readability by visually distinguishing different elements of Haskell and Plutus code. Keywords, functions, variables, and operators are color-coded, making it easier to identify and debug code. This feature is particularly useful for developers working on complex smart contracts, as it helps maintain clarity and structure in the codebase.
