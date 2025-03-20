@@ -1,0 +1,127 @@
+{
+  "scopeName": "source.haskell",
+  "patterns": [
+    {
+      "name": "keyword.haskell",
+      "match": "\\b(module|import|as|where)\\b"
+    },
+    {
+      "name": "support.class.haskell",
+      "match": "(?<=\\b(module|import|import qualified|as)\\s+)([A-Z][a-zA-Z0-9_]*(?:\\.[A-Z][a-zA-Z0-9_]*)*)\\b"
+    },
+    {
+      "name": "entity.name.function.haskell",
+      "match": "(?<!\\.)\\b[a-z_][a-zA-Z0-9_]*\\b(?=\\s*::)"
+    },
+    {
+      "name": "entity.name.function.haskell",
+      "match": "^(?!\\s)([a-z_][a-zA-Z0-9_]*)\\s+(?=[^=]*=)"
+    },
+    {
+      "name": "entity.name.type.haskell",
+      "match": "\\b[A-Z][a-zA-Z0-9_]*\\b(?=\\s*\\()"
+    },
+    {
+      "name": "variable.parameter.haskell",
+      "match": "\\b[a-z_][a-zA-Z0-9_]*\\b(?=\\s*->)"
+    },
+    {
+      "name": "variable.other.readwrite.alias.haskell",
+      "match": "(?<=\\bas\\s+)[A-Z][a-zA-Z0-9_]*"
+    },
+    {
+      "name": "meta.module.identifier.haskell",
+      "match": "\\b[A-Z][a-zA-Z0-9_]*(?:\\.[A-Z][a-zA-Z0-9_]*)*\\b(?=\\s+where)"
+    },
+    {
+      "name": "support.module.alias.haskell",
+      "match": "\\bimport\\s+(qualified\\s+)?[A-Z][a-zA-Z0-9_]*\\s+as\\s+[A-Z][a-zA-Z0-9_]*"
+    },
+    {
+      "name": "support.function.module.haskell",
+      "match": "\\.[a-z_][a-zA-Z0-9_]*\\b"
+    },
+    {
+      "name": "support.constant.haskell",
+      "match": "\\b(PlutusScriptV2|PlutusScript|LANGUAGE)\\b"
+    },
+    {
+      "name": "entity.name.function.haskell",
+      "match": "(?<=\\b(module|import)\\s*\\()\\s*([a-z_][a-zA-Z0-9_]*(?:\\s*,\\s*[a-z_][a-zA-Z0-9_]*)*)\\s*(?=\\))"
+    },
+    {
+      "name": "comment.line.double-dash.haskell",
+      "match": "--.*"
+    },
+    {
+      "name": "comment.block.haskell",
+      "match": "\\{-[\\s\\S]*?-\\}"
+    },
+   
+    {
+      "name": "support.variable.haskell",
+      "match": "(?<=\\b[a-z_][a-zA-Z0-9_]*\\s+)([a-z_][a-zA-Z0-9_]*)"
+    },
+    {
+      "name": "entity.name.function.call.haskell",
+      "match": "\\b([a-z_][a-zA-Z0-9_]*)\\b(?=\\s+[^\\s]+)"
+    },
+    {
+      "name": "variable.parameter.function.call.haskell",
+      "match": "(?<=\\b[a-z_][a-zA-Z0-9_]*\\s+)([^\\s]+)"
+    }
+    ,
+    {
+      "name": "string.quoted.double.haskell",
+      "match": "\"[^\"]*\""
+    },
+    {
+      "match": "::",
+      "scope": "punctuation.type.annotation.haskell"
+    },
+    {
+      "match": "->",
+      "scope": "punctuation.function.arrow.haskell"
+    }
+  ],
+  "punctuation": {
+    "patterns": [
+      {
+        "match": ";",
+        "name": "punctuation.terminator.statement"
+      },
+      {
+        "match": "\\.",
+        "name": "punctuation.accessor"
+      },
+      {
+        "match": ",",
+        "name": "punctuation.separator"
+      },
+      {
+        "match": "\\{",
+        "name": "punctuation.brace.curly.begin"
+      },
+      {
+        "match": "\\}",
+        "name": "punctuation.brace.curly.end"
+      },
+      {
+        "match": "\\[",
+        "name": "punctuation.brace.square.begin"
+      },
+      {
+        "match": "\\]",
+        "name": "punctuation.brace.square.end"
+      },
+      {
+        "match": "\\(",
+        "name": "punctuation.parameters.begin"
+      },
+      {
+        "match": "\\)",
+        "name": "punctuation.parameters.end"
+      }
+    ]
+  }
+}

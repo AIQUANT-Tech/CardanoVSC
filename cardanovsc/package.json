@@ -140,6 +140,29 @@
       {
         "command": "cardano.apiIntegration",
         "title": "cardanovsc: cardanoScan api integration"
+      },
+      {
+        "command": "cardanovsc.runNode",
+        "title": "run cardano node through cli ",
+        "category": "deployment"
+      },
+      {
+        "command": "extension.getUtxoInfo",
+        "title": "get_utxo",
+        "category": "deployment"
+      },
+      {
+        "command": "extension.buildPlutusAddress",
+        "title": "generate_plutusScript_address",
+        "category": "deployment"
+      },
+      {
+        "command": "extension.buildTransaction",
+        "title": "Build Cardano Transaction"
+      },
+      {
+        "command": "extension.openCardanoWallet",
+        "title": "openCardanoWallet"
       }
     ],
     "viewsContainers": {
@@ -156,6 +179,7 @@
         {
           "type": "webview",
           "id": "cardanovsc.webview",
+          "icon": "",
           "name": ""
         }
       ]
@@ -179,6 +203,11 @@
         "language": "plutus",
         "scopeName": "source.plutus",
         "path": "./syntaxes/plutus.tmLanguage.json"
+      },
+      {
+        "language": "haskell",
+        "scopeName": "source.haskell",
+        "path": "./syntaxes/haskell.tmLanguage.json"
       }
     ],
     "snippets": [
@@ -202,6 +231,48 @@
             "settings": {
               "foreground": "#D4D4D4",
               "fontStyle": "bold"
+            }
+          },
+          {
+            "scope": "entity.name.function.definition.haskell",
+            "settings": {
+              "foreground": "#b3c462"
+            }
+          },
+          {
+            "scope": "entity.name.function.declaration.haskell",
+            "settings": {
+              "foreground": "#b3c462"
+            }
+          },
+          {
+            "scope": "entity.name.function.call.haskell",
+            "settings": {
+              "foreground": "#988ae7"
+            }
+          },
+          {
+            "scope": "support.type.haskell",
+            "settings": {
+              "foreground": "#1c5cbb"
+            }
+          },
+          {
+            "scope": "support.module.haskell",
+            "settings": {
+              "foreground": "#C890A7"
+            }
+          },
+          {
+            "scope": "variable.parameter.function.call.haskell",
+            "settings": {
+              "foreground": "#5accb9"
+            }
+          },
+          {
+            "scope": "support.variable.haskell",
+            "settings": {
+              "foreground": "#5accb9"
             }
           }
         ]
@@ -234,6 +305,8 @@
     "vscode-test": "^1.6.1"
   },
   "dependencies": {
+    "@elastic/elasticsearch": "^8.17.1",
+    "@meshsdk/core": "^1.9.0-beta.20",
     "axios": "^1.7.9",
     "dotenv": "^16.4.7",
     "fs": "^0.0.1-security",

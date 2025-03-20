@@ -21,24 +21,48 @@
               "match": "\\\"(?:\\\\.|[^\"])*\\\""
             }
           ]
-        },
-        {
-          "name": "punctuation.separator.key-value.plutus",
-          "match": ":"
-        },
-        {
-          "name": "punctuation.separator.comma.plutus",
-          "match": ","
-        },
-        {
-          "name": "punctuation.definition.dictionary.begin.plutus",
-          "match": "\\{"
-        },
-        {
-          "name": "punctuation.definition.dictionary.end.plutus",
-          "match": "\\}"
         }
-      ]
+      ],
+      "punctuation": {
+    "patterns": [
+      {
+        "match": ";",
+        "name": "punctuation.terminator.statement"
+      },
+      {
+        "match": "\\.",
+        "name": "punctuation.accessor"
+      },
+      {
+        "match": ",",
+        "name": "punctuation.separator"
+      },
+      {
+        "match": "\\{",
+        "name": "punctuation.brace.curly.begin"
+      },
+      {
+        "match": "\\}",
+        "name": "punctuation.brace.curly.end"
+      },
+      {
+        "match": "\\[",
+        "name": "punctuation.brace.square.begin"
+      },
+      {
+        "match": "\\]",
+        "name": "punctuation.brace.square.end"
+      },
+      {
+        "match": "\\(",
+        "name": "punctuation.parameters.begin"
+      },
+      {
+        "match": "\\)",
+        "name": "punctuation.parameters.end"
+      }
+    ]
+  }
     }
   ],
   "repository": {},
