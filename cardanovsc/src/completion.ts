@@ -749,7 +749,7 @@ function extractModuleName(filePath: string): string | null {
 
 function indexModules() {
   const workspaceFolders = vscode.workspace.workspaceFolders;
-  if (!workspaceFolders) return;
+  if (!workspaceFolders) {return;}
 
   const rootPath = workspaceFolders[0].uri.fsPath;
   const hsFiles = glob.sync(path.join(rootPath, '**', '*.hs'));

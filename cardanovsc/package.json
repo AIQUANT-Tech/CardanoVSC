@@ -27,9 +27,7 @@
   "activationEvents": [
     "onLanguage:haskell"
   ],
-  "extensionDependencies": [
-    "justusadam.language-haskell"
-  ],
+ 
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
@@ -205,9 +203,9 @@
         "path": "./syntaxes/plutus.tmLanguage.json"
       },
       {
-        "language": "haskell",
         "scopeName": "source.haskell",
         "path": "./syntaxes/haskell.tmLanguage.json"
+
       }
     ],
     "snippets": [
