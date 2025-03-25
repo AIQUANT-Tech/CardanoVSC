@@ -156,7 +156,8 @@
         {
           "type": "webview",
           "id": "cardanovsc.webview",
-          "name": ""
+          "name": "",
+          "icon": ""
         }
       ]
     },
@@ -234,10 +235,14 @@
     "vscode-test": "^1.6.1"
   },
   "dependencies": {
+    "@blockfrost/blockfrost-js": "^5.7.0",
     "axios": "^1.8.2",
     "dotenv": "^16.4.7",
     "fs": "^0.0.1-security",
     "glob": "^11.0.1",
-    "path": "^0.12.7"
+    "lucid-cardano": "^0.10.11",
+    "path": "^0.12.7",
+    "lru-cache": "^11.0.2"
+
   }
 }

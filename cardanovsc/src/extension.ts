@@ -3,6 +3,8 @@ import vscode from "vscode";
 import { haskellProvider } from "./completion";
 import { integrateCardanoAPI } from "./config/cardanoApiIntegration";
 import { MyWebviewViewProvider } from "./webviewProvider";
+import { createStatusBarItem, registerNetworkCommand } from "./config/cardanoNodeIntegration";
+import { selectFile } from "./implementation/deployment";
 
 
 export function activate(context: vscode.ExtensionContext) {
@@ -24,7 +26,11 @@ export function activate(context: vscode.ExtensionContext) {
      
     })
   );
-
   new extensionCommand(context);
+  //status bar
+  createStatusBarItem(context);
+  registerNetworkCommand(context);
+  selectFile(context);
+
 }
 export function deactivate() {}
