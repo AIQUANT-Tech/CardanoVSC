@@ -75,7 +75,6 @@ export class OpenWalletManagementWebview {
               );
 
               if (creationResult.success && creationResult.data) {
-                // Store the encrypted seed (from the file) rather than the plain mnemonic
                 const walletData = {
                   address: creationResult.data.address,
                   network: creationResult.data.network,
@@ -87,14 +86,21 @@ export class OpenWalletManagementWebview {
                   JSON.stringify(walletData)
                 );
 
-                // Only show mnemonic if it's included in the response (consider security implications)
                 if (creationResult.data.mnemonic) {
                   this.panel.webview.html = this._getSeedPhraseHtml(
                     creationResult.data.mnemonic
                   );
                   vscode.window.showInformationMessage(
-                    `Wallet created successfully! Address: ${creationResult.data.address}`
-                  );
+                    `✅ Wallet created successfully!
+                    ----------------------------------------------
+                   🔖 Address: ${walletData.address}`,
+                      "Copy Address"
+                  ).then((selection) => {
+                   if(selection === "Copy Address") {
+                      vscode.env.clipboard.writeText(walletData.address);
+                      vscode.window.showInformationMessage("✅ Wallet address copied successfully!");
+                    }
+                  });
                 }
               } else {
                 vscode.window.showErrorMessage(
@@ -218,7 +224,7 @@ export class OpenWalletManagementWebview {
                 )}">${this.sanitizeNetworkName(p.network)}</button>`
             )
             .join("")
-        : "<p>No networks available. Please connect a node through Brockfrost.</p>";
+        : "<p>No networks available</p>";
 
     return /*html*/ `
     <!DOCTYPE html>

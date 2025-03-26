@@ -116,6 +116,7 @@ import * as vscode from "vscode";
 import { integrateCardanoAPI } from "./config/cardanoApiIntegration";
 import { OpenWalletManagementWebview } from "./webview_ui/wallet_webview";
 import { integrateCardanoNodeAPI } from "./config/cardanoNodeIntegration";
+import { selectFile } from "./implementation/deployment";
 
 export class MyWebviewViewProvider implements vscode.WebviewViewProvider {
   public static readonly viewType = "cardanovsc.webview";
@@ -152,6 +153,9 @@ export class MyWebviewViewProvider implements vscode.WebviewViewProvider {
           break;
         case "walletManagement":
           new OpenWalletManagementWebview(this.context, this._extensionUri);
+          break;
+        case "deployment":
+          await selectFile(this.context);
           break;
         default:
           vscode.window.showErrorMessage(`Unknown command: ${message.command}`);
@@ -221,7 +225,7 @@ export class MyWebviewViewProvider implements vscode.WebviewViewProvider {
             vscode.postMessage({ command: 'nodeIntegration' });
           });
           document.getElementById('deploySmartContract').addEventListener('click',()=>{
-            
+            vscode.postMessage({command:'deployment'})
           })
         </script>
       </body>

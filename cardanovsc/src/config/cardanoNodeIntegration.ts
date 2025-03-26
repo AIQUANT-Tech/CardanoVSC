@@ -86,7 +86,7 @@ export async function integrateCardanoNodeAPI(extensionContext: vscode.Extension
         // Test the connection by checking Blockfrost health
         const health = await blockfrostInstance.health();
         if (health.is_healthy) {
-            vscode.window.showInformationMessage(`🎉 Successfully connected to Blockfrost on ${selectedNetwork}!`);
+            vscode.window.showInformationMessage(`🎉 Successfully connected cardano node  on ${selectedNetwork}! through blockfrost`);
         } else {
             vscode.window.showErrorMessage("😷 Blockfrost connection failed. The server might be down.");
             return false;
@@ -148,18 +148,56 @@ export async function integrateCardanoNodeAPI(extensionContext: vscode.Extension
     }
   }
   
-  export function registerNetworkCommand(context: vscode.ExtensionContext) {
-    context.subscriptions.push(vscode.commands.registerCommand('cardano.switchNetwork', async () => {
+//   export function registerNetworkCommand(context: vscode.ExtensionContext) {
+//     context.subscriptions.push(vscode.commands.registerCommand('cardano.switchNetwork', async () => {
       
-        const networks = await getNetworkConfigs(context);
-        const selectedNetwork = await vscode.window.showQuickPick(networks.map(n => n.network), {
-            placeHolder: "Select a network to switch"
-        });
+//         const networks = await getNetworkConfigs(context);
+//         const selectedNetwork = await vscode.window.showQuickPick(networks.map(n => n.network), {
+//             placeHolder: "Select a network to switch"
+//         });
 
-        if (selectedNetwork) {
-            await setNetwork(selectedNetwork, context, vscode.Uri.parse(""));
-        }
-    }));
+//         if (selectedNetwork) {
+//             await setNetwork(selectedNetwork, context, vscode.Uri.parse(""));
+//         }
+//     }));
+// }
+export function registerNetworkCommand(context: vscode.ExtensionContext) {
+  context.subscriptions.push(vscode.commands.registerCommand('cardano.switchNetwork', async () => {
+      const networks = await getNetworkConfigs(context);
+      
+      // If no networks are configured, prompt to add one
+      if (networks.length === 0) {
+          const action = await vscode.window.showInformationMessage(
+              "No Cardano networks configured. Would you like to add one now?",
+              "Yes", "No"
+          );
+          
+          if (action === "Yes") {
+              await integrateCardanoNodeAPI(context);
+          }
+          return;
+      }
+
+      // Create quick pick items with additional information
+      const networkItems = networks.map(n => ({
+          label: n.network,
+          description: `API Key: ${n.apiKey.substring(0, 4)}...${n.apiKey.substring(n.apiKey.length - 4)}`,
+          network: n.network
+      }));
+
+      const selectedItem = await vscode.window.showQuickPick(networkItems, {
+          placeHolder: "Select a network to switch to",
+          title: "Cardano Networks",
+          ignoreFocusOut: true
+      });
+
+      if (selectedItem) {
+          const success = await setNetwork(selectedItem.network, context, vscode.Uri.parse(""));
+          if (success) {
+              vscode.window.showInformationMessage(`Switched to ${selectedItem.network} network`);
+          }
+      }
+  }));
 }
 let statusBarItem: vscode.StatusBarItem;
 
@@ -178,4 +216,54 @@ export function createStatusBarItem(extensionContext: vscode.ExtensionContext) {
   updateStatusBar(firstConfig?.network || "No Network");
 
   extensionContext.subscriptions.push(statusBarItem);
+}
+export async function deleteNetworkConfig(networkToDelete: string, extensionContext: vscode.ExtensionContext): Promise<boolean> {
+  try {
+      // Get the current network configurations
+      const currentConfigs = await getNetworkConfigs(extensionContext);
+      
+      // Filter out the network to be deleted
+      const updatedConfigs = currentConfigs.filter(config => config.network !== networkToDelete);
+      
+      // Update the global state with the remaining configurations
+      await extensionContext.globalState.update('cardano.node', updatedConfigs);
+      
+      // If the deleted network was the currently active one, update the status bar
+      const firstConfig = getFirstNetworkConfig(extensionContext);
+      updateStatusBar(firstConfig?.network || "No Network");
+      
+      // If Blockfrost instance was using the deleted network, reset it
+      if (blockfrostInstance) {
+          const health = await blockfrostInstance.health().catch(() => null);
+          if (!health?.is_healthy) {
+              blockfrostInstance = null;
+          }
+      }
+      
+      vscode.window.showInformationMessage(`✅ Successfully deleted ${networkToDelete} network configuration`);
+      return true;
+  } catch (error: any) {
+      vscode.window.showErrorMessage(`❌ Failed to delete network configuration: ${error.message || error}`);
+      console.error("Delete network error:", error);
+      return false;
+  }
+}
+
+export function registerDeleteNetworkCommand(context: vscode.ExtensionContext) {
+  context.subscriptions.push(vscode.commands.registerCommand('cardanovsc.deleteNetwork', async () => {
+      const networks = await getNetworkConfigs(context);
+      
+      if (networks.length === 0) {
+          vscode.window.showInformationMessage("No network configurations to delete");
+          return;
+      }
+      
+      const selectedNetwork = await vscode.window.showQuickPick(networks.map(n => n.network), {
+          placeHolder: "Select a network to delete"
+      });
+
+      if (selectedNetwork) {
+          await deleteNetworkConfig(selectedNetwork, context);
+      }
+  }));
 }

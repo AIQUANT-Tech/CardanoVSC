@@ -8,6 +8,7 @@ CardanoVSC is a powerful Visual Studio Code extension that provides seamless sup
 - Intelligent code completion to speed up development.
 - Integration with the Cardano API for real-time blockchain interaction.
 - An intuitive "Ctrl + Shift + P >> CardanoAPI" feature allowing developers to quickly access Cardano API options directly from the IDE.
+- Cardano node Connection with **Blockfrost api** .
 - Cardano wallet management 
 
 This extension is perfect for developers building on the Cardano blockchain, enabling smooth and efficient smart contract development within the Visual Studio Code ecosystem.
@@ -94,12 +95,64 @@ The Syntax Highlighting feature improves code readability by visually distinguis
 ![highlight](https://github.com/AIQUANT-Tech/CardanoVSC/blob/main/.github/images/syntax_highlight.png?raw=true)
 
 
+## 🔗 Cardano node Connection via BlockFrost
+Before using wallet management and smart contract deployment, you need to connect to a Cardano node on the Mainnet, Preprod, or Preview network.
+
+### Steps to Connect:
+1. Open the **CardanoVSC** sidebar (click the Cardano icon in the Activity Bar).
+2. Click **Cardano Node Connection**.
+3. A prompt will appear to select the network (Mainnet, Preprod, or Preview).
+4. Another prompt will appear asking for the BlockFrost API key for the selected network.
+5. Enter the API key in the input box and press `Enter`.
+6. The selected network will be reflected on the right side of the status bar, like this:  
+   **🔗 Cardano Node: Preprod** (or **Mainnet/Preview**)
+7. After a successful connection, **reload the VSCode window**.
+
+## 📜 Deploying a Smart Contract
+
+### Steps to Deploy a Plutus Smart Contract:
+1. **Ensure a Cardano network is configured:**
+   - If no network is detected, the extension will prompt you to configure one.
+   - Follow the on-screen instructions to set up the network.
+
+2. **Select a Plutus Smart Contract file:**
+   - Click on the **Deploy Smart Contract** option.
+   - A file selection dialog will open.
+   - Choose a `.plutus` file containing your contract.
+
+3. **Initialize Lucid with network configuration:**
+   - The extension will retrieve network details from your configuration.
+   - Lucid (a JavaScript library for Cardano smart contract interactions) will be initialized.
+
+4. **Generate the script address:**
+   - The extension extracts the CBOR hex from the Plutus script.
+   - It then computes the associated script address.
+
+5. **Confirm overwriting existing address files:**
+   - If an address file already exists, the extension prompts you for confirmation before overwriting.
+
+6. **Save the generated address:**
+   - The script address is saved to an `.addr` file in the same location as the `.plutus` script.
+   - A success message is displayed with the file location and script address preview.
+
+### 📌 Additional Features:
+- **Open Folder:** View the location of the saved `.addr` file.
+- **Copy Address:** Copy the generated script address to the clipboard for easy sharing.
+
+## 🛠️ Troubleshooting
+- **No network configured?** Follow the prompt to set up a network connection.
+- **Invalid Plutus script?** Ensure the `.plutus` file contains a valid `cborHex` field.
+- **Address file already exists?** Choose whether to overwrite the file or cancel the operation.
+- **Errors during deployment?** Check the error messages and logs in the VSCode output panel.
+
+
+
 ### 🏦 Wallet Management  
 CardanoVSC allows you to manage your Cardano wallets directly within VS Code. You can create, restore, and check balances securely while ensuring encrypted storage and password protection.  
 
 ### 🆕 Creating a New Wallet  
 1. Open the **CardanoVSC** sidebar (click the Cardano icon in the Activity Bar).  
-2. Click **Wallet Management**.  
+2. Click **Wallet Management**  
 3. Select your network from the dropdown (Mainnet/Testnet) and also from the status bar `[cardano:network-name]` button, which displays the selected network.  
 4. Click **Create Wallet**.  
 5. Set a strong password (minimum **12 characters** recommended).  
