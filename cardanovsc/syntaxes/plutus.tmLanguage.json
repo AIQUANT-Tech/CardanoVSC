@@ -27,17 +27,17 @@
           "match": ":"
         },
         {
-          "name": "punctuation.separator.comma.plutus",
-          "match": ","
-        },
+          "match": ",",
+          "name": "punctuation.separator"
+       },
         {
-          "name": "punctuation.definition.dictionary.begin.plutus",
-          "match": "\\{"
-        },
-        {
-          "name": "punctuation.definition.dictionary.end.plutus",
-          "match": "\\}"
-        }
+          "match": "\\{",
+          "name": "punctuation.brace.curly.begin"
+      },
+      {
+          "match": "\\}",
+          "name": "punctuation.brace.curly.end"
+      }
       ]
     }
   ],

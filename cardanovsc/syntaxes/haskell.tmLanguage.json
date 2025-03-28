@@ -561,7 +561,10 @@
         },
         {
             "include": "#record"
-        }
+        },
+        { 
+            "include": "#cardano"
+          }
     ],
     "repository": {
         "block_comment": {
@@ -2525,8 +2528,59 @@
                     "name": "meta.quasi-quotation.haskell meta.embedded.block.$5"
                 }
             ]
-        }
+        },
+                
+            "cardano": {
+              "patterns": [
+                
+                {
+                  "match": "^\\s*(\\w+)\\s*((?:\\w+\\s*)*)?=",
+                  "captures": {
+                    "1": { "name": "entity.name.function.definition.haskell" },
+                    "2": { "name": "variable.argument.haskell" }
+                  }
+                },
+                {
+                  "match": "\\b(writeFileTextEnvelope|validator|mkValidatorScript|PlutusScriptSerialised|unValidatorScript)\\b",
+                  "name": "entity.name.function.haskell"
+                },
+                {
+                  "match": "\\b(toShort|toStrict|serialise|compile|writeValidator)\\b",
+                  "name": "support.function.haskell"
+                },
+                
+                {
+                  "match": "\\b(Nothing|Just|IO|Either|FilePath|Validator)\\b",
+                  "name": "support.type.haskell"
+                },
+                {
+                  "match": "@\\(?([\\w\\s]+)\\)?",
+                  "name": "storage.type.annotation.haskell"
+                },
+                {
+                  "match": "\\b(Plutus\\.V2\\.Ledger\\.Api|PlutusScriptV2)\\b",
+                  "name": "support.module.haskell"
+                },
+                {
+                  "match": "\\b(BuiltinData)\\b",
+                  "name": "storage.type.haskell"
+                },
+                {
+                  "include": "#comments"
+                },
+                {
+                    "match": "(?<=\\.)(\\w+)\\s+([^()\\s,]+(?:\\s+[^()\\s,]+))?",
+                    "captures": {
+                      "1": { 
+                        "name": "support.function.haskell" 
+                    }
+                      
+                    }
+                  } 
+              ]
+            }
+           
     },
-    "scopeName": "source.haskell",
+    "scopeName": "source.haskell"
     
 }
