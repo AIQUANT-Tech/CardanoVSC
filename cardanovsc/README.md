@@ -1,5 +1,5 @@
 # ⚡ CardanoVSC 🚀
-[![Version](https://vsmarketplacebadges.dev/version/AIQUANT-TECHNOLOGIES.cardanovsc.svg)](https://marketplace.visualstudio.com/items?itemName=AIQUANT-TECHNOLOGIES.cardanovsc)  [![Downloads](https://vsmarketplacebadges.dev/downloads/AIQUANT-TECHNOLOGIES.cardanovsc.svg)]([https://marketplace.visualstudio.com/items?itemName=juanblanco.solidity](https://marketplace.visualstudio.com/items?itemName=AIQUANT-TECHNOLOGIES.cardanovsc)) [![Installs](https://vsmarketplacebadges.dev/installs/AIQUANT-TECHNOLOGIES.cardanovsc.svg)](https://marketplace.visualstudio.com/items?itemName=AIQUANT-TECHNOLOGIES.cardanovsc)
+[![Version](https://vsmarketplacebadges.dev/version/AIQUANT-TECHNOLOGIES.cardanovsc.png)](https://marketplace.visualstudio.com/items?itemName=AIQUANT-TECHNOLOGIES.cardanovsc)  [![Downloads](https://vsmarketplacebadges.dev/downloads/AIQUANT-TECHNOLOGIES.cardanovsc.png)]([https://marketplace.visualstudio.com/items?itemName=juanblanco.solidity](https://marketplace.visualstudio.com/items?itemName=AIQUANT-TECHNOLOGIES.cardanovsc)) [![Installs](https://vsmarketplacebadges.dev/installs/AIQUANT-TECHNOLOGIES.cardanovsc.png)](https://marketplace.visualstudio.com/items?itemName=AIQUANT-TECHNOLOGIES.cardanovsc)
 ## ✨ Features
 
 CardanoVSC is a powerful Visual Studio Code extension that provides seamless support for Haskell and Plutus development. It is designed to enhance developer productivity by offering:
@@ -10,6 +10,7 @@ CardanoVSC is a powerful Visual Studio Code extension that provides seamless sup
 - An intuitive "Ctrl + Shift + P >> CardanoAPI" feature allowing developers to quickly access Cardano API options directly from the IDE.
 - Cardano node Connection with **Blockfrost api** .
 - Cardano wallet management 
+- Deployment of smart contract on cardano node 
 
 This extension is perfect for developers building on the Cardano blockchain, enabling smooth and efficient smart contract development within the Visual Studio Code ecosystem.
 
@@ -119,7 +120,13 @@ Before using wallet management and smart contract deployment, you need to connec
    - Click on the **Deploy Smart Contract** option.
    - A file selection dialog will open.
    - Choose a `.plutus` file containing your contract.
-
+   - example `.plutus` file content 
+   ```
+     {
+     "type": "PlutusScriptV2",
+     "description": "",
+     "cborHex": "49480100002221200101"
+      } ```
 3. **Initialize Lucid with network configuration:**
    - The extension will retrieve network details from your configuration.
    - Lucid (a JavaScript library for Cardano smart contract interactions) will be initialized.
@@ -154,7 +161,7 @@ CardanoVSC allows you to manage your Cardano wallets directly within VS Code. Yo
 1. Open the **CardanoVSC** sidebar (click the Cardano icon in the Activity Bar).  
 2. Click **Wallet Management**  
 3. Select your network from the dropdown (Mainnet/Testnet) and also from the status bar `[cardano:network-name]` button, which displays the selected network.  
-4. Click **Create Wallet**.  
+4. Click **Create Wallet** and before creating wallet must open any folder otherwise not create wallet. 
 5. Set a strong password (minimum **12 characters** recommended).  
 6. Securely **store your 24-word recovery phrase** (displayed during setup).  
 7. Click **"I've Saved My Seed Phrase"** to complete the setup.  
@@ -170,7 +177,7 @@ CardanoVSC allows you to manage your Cardano wallets directly within VS Code. Yo
       * copy seed phrase in the format --
    `word1 word2 word3 word4 word5 word6 word7 word8 word9 word10  word11 word12 word13 word14 word15 word16 word17 word18 word19 word20 word21 word22 word23 word24`
    - **Manually type each word** in the numbered fields.  
-5. Click **Restore Wallet**.  
+5. Click **Restore Wallet**and before restoring wallet must open any folder otherwise not restoring wallet.  
 6. Enter your **wallet password** when prompted.  
 7. After successful, Wallet details are stored in the working directory inside the `wallet_details/` folder.  
 
@@ -179,7 +186,8 @@ CardanoVSC allows you to manage your Cardano wallets directly within VS Code. Yo
 1. Open **Wallet Management**.  
 2. Select the correct network (**Mainnet**/**Testnet**).  
 3. Click **Check Balance**.  
-4. View your balance in the **VS Code output channel**.  
+4. promt for asking address of wallet of that network in which you connected (network show at right corner in status bar of vscode)
+5. View your balance in the **vscode Notification message**.  
 
 ### 🔒 Wallet Security Features  
 ✅ **AES-256 Encryption** – Wallets are encrypted before storage.  

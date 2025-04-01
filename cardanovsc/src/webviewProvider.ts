@@ -206,8 +206,8 @@ export class MyWebviewViewProvider implements vscode.WebviewViewProvider {
       <body>
         <button id="apiIntegrationButton">Cardano API Integration</button>
         <button id="openCardanoScan">Go to CardanoScan Website</button>
-        <button id="walletManagementButton">Wallet Management</button>
         <button id="nodeIntegrationButton">Cardano Node Connection</button>
+        <button id="walletManagementButton">Wallet Management</button>
         <button id="deploySmartContract">Deploy Smart Contract</button>
 
         <script>
