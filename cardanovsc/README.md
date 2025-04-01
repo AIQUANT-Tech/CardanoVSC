@@ -61,7 +61,7 @@ npm run test
 The Webview in CardanoVSC provides a dedicated sidebar interface within Visual Studio Code, offering a centralized hub for blockchain api interactions , development tools.
 
 
-![webview](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/.github/images/cardanovsc_sidebar_webview.png)
+![webview](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/milestone2/cardanovsc/docs/cardanovsc01_sidebar_webview.png)
 
 
 ### 📜 Commands
@@ -93,7 +93,7 @@ The Auto Completion feature in CardanoVSC enhances developer productivity by pro
 ## 🔗 syntax highlighting
 The Syntax Highlighting feature improves code readability by visually distinguishing different elements of Haskell and Plutus code. Keywords, functions, variables, and operators are color-coded, making it easier to identify and debug code. This feature is particularly useful for developers working on complex smart contracts, as it helps maintain clarity and structure in the codebase.
 
-![highlight](https://github.com/AIQUANT-Tech/CardanoVSC/blob/main/.github/images/syntax_highlight.png?raw=true)
+![highlight](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/.github/images/syntax_highlight.png)
 
 
 ## 🔗 Cardano node Connection via BlockFrost
@@ -108,6 +108,8 @@ Before using wallet management and smart contract deployment, you need to connec
 6. The selected network will be reflected on the right side of the status bar, like this:  
    **🔗 Cardano Node: Preprod** (or **Mainnet/Preview**)
 7. After a successful connection, **reload the VSCode window**.
+
+![node_connection](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/milestone2/cardanovsc/docs/cardanovsc_node_connection.gif)
 
 ## 📜 Deploying a Smart Contract
 
@@ -140,7 +142,9 @@ Before using wallet management and smart contract deployment, you need to connec
 
 6. **Save the generated address:**
    - The script address is saved to an `.addr` file in the same location as the `.plutus` script.
-   - A success message is displayed with the file location and script address preview.
+   - A success message is displayed with the file location and script address .
+
+![deploy](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/milestone2/cardanovsc/docs/cardanovsc_deployment.gif)
 
 ### 📌 Additional Features:
 - **Open Folder:** View the location of the saved `.addr` file.
@@ -157,6 +161,8 @@ Before using wallet management and smart contract deployment, you need to connec
 ### 🏦 Wallet Management  
 CardanoVSC allows you to manage your Cardano wallets directly within VS Code. You can create, restore, and check balances securely while ensuring encrypted storage and password protection.  
 
+![wallet_webview](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/milestone2/cardanovsc/docs/cardanovsc_wellet_webview.png)
+
 ### 🆕 Creating a New Wallet  
 1. Open the **CardanoVSC** sidebar (click the Cardano icon in the Activity Bar).  
 2. Click **Wallet Management**  
@@ -167,6 +173,7 @@ CardanoVSC allows you to manage your Cardano wallets directly within VS Code. Yo
 7. Click **"I've Saved My Seed Phrase"** to complete the setup.  
 8. Wallet details are stored in the working directory inside the `wallet_details/` folder.  
 
+![create](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/milestone2/cardanovsc/docs/cardanovsc_create_wallet.gif)
 
 ### 🔄 Restoring an Existing Wallet  
 1. Open **Wallet Management** from the sidebar.  
@@ -181,6 +188,8 @@ CardanoVSC allows you to manage your Cardano wallets directly within VS Code. Yo
 6. Enter your **wallet password** when prompted.  
 7. After successful, Wallet details are stored in the working directory inside the `wallet_details/` folder.  
 
+![restore](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/milestone2/cardanovsc/docs/cardanovsc_restore_webview.png)
+
 
 ### 💰 Checking Your Balance  
 1. Open **Wallet Management**.  
@@ -194,7 +203,7 @@ CardanoVSC allows you to manage your Cardano wallets directly within VS Code. Yo
 ✅ **Secure Storage** – Wallets are saved under `wallet_details/[network]/[wallet-address].json`.  
 
 #### 📂 Wallet File Location  
-Your encrypted wallet files are stored in:  
+Your  wallet files are stored in vscode workspace after successful creating or restoring wallet   
 ```
 workspace/
 └── wallet_details/
