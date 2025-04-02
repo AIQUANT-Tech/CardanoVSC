@@ -134,7 +134,6 @@ export async function integrateCardanoNodeAPI(extensionContext: vscode.Extension
         const firstConfig = getFirstNetworkConfig(extensionContext);
            
         updateStatusBar(firstConfig?.network || "No Network");
-        setTimeout(reloadWindow, 1000);
 
         return true;
       } else {
