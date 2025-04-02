@@ -1,8 +1,8 @@
 
 import vscode from 'vscode';
 import { BlockFrostAPI } from '@blockfrost/blockfrost-js';
-import { OpenWalletManagementWebview } from '../webview_ui/wallet_webview';
 let blockfrostInstance: BlockFrostAPI | null = null;
+import { exec } from "child_process";
 
 export async function storeNetworkConfig(selectedNetwork: string, apiKey: string, extensionContext: vscode.ExtensionContext) {
   // Get the existing configurations from global state
@@ -77,26 +77,18 @@ export async function integrateCardanoNodeAPI(extensionContext: vscode.Extension
             return false;
         }
 
-
-        // Create Blockfrost instance
-        blockfrostInstance = new BlockFrostAPI({
-            projectId: apiKey
-        });
-
-        // Test the connection by checking Blockfrost health
-        const health = await blockfrostInstance.health();
-        if (health.is_healthy) {
-            vscode.window.showInformationMessage(`🎉 Successfully connected cardano node  on ${selectedNetwork}! through blockfrost`);
-        } else {
-            vscode.window.showErrorMessage("😷 Blockfrost connection failed. The server might be down.");
-            return false;
-        }
+       const isValidApiKey = await valApiKey(apiKey,selectedNetwork);
+       if (!isValidApiKey) {
+        vscode.window.showErrorMessage(
+          "Invalid API key! Please check and try again."
+        );
+        return false;
+      }
 
         // Store the selected network and API key in the global state
         await storeNetworkConfig(selectedNetwork, apiKey, extensionContext);
         updateStatusBar(selectedNetwork); // Update status bar with selected network
 
-        setTimeout(reloadWindow, 1000);
 
 
         return true;
@@ -107,7 +99,6 @@ export async function integrateCardanoNodeAPI(extensionContext: vscode.Extension
 }
 
  export async function setNetwork(network: string, extensionContext: vscode.ExtensionContext,_extensionUri: vscode.Uri) {
-  console.log("set_network");
     const networkConfigs = await getNetworkConfigs(extensionContext);
   
     const selectedConfig = networkConfigs.find(config => config.network === network);
@@ -142,7 +133,6 @@ export async function integrateCardanoNodeAPI(extensionContext: vscode.Extension
       }
     } catch (error: any) {
       vscode.window.showErrorMessage(`❌ Error connecting to ${network}: ${error.message || error}`);
-      console.error("Blockfrost connection error:", error);
       return false;
     }
   }
@@ -240,7 +230,6 @@ export async function deleteNetworkConfig(networkToDelete: string, extensionCont
       }
       
       vscode.window.showInformationMessage(`✅ Successfully deleted ${networkToDelete} network configuration`);
-      setTimeout(reloadWindow, 1000);
 
       return true;
   } catch (error: any) {
@@ -268,7 +257,41 @@ export function registerDeleteNetworkCommand(context: vscode.ExtensionContext) {
       }
   }));
 }
-function reloadWindow() {
-  // Execute the 'workbench.action.reloadWindow' command
-  vscode.commands.executeCommand('workbench.action.reloadWindow');
+async function valApiKey(apiKey: string,network:string): Promise<boolean> {
+  const baseUrl = `https://api.https://cardano-${network.toLocaleLowerCase()}.blockfrost.io/api/v0`; // Corrected base URL for the API
+  const endpoint = `${baseUrl}/block/latest`; // Replace with actual endpoint for validation
+
+  try {
+    const response = await executeCurl(endpoint, apiKey);
+    if (response.hash) {
+      return true;
+    } else {
+      return false;
+    }
+  } catch (error: any) {
+    return false;
+  }
+}
+
+
+ function executeCurl(apiUrl: string, apiKey: string | undefined): Promise<any> {
+  return new Promise((resolve, reject) => {
+    const curlCommand = `curl -X GET "${apiUrl}" \
+  --header "project_id: ${apiKey}" \
+  --header "Accept: application/json" `;
+  // --header "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"`;
+
+    exec(curlCommand, (error, stdout, stderr) => {
+      if (error) {
+        reject(new Error(stderr || error.message));
+      }
+
+      try {
+        const jsonResponse = JSON.parse(stdout);
+        resolve(jsonResponse);
+      } catch (parseError) {
+        reject(new Error("Failed to parse API response as JSON."));
+      }
+    });
+  });
 }

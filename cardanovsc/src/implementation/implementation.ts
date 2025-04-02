@@ -71,9 +71,9 @@ export async function restoreWallet(
     }
 
     // Validate workspace
-    if (!vscode.workspace.workspaceFolders?.[0]) {
+    if (!vscode.workspace.workspaceFolders?.length) {
       vscode.window.showErrorMessage(
-        "Please open a workspace before restoring a wallet"
+        "Please open a workspace folder before restoring a wallet"
       );
       return false;
     }
@@ -155,7 +155,15 @@ export async function createWallet(
   error?: string;
 }> {
   try {
-    console.log("Creating wallet via Lucid...");
+    
+        // Ensure workspace exists
+        if (!vscode.workspace.workspaceFolders?.length) {
+          return {
+            success: false,
+            error:
+              "No workspace folder is open. Please open a workspace before creating a wallet.",
+          };
+        }
 
     const lucid = await initializeLucid(selectedNetwork, apiKey);
     const mnemonic = lucid.utils.generateSeedPhrase();
@@ -180,15 +188,6 @@ export async function createWallet(
     // Select the wallet from the generated mnemonic
     lucid.selectWalletFromSeed(mnemonic);
     const address = await lucid.wallet.address();
-
-    // Ensure workspace exists
-    if (!vscode.workspace.workspaceFolders?.length) {
-      return {
-        success: false,
-        error:
-          "No workspace folder is open. Please open a workspace before creating a wallet.",
-      };
-    }
 
     // Define folder paths
     const workspacePath = vscode.workspace.workspaceFolders[0].uri.fsPath;

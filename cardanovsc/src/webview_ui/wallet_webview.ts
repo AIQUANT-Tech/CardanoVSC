@@ -175,6 +175,14 @@ export class OpenWalletManagementWebview {
               break;
 
             case "getSeedphrase":
+              // Validate workspace
+                  if (!vscode.workspace.workspaceFolders?.length) {
+                    vscode.window.showErrorMessage(
+                     " Wallet restore failed: No workspace folder is open. Please open a workspace before restoring a wallet."
+                    );
+                    return false;
+                  }
+
               firstConfig = getFirstNetworkConfig(this.context);
 
               if (!firstConfig) {
