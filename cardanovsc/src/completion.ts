@@ -20,19 +20,13 @@ export const haskellProvider = vscode.languages.registerCompletionItemProvider(
         return completions;
       }
       let linePrefix = document.lineAt(position).text.substr(0, position.character).trim();
-      console.log(linePrefix);
 
-      if (!linePrefix.startsWith('import') && !linePrefix.startsWith('import qualified')) {
-        // Only provide completion suggestions after 'import'
-        return completions;
-      } else {
-
+      if (linePrefix.startsWith('import') || linePrefix.startsWith('import qualified')) {
         const rootPath = workspaceFolders[0].uri.fsPath;
         // const hsFiles = glob.sync(path.join(rootPath, '/**/*.hs')); // Search for .hs files in all folders
         const hsFiles = glob.sync("**/*.hs", { cwd: rootPath, absolute: true, windowsPathsNoEscape: true });
 
         console.log("Found Haskell files:", hsFiles);
-        console.log(rootPath);
 
         hsFiles.forEach((file: string) => {
           const filePath = path.normalize(file);
@@ -125,6 +119,13 @@ export const haskellProvider = vscode.languages.registerCompletionItemProvider(
         },
         { label: "liftM", detail: "Lifts a function to a monadic context." },
         { label: "join", detail: "Flattens a monadic value." },
+        {label:"Num",detail:"haskell function"},
+        {label:"GT",detail:"haskell function"},
+        {label:"LT",detail:"haskell function"},
+        
+        {label:"getLine",detail:"haskell function"},
+        {label:"Nothing",detail:"haskell function"}
+         ,        {label:"compile",detail:"haskell function"}
       ];
       functions.forEach((fn) => {
         const item = new vscode.CompletionItem(
@@ -177,6 +178,15 @@ export const haskellProvider = vscode.languages.registerCompletionItemProvider(
 
       // Keywords
       const keywords = [
+        "BuiltinData",
+        "Float",
+        "Integer",
+        "True",
+        "False",
+        "ordering",
+        "do",
+        "elem",
+        "notElem",
         "data",
         "type",
         "where",
