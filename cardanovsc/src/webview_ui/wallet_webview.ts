@@ -11,12 +11,13 @@ import {
 } from "../implementation/implementation";
 
 export class OpenWalletManagementWebview {
-  private panel: vscode.WebviewPanel;
+  public panel: vscode.WebviewPanel;
 
   constructor(
     private context: vscode.ExtensionContext,
     private readonly _extensionUri: vscode.Uri
   ) {
+    
     this.panel = vscode.window.createWebviewPanel(
       "cardanovsc.walletManagement",
       "Wallet Management",

@@ -1,6 +1,7 @@
 
 import vscode from 'vscode';
 import { BlockFrostAPI } from '@blockfrost/blockfrost-js';
+import { OpenWalletManagementWebview } from '../webview_ui/wallet_webview';
 let blockfrostInstance: BlockFrostAPI | null = null;
 
 export async function storeNetworkConfig(selectedNetwork: string, apiKey: string, extensionContext: vscode.ExtensionContext) {
@@ -76,7 +77,6 @@ export async function integrateCardanoNodeAPI(extensionContext: vscode.Extension
             return false;
         }
 
-        console.log(`✅ Received API key for ${selectedNetwork}, initializing Blockfrost instance...`);
 
         // Create Blockfrost instance
         blockfrostInstance = new BlockFrostAPI({
@@ -96,12 +96,11 @@ export async function integrateCardanoNodeAPI(extensionContext: vscode.Extension
         await storeNetworkConfig(selectedNetwork, apiKey, extensionContext);
         updateStatusBar(selectedNetwork); // Update status bar with selected network
 
-        
+        setTimeout(reloadWindow, 1000);
 
-        console.log("🔗 Blockfrost instance created and Cardano Node configured.");
+
         return true;
     } catch (error: any) {
-        console.error("❌ Error in integration:", error);
         vscode.window.showErrorMessage(`Integration failed: ${error.message || error}`);
         return false;
     }
@@ -133,9 +132,10 @@ export async function integrateCardanoNodeAPI(extensionContext: vscode.Extension
         reorderedConfigs.unshift(selectedConfig);
         await extensionContext.globalState.update('cardano.node', reorderedConfigs);
         const firstConfig = getFirstNetworkConfig(extensionContext);
-
+           
         updateStatusBar(firstConfig?.network || "No Network");
-        console.log(`🔄 Connected to ${network} `);
+        setTimeout(reloadWindow, 1000);
+
         return true;
       } else {
         vscode.window.showErrorMessage(`😷 Failed to connect to ${network} network.`);
@@ -241,6 +241,8 @@ export async function deleteNetworkConfig(networkToDelete: string, extensionCont
       }
       
       vscode.window.showInformationMessage(`✅ Successfully deleted ${networkToDelete} network configuration`);
+      setTimeout(reloadWindow, 1000);
+
       return true;
   } catch (error: any) {
       vscode.window.showErrorMessage(`❌ Failed to delete network configuration: ${error.message || error}`);
@@ -266,4 +268,8 @@ export function registerDeleteNetworkCommand(context: vscode.ExtensionContext) {
           await deleteNetworkConfig(selectedNetwork, context);
       }
   }));
+}
+function reloadWindow() {
+  // Execute the 'workbench.action.reloadWindow' command
+  vscode.commands.executeCommand('workbench.action.reloadWindow');
 }

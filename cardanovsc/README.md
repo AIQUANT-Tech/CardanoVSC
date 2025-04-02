@@ -107,7 +107,6 @@ Before using wallet management and smart contract deployment, you need to connec
 5. Enter the API key in the input box and press `Enter`.
 6. The selected network will be reflected on the right side of the status bar, like this:  
    **🔗 Cardano Node: Preprod** (or **Mainnet/Preview**)
-7. After a successful connection, **reload the VSCode window**.
 
 ![node_connection](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/milestone2/cardanovsc/docs/cardanovsc_node_connection.gif)
 
@@ -168,7 +167,7 @@ CardanoVSC allows you to manage your Cardano wallets directly within VS Code. Yo
 2. Click **Wallet Management**  
 3. Select your network from the dropdown (Mainnet/Testnet) and also from the status bar `[cardano:network-name]` button, which displays the selected network.  
 4. Click **Create Wallet** and before creating wallet must open any folder otherwise not create wallet. 
-5. Set a strong password (minimum **12 characters** recommended).  
+5. Set a strong password 
 6. Securely **store your 24-word recovery phrase** (displayed during setup).  
 7. Click **"I've Saved My Seed Phrase"** to complete the setup.  
 8. Wallet details are stored in the working directory inside the `wallet_details/` folder.  
@@ -214,15 +213,16 @@ workspace/
     │   └── addr_test1...def.json
     └── preprod/
         └── addr_test1...def.json
-```
-Each `.json` file contains:  
-```json
+
+Each .json file contains:  
+
 {
   "address": "addr1...",
   "network": "mainnet",
   "encryptedSeed": "salt:iv:encryptedData",
   "createdAt": "2023-01-01T00:00:00.000Z"
 }
+```
 ```
 
 ### ⚠️ Important Security Notes  

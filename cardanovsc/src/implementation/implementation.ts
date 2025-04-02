@@ -345,23 +345,6 @@ export async function sendTransaction(
   }
 }
 
-async function promptUser(
-  question: string,
-  isPassword: boolean = false
-): Promise<string> {
-  const answer = await vscode.window.showInputBox({
-    prompt: question,
-    password: isPassword,
-    ignoreFocusOut: true, // Keeps the input box open even if the user clicks outside
-    validateInput: (value) => (value ? undefined : "Input is required."),
-  });
-
-  if (!answer) {
-    throw new Error("Input is required.");
-  }
-
-  return answer;
-}
 
 export async function checkBalance(selectedNetwork: string, apiKey: string) {
   const addr = await vscode.window.showInputBox({
@@ -381,7 +364,6 @@ export async function checkBalance(selectedNetwork: string, apiKey: string) {
       acc + BigInt(utxo.assets.lovelace || 0n),
     0n
   );
-  console.log(balance);
   const adaBalance = Number(balance) / 1_000_000;
   vscode.window.showInformationMessage(
     `Available balance: ${adaBalance.toFixed(6)} ADA`

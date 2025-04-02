@@ -2,7 +2,7 @@
   "name": "cardanovsc",
   "displayName": "CardanoVSC",
   "description": "supports in cardano development",
-  "version": "0.0.12",
+  "version": "0.0.15",
   "publisher": "AIQUANT-TECHNOLOGIES",
   "license": "MIT",
   "keywords": [
@@ -25,9 +25,11 @@
     "url": "https://github.com/AIQUANT-Tech/CardanoVSC"
   },
   "activationEvents": [
+    
   ],
    "main": "./out/extension.js",
   "contributes": {
+
     "commands": [
       {
         "command": "cardanovsc.helloWorld",

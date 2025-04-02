@@ -8,12 +8,7 @@ import { selectFile } from "./implementation/deployment";
 
 
 export function activate(context: vscode.ExtensionContext) {
-  context.subscriptions.push(
-    vscode.window.registerWebviewViewProvider(
-      MyWebviewViewProvider.viewType,
-      new MyWebviewViewProvider(context,context.extensionUri)
-    )
-  );
+  
   context.subscriptions.push(
     vscode.commands.registerCommand("cardanovsc.helloWorld", () => {
       vscode.window.showInformationMessage("Hello World from CardanoVSC!");
