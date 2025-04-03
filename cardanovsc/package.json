@@ -141,7 +141,7 @@
       },
       {
         "command": "cardanovsc.deleteNetwork",
-        "title": "cardanovsc: Delete Network"
+        "title": "cardanovsc: Delete Cardano Network"
       }
     ],
     "viewsContainers": {

@@ -11,14 +11,18 @@ import {
 } from "../implementation/implementation";
 
 export class OpenWalletManagementWebview {
-  public panel: vscode.WebviewPanel;
+  public static panel: vscode.WebviewPanel | undefined;
 
   constructor(
     private context: vscode.ExtensionContext,
     private readonly _extensionUri: vscode.Uri
   ) {
-    
-    this.panel = vscode.window.createWebviewPanel(
+    if (OpenWalletManagementWebview.panel) {
+      // If the panel is already open, reveal it
+      OpenWalletManagementWebview.panel.reveal(vscode.ViewColumn.One,true);
+      return;
+    }
+    OpenWalletManagementWebview.panel = vscode.window.createWebviewPanel(
       "cardanovsc.walletManagement",
       "Wallet Management",
       vscode.ViewColumn.One,
@@ -29,12 +33,17 @@ export class OpenWalletManagementWebview {
     );
 
     this.initialize();
+    OpenWalletManagementWebview.panel.onDidDispose(() => {
+      OpenWalletManagementWebview.panel = undefined;
+    });
   }
 
-  private async initialize() {
-    this.panel.webview.html = await this._getWalletManagementHtml();
+  public async initialize() {
+    if (!OpenWalletManagementWebview.panel) {return;}
 
-    this.panel.webview.onDidReceiveMessage(
+    OpenWalletManagementWebview.panel.webview.html = await this._getWalletManagementHtml();
+
+    OpenWalletManagementWebview.panel.webview.onDidReceiveMessage(
       async (message: {
         walletName?: string;
         command: string;
@@ -88,9 +97,10 @@ export class OpenWalletManagementWebview {
                 );
 
                 if (creationResult.data.mnemonic) {
-                  this.panel.webview.html = this._getSeedPhraseHtml(
+                  if (OpenWalletManagementWebview.panel){
+                  OpenWalletManagementWebview.panel.webview.html = this._getSeedPhraseHtml(
                     creationResult.data.mnemonic
-                  );
+                  );}
                   vscode.window.showInformationMessage(
                     `✅ Wallet created successfully!
                     ----------------------------------------------
@@ -153,11 +163,13 @@ export class OpenWalletManagementWebview {
                   // Only show seed if restoration was successful
                   await this.context.secrets.store("seed", message.seedPhrase);
                   // go home
-                  this.panel.webview.html =
+                  if (OpenWalletManagementWebview.panel){
+
+                  OpenWalletManagementWebview.panel.webview.html =
                     await this._getWalletManagementHtml();
                   vscode.window.showInformationMessage(
                     "Wallet restored successfully!"
-                  );
+                  );}
                 } else {
                   vscode.window.showErrorMessage("Failed to restore wallet.");
                 }
@@ -171,7 +183,9 @@ export class OpenWalletManagementWebview {
               }
               break;
             case "home":
-              this.panel.webview.html = await this._getWalletManagementHtml();
+              if (OpenWalletManagementWebview.panel){
+              OpenWalletManagementWebview.panel.webview.html = await this._getWalletManagementHtml();
+              }
               break;
 
             case "getSeedphrase":
@@ -191,10 +205,12 @@ export class OpenWalletManagementWebview {
                 );
                 break;
               }
+              if (OpenWalletManagementWebview.panel){;
 
-              this.panel.webview.html = this._getRestoreWalletHtml(
+              OpenWalletManagementWebview.panel.webview.html = this._getRestoreWalletHtml(
                 firstConfig.network
               );
+            }
               break;
 
             default:

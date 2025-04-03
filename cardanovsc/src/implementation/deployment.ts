@@ -75,8 +75,9 @@ import * as fs from "fs/promises";
 import * as path from "path";
 import { getFirstNetworkConfig, getNetworkConfigs, integrateCardanoNodeAPI } from "../config/cardanoNodeIntegration";
 import { initializeLucid } from "./implementation";
+import { OpenWalletManagementWebview } from "../webview_ui/wallet_webview";
 
-export async function selectFile(context: vscode.ExtensionContext) {
+export async function selectFile(context: vscode.ExtensionContext,_extensionUri:vscode.Uri) {
   try {
     // 1️⃣ Check network availability
     const networks = await getNetworkConfigs(context);
@@ -87,7 +88,13 @@ export async function selectFile(context: vscode.ExtensionContext) {
       );
       
       if (action === "Configure Network") {
-        await integrateCardanoNodeAPI(context);
+       const check= await integrateCardanoNodeAPI(context);
+        if(check){
+                 if (OpenWalletManagementWebview.panel) {
+                   new OpenWalletManagementWebview(context, _extensionUri).initialize();
+       
+                 }
+               }
       }
       return;
     }
@@ -147,7 +154,6 @@ const addressPreview = scriptAddress.length > 30
 
   } catch (error: any) {
     vscode.window.showErrorMessage(`❌ Error: ${error.message}`);
-    console.error("Error Details:", error);
   }
 }
 

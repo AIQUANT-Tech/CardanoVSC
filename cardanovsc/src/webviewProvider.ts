@@ -145,8 +145,13 @@ export class MyWebviewViewProvider implements vscode.WebviewViewProvider {
           const valid = await integrateCardanoAPI(vscode, this.context);
           break;
         case "nodeIntegration":
-          await integrateCardanoNodeAPI(this.context);
+         const valid_connection= await integrateCardanoNodeAPI(this.context);
+         if(valid_connection){
+          if (OpenWalletManagementWebview.panel) {
+            new OpenWalletManagementWebview(this.context, this._extensionUri).initialize();
 
+          }
+        }
           break;
         case "openCardanoScan":
           vscode.env.openExternal(vscode.Uri.parse("https://cardanoscan.io/"));
@@ -155,7 +160,7 @@ export class MyWebviewViewProvider implements vscode.WebviewViewProvider {
           new OpenWalletManagementWebview(this.context, this._extensionUri);
           break;
         case "deployment":
-          await selectFile(this.context);
+          await selectFile(this.context,this._extensionUri);
           break;
         default:
           vscode.window.showErrorMessage(`Unknown command: ${message.command}`);
