@@ -1,10 +1,6 @@
 
 import vscode from 'vscode';
-import { BlockFrostAPI } from '@blockfrost/blockfrost-js';
-let blockfrostInstance: BlockFrostAPI | null = null;
-import { exec } from "child_process";
 import axios from 'axios';
-import { config } from 'dotenv';
 import { OpenWalletManagementWebview } from '../webview_ui/wallet_webview';
 
 export async function storeNetworkConfig(selectedNetwork: string, apiKey: string, extensionContext: vscode.ExtensionContext) {
@@ -196,7 +192,7 @@ export function registerNetworkCommand(context: vscode.ExtensionContext,_extensi
 }
 let statusBarItem: vscode.StatusBarItem;
 
-function updateStatusBar(network: string) {
+export function updateStatusBar(network: string) {
   if (statusBarItem) {
       statusBarItem.text = `$(plug) Cardano: ${network}`;
   }
@@ -261,7 +257,7 @@ export function registerDeleteNetworkCommand(context: vscode.ExtensionContext,_e
 }
 
 
-async function valApiKey(apiKey: string, network: string): Promise<boolean> {
+export async function valApiKey(apiKey: string, network: string): Promise<boolean> {
   try {
       const url = `https://cardano-${network}.blockfrost.io/api/v0/blocks/latest`;
 
@@ -269,7 +265,6 @@ async function valApiKey(apiKey: string, network: string): Promise<boolean> {
           headers: { 'project_id': apiKey }
       });
 
-      // If the request is successful, return true
       return response.status === 200;
   } catch (error: any) {
       return false;

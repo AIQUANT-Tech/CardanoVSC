@@ -1,75 +1,3 @@
-
-// import * as vscode from "vscode";
-// import * as fs from "fs/promises";
-// import { getFirstNetworkConfig, getNetworkConfigs, integrateCardanoNodeAPI } from "../config/cardanoNodeIntegration";
-// import { initializeLucid } from "./implementation";
-
-// export async function selectFile(context: vscode.ExtensionContext) {
-//   try {
-//     // 📌 Step 1: Check if network is available
-//     const networks = await getNetworkConfigs(context);
-//     if (!networks || networks.length === 0) {
-//       const action = await vscode.window.showErrorMessage(
-//         "No Cardano network configured. Would you like to configure one now?",
-//         "Configure Network", "Cancel"
-//       );
-      
-//       if (action === "Configure Network") {
-//         await integrateCardanoNodeAPI(context);
-//       }
-//       return;
-//     }
-    
-//     // 📌 Step 1: Select and Parse Plutus File
-//     const scriptJson = await selectPlutusFile();
-//     if (!scriptJson) {return;}
-
-//     // 📌 Step 2: Get Network Config & Initialize Lucid
-//     const firstConfig = getFirstNetworkConfig(context);
-//     if (!firstConfig) {throw new Error("Failed to get network configuration.");}
-
-//     const lucid = await initializeLucid(firstConfig.network, firstConfig.apiKey);
-//     if (!lucid) {throw new Error("Failed to initialize Lucid.");}
-
-//     // 📌 Step 3: Generate Script Address
-//     const scriptAddress = generateScriptAddress(lucid, scriptJson.cborHex);
-//     vscode.window.showInformationMessage(`Generated script address: ${scriptAddress}`);
-//   } catch (error: any) {
-//     vscode.window.showErrorMessage(`Error: ${error.message}`);
-//     console.error("Error Details:", error);
-//   }
-// }
-
-// // 📌 Select and Parse Plutus File
-// async function selectPlutusFile(): Promise<any | null> {
-//   const scriptUri = await vscode.window.showOpenDialog({
-//     canSelectMany: false,
-//     openLabel: "Select Plutus Script (.plutus)",
-//     filters: { "Plutus Script": ["plutus"] },
-//   });
-
-//   if (!scriptUri || scriptUri.length === 0) {
-//     vscode.window.showErrorMessage("No script selected.");
-//     return null;
-//   }
-
-//   const scriptPath = scriptUri[0].fsPath;
-//   try {
-//     const scriptContent = await fs.readFile(scriptPath, "utf8");
-//     const scriptJson = JSON.parse(scriptContent);
-
-//     if (!scriptJson.cborHex) {throw new Error("Invalid Plutus script file: missing 'cborHex' field.");}
-//     return scriptJson;
-//   } catch (error) {
-//     vscode.window.showErrorMessage("Failed to parse Plutus script file.");
-//     return null;
-//   }
-// }
-
-// // 📌 Generate Script Address
-// function generateScriptAddress(lucid: any, cborHex: string): string {
-//   return lucid.utils.validatorToAddress({ type: "PlutusV2", script: cborHex });
-// }
 import * as vscode from "vscode";
 import * as fs from "fs/promises";
 import * as path from "path";
@@ -182,7 +110,7 @@ async function saveAddressFile(filePath: string, address: string) {
 }
 
 // 📜 Select and parse Plutus file
-async function selectPlutusFile(): Promise<{ scriptJson: any | null, scriptPath: string | null }> {
+export async function selectPlutusFile(): Promise<{ scriptJson: any | null, scriptPath: string | null }> {
   const scriptUri = await vscode.window.showOpenDialog({
     canSelectMany: false,
     openLabel: "Select Plutus Script",
@@ -200,16 +128,29 @@ async function selectPlutusFile(): Promise<{ scriptJson: any | null, scriptPath:
     const scriptJson = JSON.parse(scriptContent);
 
     if (!scriptJson.cborHex) {
-      throw new Error("Invalid Plutus script: missing 'cborHex' field");
+      throw new Error("Invalid Plutus script: The file must contain a 'cborHex' field");
+    }
+    if (typeof scriptJson.cborHex !== 'string') {
+      throw new Error("Invalid Plutus script: 'cborHex' must be a string");
     }
     return { scriptJson, scriptPath };
-  } catch (error) {
-    throw new Error(`Failed to parse Plutus file: ${error instanceof Error ? error.message : String(error)}`);
+  } catch (error:any) {
+    let errorMessage = "Failed to process Plutus script file";
+    
+    if (error instanceof SyntaxError) {
+      errorMessage = "Invalid JSON format in Plutus script file";
+    } else if (error instanceof Error) {
+      errorMessage += `: ${error.message}`;
+    } else {
+      errorMessage += `: ${String(error)}`;
+    }
+    
+    throw new Error(errorMessage);
   }
 }
 
 // 🔑 Generate script address
-function generateScriptAddress(lucid: any, cborHex: string): string {
+export function generateScriptAddress(lucid: any, cborHex: string): string {
   if (!cborHex || typeof cborHex !== 'string') {
     throw new Error("Invalid CBOR hex format");
   }

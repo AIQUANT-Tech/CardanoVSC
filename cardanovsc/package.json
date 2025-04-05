@@ -206,26 +206,8 @@
         "scopeName": "source.haskell",
         "path": "./syntaxes/haskell.tmLanguage.json"
       },
-      {
-        "language": "alex",
-        "scopeName": "source.haskell.alex",
-        "path": "./syntaxes/alex.tmLanguage.json"
-      },
-      {
-        "language": "C2Hs",
-        "scopeName": "source.c2hs",
-        "path": "./syntaxes/C2Hs.json"
-      },
-      {
-        "language": "Hsc2Hs",
-        "scopeName": "source.hsc",
-        "path": "./syntaxes/Hsc2Hs.json"
-      },
-      {
-        "language": "happy",
-        "scopeName": "source.haskell.happy",
-        "path": "./syntaxes/happy.tmLanguage.json"
-      },
+      
+     
       {
         "language": "cabal",
         "scopeName": "source.cabal",

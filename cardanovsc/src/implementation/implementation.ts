@@ -20,9 +20,6 @@ export async function initializeLucid(
     // Dynamically import Lucid and Blockfrost
     const { Blockfrost, Lucid } = await import("lucid-cardano");
 
-    console.log("Initializing Lucid...");
-    console.log(`Selected Network: ${selectedNetwork}`); // Debugging: Log the selected network
-
     let lucid: any;
     if (selectedNetwork === "Mainnet") {
       lucid = await Lucid.new(new Blockfrost(baseUrl, apiKey), "Mainnet");
@@ -36,14 +33,9 @@ export async function initializeLucid(
       return null;
     }
 
-    vscode.window.showInformationMessage(
-      `Lucid initialized for ${selectedNetwork} network`
-    );
-    console.log(`Lucid initialized for ${selectedNetwork} network`);
 
     return lucid;
   } catch (error: any) {
-    console.error("Lucid initialization error:", error.message);
     vscode.window.showErrorMessage(
       "Error initializing Lucid with the selected network."
     );
@@ -80,7 +72,6 @@ export async function restoreWallet(
 
     // Initialize Lucid
     const lucid = await initializeLucid(selectedNetwork, apiKey);
-
     // Get password
     const password = await vscode.window.showInputBox({
       prompt: "Enter a password to encrypt your wallet",
@@ -126,15 +117,24 @@ export async function restoreWallet(
 
     fs.writeFileSync(walletFile, JSON.stringify(walletData, null, 2));
 
-    vscode.window.showInformationMessage(
-      `Wallet restored successfully on ${selectedNetwork}!\n` +
-        `Address: ${address}\n` +
-        `Saved to: wallet_details/${selectedNetwork}/${sanitizedAddress}.json`
-    );
+    vscode.window
+      .showInformationMessage(
+        `✅ Wallet restore successfully! on ${walletData.network}
+                        -------------------------
+                       Saved to: wallet_details/${selectedNetwork}/${sanitizedAddress}.json`,
+        "Copy Address"
+      )
+      .then((selection) => {
+        if (selection === "Copy Address") {
+          vscode.env.clipboard.writeText(walletData.address);
+          vscode.window.showInformationMessage(
+            "✅ Wallet address copied successfully!"
+          );
+        }
+      });
 
     return true;
   } catch (error) {
-    console.error("Wallet restoration error:", error);
     const message = error instanceof Error ? error.message : String(error);
     vscode.window.showErrorMessage(`Failed to restore wallet: ${message}`);
     return false;
@@ -150,22 +150,23 @@ export async function createWallet(
     address: string;
     network: string;
     filePath: string;
-    mnemonic?: string; // Only included if needed for immediate use
+    mnemonic: string; // Only included if needed for immediate use
   };
   error?: string;
 }> {
   try {
-    
-        // Ensure workspace exists
-        if (!vscode.workspace.workspaceFolders?.length) {
-          return {
-            success: false,
-            error:
-              "No workspace folder is open. Please open a workspace before creating a wallet.",
-          };
-        }
+    // Ensure workspace exists
+    if (!vscode.workspace.workspaceFolders?.length) {
+      return {
+        success: false,
+        error:
+          "No workspace folder is open. Please open a workspace before creating a wallet.",
+      };
+    }
 
     const lucid = await initializeLucid(selectedNetwork, apiKey);
+    console.log(lucid);
+
     const mnemonic = lucid.utils.generateSeedPhrase();
 
     const password = await vscode.window.showInputBox({
@@ -238,7 +239,7 @@ export async function createWallet(
     };
   }
 }
-function encryptMnemonic(mnemonic: string, password: string): string {
+export function encryptMnemonic(mnemonic: string, password: string): string {
   const salt = crypto.randomBytes(16);
   const key = crypto.scryptSync(password, salt, 32);
   const iv = crypto.randomBytes(16);
@@ -249,122 +250,22 @@ function encryptMnemonic(mnemonic: string, password: string): string {
 
   return `${salt.toString("hex")}:${iv.toString("hex")}:${encrypted}`;
 }
-
-function decryptMnemonic(encryptedMnemonic: string, password: string): string {
-  const [saltHex, ivHex, encryptedHex] = encryptedMnemonic.split(":");
-
-  if (!saltHex || !ivHex || !encryptedHex) {
-    throw new Error("Invalid encrypted mnemonic format.");
-  }
-
-  const salt = Buffer.from(saltHex, "hex");
-  const iv = Buffer.from(ivHex, "hex");
-  const encrypted = encryptedHex; // Keep this as a string
-
-  const key = crypto.scryptSync(password, salt, 32);
-  const decipher = crypto.createDecipheriv("aes-256-cbc", key, iv);
-
-  // `encrypted` is a string, and 'hex' specifies its encoding
-  let decrypted = decipher.update(encrypted, "hex", "utf8");
-  decrypted += decipher.final("utf8");
-
-  return decrypted;
-}
-
-function getWorkingDirectory(): string | undefined {
-  const folders = vscode.workspace.workspaceFolders;
-  if (folders && folders.length > 0) {
-    return folders[0].uri.fsPath; // Returns the first workspace folder path
-  }
-  console.error("No workspace folder is open.");
-  return undefined;
-}
-
-function getEncryptedSeedFromFile(fileName: string): string {
-  try {
-    const workingDir = getWorkingDirectory();
-    if (!workingDir) {
-      throw new Error("Working directory not found.");
-    }
-
-    const filePath = path.join(workingDir, "wallet_details", fileName);
-
-    if (!fs.existsSync(filePath)) {
-      console.error(`File not found: ${filePath}`);
-      throw new Error("File does not exist.");
-    }
-
-    const data = fs.readFileSync(filePath, "utf8");
-    const match = data.match(/^Encrypted Seed:\s*(.+)$/m);
-
-    if (!match || match.length < 2) {
-      throw new Error("Encrypted Seed not found in the file.");
-    }
-
-    console.log(`Encrypted seed extracted successfully from ${filePath}`);
-    return match[1].trim();
-  } catch (error: any) {
-    console.error(
-      `Failed to extract encrypted seed from ${fileName}:`,
-      error.message
-    );
-    throw error;
-  }
-}
-// Function to send a transaction
-export async function sendTransaction(
-  senderAddress: string,
-  recipientAddress: string,
-  amount: number,
-  password: string,
+export async function checkBalance(
   selectedNetwork: string,
-  apiKey: string
-): Promise<void> {
-  try {
-    const fileName = `${senderAddress}`;
-    const encryptedSeed = getEncryptedSeedFromFile(fileName);
-    const mnemonic = decryptMnemonic(encryptedSeed, password);
-
-    const lucid = await initializeLucid(selectedNetwork, apiKey);
-    lucid.selectWalletFromSeed(mnemonic);
-
-    const tx = await lucid
-      .newTx()
-      .payToAddress(recipientAddress, {
-        lovelace: BigInt(Number(amount) * 1_000_000),
-      })
-      .complete();
-
-    const signedTx = await tx.sign().complete();
-    const txHash = await signedTx.submit();
-    vscode.window.showInformationMessage("transaction successful" + txHash);
-    console.log("Transaction successful! TxHash:", txHash);
-  } catch (error: any) {
-    console.error("Failed to send transaction:", error.message);
-  }
-}
-
-
-export async function checkBalance(selectedNetwork: string, apiKey: string) {
-  const addr = await vscode.window.showInputBox({
-    prompt: "Enter the address",
-    ignoreFocusOut: true,
-  });
-
-  if (!addr) {
-    vscode.window.showErrorMessage("Input is required.");
-    return;
-  }
-
+  apiKey: string,
+  addr: string
+): Promise<{ balance: number; balanceInLovelace: bigint }> {
   const lucid = await initializeLucid(selectedNetwork, apiKey);
   const utxos = await lucid.utxosAt(addr);
-  const balance = utxos.reduce(
+
+  const balanceInLovelace = utxos.reduce(
     (acc: bigint, utxo: { assets: { lovelace: any } }) =>
       acc + BigInt(utxo.assets.lovelace || 0n),
     0n
   );
-  const adaBalance = Number(balance) / 1_000_000;
-  vscode.window.showInformationMessage(
-    `Available balance: ${adaBalance.toFixed(6)} ADA`
-  );
+  const balance = Number(balanceInLovelace) / 1_000_000;
+  return {
+    balance,
+    balanceInLovelace,
+  };
 }

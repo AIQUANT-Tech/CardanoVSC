@@ -6,8 +6,7 @@ import {
 import {
   checkBalance,
   createWallet,
-  restoreWallet,
-  sendTransaction,
+  restoreWallet
 } from "../implementation/implementation";
 
 export class OpenWalletManagementWebview {
@@ -89,6 +88,7 @@ export class OpenWalletManagementWebview {
                   address: creationResult.data.address,
                   network: creationResult.data.network,
                   filePath: creationResult.data.filePath,
+                  seed:creationResult.data.mnemonic
                 };
 
                 await this.context.secrets.store(
@@ -104,12 +104,16 @@ export class OpenWalletManagementWebview {
                   vscode.window.showInformationMessage(
                     `✅ Wallet created successfully!
                     ----------------------------------------------
-                   🔖 Address: ${walletData.address}`,
-                      "Copy Address"
+                    Saved to: ${walletData.filePath}`,
+                      "Copy Address", "Copy SeedPhrase"
                   ).then((selection) => {
                    if(selection === "Copy Address") {
                       vscode.env.clipboard.writeText(walletData.address);
                       vscode.window.showInformationMessage("✅ Wallet address copied successfully!");
+                    }
+                    if(selection === "Copy SeedPhrase") {
+                      vscode.env.clipboard.writeText(walletData.seed);
+                      vscode.window.showInformationMessage("✅ Wallet seedPhrase copied successfully!");
                     }
                   });
                 }
@@ -131,8 +135,25 @@ export class OpenWalletManagementWebview {
                 );
                 break;
               }
-
-              await checkBalance(firstConfig.network, firstConfig.apiKey);
+               const addr = await vscode.window.showInputBox({
+                  prompt: "Enter the address",
+                  ignoreFocusOut: true,
+                });
+              
+                if (!addr) {
+                  vscode.window.showErrorMessage("address is required.");
+                  return;
+                }
+            const data=  await checkBalance(firstConfig.network, firstConfig.apiKey,addr);
+            if(data){
+              vscode.window.showInformationMessage(
+                `Available balance: ${data.balance.toFixed(6)} ADA`
+              );
+            }else{
+              vscode.window.showErrorMessage(
+                `error in fetching balance..`
+              );
+            }
               break;
 
             case "restoreWallet":
@@ -167,14 +188,11 @@ export class OpenWalletManagementWebview {
 
                   OpenWalletManagementWebview.panel.webview.html =
                     await this._getWalletManagementHtml();
-                  vscode.window.showInformationMessage(
-                    "Wallet restored successfully!"
-                  );}
+                  }
                 } else {
                   vscode.window.showErrorMessage("Failed to restore wallet.");
                 }
               } catch (error) {
-                console.error("Restore wallet error:", error);
                 vscode.window.showErrorMessage(
                   `Error restoring wallet: ${
                     error instanceof Error ? error.message : String(error)

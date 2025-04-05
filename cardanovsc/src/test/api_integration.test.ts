@@ -11,7 +11,7 @@ import {
 import("chai").then((chai) => {
   const expect = chai.expect;
 
-  suite("integrateCardanoAPI Test Suite", function () {
+  suite("cardano_api_integration Test Suite", function () {
     this.timeout(30000); // Set suite timeout to 30 seconds
 
     let showQuickPickStub: sinon.SinonStub;
@@ -73,7 +73,6 @@ import("chai").then((chai) => {
       );
 
       expect(result).to.be.false;
-      console.log("api_integration test completed successfully! ");
 
     });
 
