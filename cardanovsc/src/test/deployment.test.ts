@@ -29,8 +29,5 @@ suite("deployment Test Suite", function () {
        const result= await generateScriptAddress(lucid,cborHex);
        expect(result).to.equal(address);
   });
-
-
-
 });
 });

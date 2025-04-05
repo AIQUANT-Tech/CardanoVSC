@@ -1,7 +1,7 @@
 import * as assert from "assert";
 import * as vscode from "vscode";
 
-suite("Haskell Completion Contributor Tests", () => {
+suite("Haskell Completion Contributor Test Suite", () => {
   test("Module Import Completions", async () => {
 
     const document = await vscode.workspace.openTextDocument({
@@ -21,8 +21,6 @@ suite("Haskell Completion Contributor Tests", () => {
       completions.some((item: string) => item === "import"),
       'Completions should contain "import"'
     );
-
-    console.log("auto completion test completed successfully! ");
   });
 });
 
