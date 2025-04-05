@@ -53,7 +53,7 @@ async function integrateCardanoAPI(
 }
 
 
-function executeCurlCommand(apiUrl: string, apiKey: string | undefined): Promise<any> {
+export function executeCurlCommand(apiUrl: string, apiKey: string | undefined): Promise<any> {
   return new Promise((resolve, reject) => {
     const curlCommand = `curl -X GET "${apiUrl}" \
   --header "apiKey: ${apiKey}" \

@@ -192,7 +192,7 @@ CardanoVSC allows you to manage your Cardano wallets directly within VS Code. Yo
 
 ### 💰 Checking Your Balance  
 1. Open **Wallet Management**.  
-2. Select the correct network (**Mainnet**/**Testnet**).  
+2. Select the correct network (**Mainnet**/**Prepeod**/**Preview**).  
 3. Click **Check Balance**.  
 4. promt for asking address of wallet of that network in which you connected (network show at right corner in status bar of vscode)
 5. View your balance in the **vscode Notification message**.  
@@ -232,7 +232,7 @@ Each .json file contains:
 
 ### 🛠️ Troubleshooting  
 If you encounter issues:  
-- Ensure you're on the correct network (**Mainnet**/**Testnet**).  
+- Ensure you're on the correct network (**Mainnet**/**Preprod**/**Preview**).  
 - Double-check that all **24 words** are entered correctly when restoring.  
 - Make sure your **workspace folder has write permissions**.  
 

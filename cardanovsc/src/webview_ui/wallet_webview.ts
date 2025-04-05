@@ -6,19 +6,22 @@ import {
 import {
   checkBalance,
   createWallet,
-  restoreWallet,
-  sendTransaction,
+  restoreWallet
 } from "../implementation/implementation";
 
 export class OpenWalletManagementWebview {
-  public panel: vscode.WebviewPanel;
+  public static panel: vscode.WebviewPanel | undefined;
 
   constructor(
     private context: vscode.ExtensionContext,
     private readonly _extensionUri: vscode.Uri
   ) {
-    
-    this.panel = vscode.window.createWebviewPanel(
+    if (OpenWalletManagementWebview.panel) {
+      // If the panel is already open, reveal it
+      OpenWalletManagementWebview.panel.reveal(vscode.ViewColumn.One,true);
+      return;
+    }
+    OpenWalletManagementWebview.panel = vscode.window.createWebviewPanel(
       "cardanovsc.walletManagement",
       "Wallet Management",
       vscode.ViewColumn.One,
@@ -29,12 +32,17 @@ export class OpenWalletManagementWebview {
     );
 
     this.initialize();
+    OpenWalletManagementWebview.panel.onDidDispose(() => {
+      OpenWalletManagementWebview.panel = undefined;
+    });
   }
 
-  private async initialize() {
-    this.panel.webview.html = await this._getWalletManagementHtml();
+  public async initialize() {
+    if (!OpenWalletManagementWebview.panel) {return;}
 
-    this.panel.webview.onDidReceiveMessage(
+    OpenWalletManagementWebview.panel.webview.html = await this._getWalletManagementHtml();
+
+    OpenWalletManagementWebview.panel.webview.onDidReceiveMessage(
       async (message: {
         walletName?: string;
         command: string;
@@ -80,6 +88,7 @@ export class OpenWalletManagementWebview {
                   address: creationResult.data.address,
                   network: creationResult.data.network,
                   filePath: creationResult.data.filePath,
+                  seed:creationResult.data.mnemonic
                 };
 
                 await this.context.secrets.store(
@@ -88,18 +97,23 @@ export class OpenWalletManagementWebview {
                 );
 
                 if (creationResult.data.mnemonic) {
-                  this.panel.webview.html = this._getSeedPhraseHtml(
+                  if (OpenWalletManagementWebview.panel){
+                  OpenWalletManagementWebview.panel.webview.html = this._getSeedPhraseHtml(
                     creationResult.data.mnemonic
-                  );
+                  );}
                   vscode.window.showInformationMessage(
                     `✅ Wallet created successfully!
                     ----------------------------------------------
-                   🔖 Address: ${walletData.address}`,
-                      "Copy Address"
+                    Saved to: ${walletData.filePath}`,
+                      "Copy Address", "Copy SeedPhrase"
                   ).then((selection) => {
                    if(selection === "Copy Address") {
                       vscode.env.clipboard.writeText(walletData.address);
                       vscode.window.showInformationMessage("✅ Wallet address copied successfully!");
+                    }
+                    if(selection === "Copy SeedPhrase") {
+                      vscode.env.clipboard.writeText(walletData.seed);
+                      vscode.window.showInformationMessage("✅ Wallet seedPhrase copied successfully!");
                     }
                   });
                 }
@@ -121,8 +135,25 @@ export class OpenWalletManagementWebview {
                 );
                 break;
               }
-
-              await checkBalance(firstConfig.network, firstConfig.apiKey);
+               const addr = await vscode.window.showInputBox({
+                  prompt: "Enter the address",
+                  ignoreFocusOut: true,
+                });
+              
+                if (!addr) {
+                  vscode.window.showErrorMessage("address is required.");
+                  return;
+                }
+            const data=  await checkBalance(firstConfig.network, firstConfig.apiKey,addr);
+            if(data){
+              vscode.window.showInformationMessage(
+                `Available balance: ${data.balance.toFixed(6)} ADA`
+              );
+            }else{
+              vscode.window.showErrorMessage(
+                `error in fetching balance..`
+              );
+            }
               break;
 
             case "restoreWallet":
@@ -153,16 +184,15 @@ export class OpenWalletManagementWebview {
                   // Only show seed if restoration was successful
                   await this.context.secrets.store("seed", message.seedPhrase);
                   // go home
-                  this.panel.webview.html =
+                  if (OpenWalletManagementWebview.panel){
+
+                  OpenWalletManagementWebview.panel.webview.html =
                     await this._getWalletManagementHtml();
-                  vscode.window.showInformationMessage(
-                    "Wallet restored successfully!"
-                  );
+                  }
                 } else {
                   vscode.window.showErrorMessage("Failed to restore wallet.");
                 }
               } catch (error) {
-                console.error("Restore wallet error:", error);
                 vscode.window.showErrorMessage(
                   `Error restoring wallet: ${
                     error instanceof Error ? error.message : String(error)
@@ -171,10 +201,20 @@ export class OpenWalletManagementWebview {
               }
               break;
             case "home":
-              this.panel.webview.html = await this._getWalletManagementHtml();
+              if (OpenWalletManagementWebview.panel){
+              OpenWalletManagementWebview.panel.webview.html = await this._getWalletManagementHtml();
+              }
               break;
 
             case "getSeedphrase":
+              // Validate workspace
+                  if (!vscode.workspace.workspaceFolders?.length) {
+                    vscode.window.showErrorMessage(
+                     " Wallet restore failed: No workspace folder is open. Please open a workspace before restoring a wallet."
+                    );
+                    return false;
+                  }
+
               firstConfig = getFirstNetworkConfig(this.context);
 
               if (!firstConfig) {
@@ -183,10 +223,12 @@ export class OpenWalletManagementWebview {
                 );
                 break;
               }
+              if (OpenWalletManagementWebview.panel){;
 
-              this.panel.webview.html = this._getRestoreWalletHtml(
+              OpenWalletManagementWebview.panel.webview.html = this._getRestoreWalletHtml(
                 firstConfig.network
               );
+            }
               break;
 
             default:

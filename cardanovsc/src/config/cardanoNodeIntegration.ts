@@ -1,8 +1,7 @@
 
 import vscode from 'vscode';
-import { BlockFrostAPI } from '@blockfrost/blockfrost-js';
+import axios from 'axios';
 import { OpenWalletManagementWebview } from '../webview_ui/wallet_webview';
-let blockfrostInstance: BlockFrostAPI | null = null;
 
 export async function storeNetworkConfig(selectedNetwork: string, apiKey: string, extensionContext: vscode.ExtensionContext) {
   // Get the existing configurations from global state
@@ -24,7 +23,6 @@ export async function storeNetworkConfig(selectedNetwork: string, apiKey: string
   // Update the global state with the updated array
   await extensionContext.globalState.update('cardano.node', updatedConfigs);
 
-  console.log('Updated network configurations:', updatedConfigs); // Debug log
 }
 export function getFirstNetworkConfig(extensionContext: vscode.ExtensionContext): { network: string, apiKey: string } | null {
   let storedConfigs = extensionContext.globalState.get<{ network: string, apiKey: string }[]>('cardano.node');
@@ -77,28 +75,20 @@ export async function integrateCardanoNodeAPI(extensionContext: vscode.Extension
             return false;
         }
 
+       const isValidApiKey = await valApiKey(apiKey,selectedNetwork);
+       if (!isValidApiKey) {
+        vscode.window.showErrorMessage(
+          "Invalid API key! Please check and try again."
+        );
+        return false;
+      }else{
+        vscode.window.showInformationMessage(`🎉 Successfully connected cardano node  on ${selectedNetwork}! through blockfrost`);
 
-        // Create Blockfrost instance
-        blockfrostInstance = new BlockFrostAPI({
-            projectId: apiKey
-        });
-
-        // Test the connection by checking Blockfrost health
-        const health = await blockfrostInstance.health();
-        if (health.is_healthy) {
-            vscode.window.showInformationMessage(`🎉 Successfully connected cardano node  on ${selectedNetwork}! through blockfrost`);
-        } else {
-            vscode.window.showErrorMessage("😷 Blockfrost connection failed. The server might be down.");
-            return false;
-        }
+      }
 
         // Store the selected network and API key in the global state
-        await storeNetworkConfig(selectedNetwork, apiKey, extensionContext);
+        await storeNetworkConfig(selectedNetwork, apiKey, extensionContext);       
         updateStatusBar(selectedNetwork); // Update status bar with selected network
-
-        setTimeout(reloadWindow, 1000);
-
-
         return true;
     } catch (error: any) {
         vscode.window.showErrorMessage(`Integration failed: ${error.message || error}`);
@@ -107,7 +97,6 @@ export async function integrateCardanoNodeAPI(extensionContext: vscode.Extension
 }
 
  export async function setNetwork(network: string, extensionContext: vscode.ExtensionContext,_extensionUri: vscode.Uri) {
-  console.log("set_network");
     const networkConfigs = await getNetworkConfigs(extensionContext);
   
     const selectedConfig = networkConfigs.find(config => config.network === network);
@@ -116,25 +105,23 @@ export async function integrateCardanoNodeAPI(extensionContext: vscode.Extension
       return false;
     }
   
-    // Reinitialize Blockfrost instance with the selected network's API key
-    blockfrostInstance = new BlockFrostAPI({
-      projectId: selectedConfig.apiKey
-    });
+
   
     try {
       // Test the connection
-      const health = await blockfrostInstance.health();
-      if (health.is_healthy) {
+      const isValidApiKey = await valApiKey(selectedConfig.apiKey,selectedConfig.network);
+      if (isValidApiKey) {   
         vscode.window.showInformationMessage(`🎉 Successfully connected to ${network} network!`);
-         
-        // Reorder the selected network to be at the front and update global state
+         // Reorder the selected network to be at the front and update global state
         const reorderedConfigs = networkConfigs.filter(config => config.network !== network);
         reorderedConfigs.unshift(selectedConfig);
         await extensionContext.globalState.update('cardano.node', reorderedConfigs);
         const firstConfig = getFirstNetworkConfig(extensionContext);
            
         updateStatusBar(firstConfig?.network || "No Network");
-
+        if (OpenWalletManagementWebview.panel) {
+          new OpenWalletManagementWebview(extensionContext, _extensionUri).initialize();
+        }
         return true;
       } else {
         vscode.window.showErrorMessage(`😷 Failed to connect to ${network} network.`);
@@ -142,25 +129,11 @@ export async function integrateCardanoNodeAPI(extensionContext: vscode.Extension
       }
     } catch (error: any) {
       vscode.window.showErrorMessage(`❌ Error connecting to ${network}: ${error.message || error}`);
-      console.error("Blockfrost connection error:", error);
       return false;
     }
   }
   
-//   export function registerNetworkCommand(context: vscode.ExtensionContext) {
-//     context.subscriptions.push(vscode.commands.registerCommand('cardano.switchNetwork', async () => {
-      
-//         const networks = await getNetworkConfigs(context);
-//         const selectedNetwork = await vscode.window.showQuickPick(networks.map(n => n.network), {
-//             placeHolder: "Select a network to switch"
-//         });
-
-//         if (selectedNetwork) {
-//             await setNetwork(selectedNetwork, context, vscode.Uri.parse(""));
-//         }
-//     }));
-// }
-export function registerNetworkCommand(context: vscode.ExtensionContext) {
+export function registerNetworkCommand(context: vscode.ExtensionContext,_extensionUri:vscode.Uri) {
   context.subscriptions.push(vscode.commands.registerCommand('cardano.switchNetwork', async () => {
       const networks = await getNetworkConfigs(context);
       
@@ -172,9 +145,28 @@ export function registerNetworkCommand(context: vscode.ExtensionContext) {
           );
           
           if (action === "Yes") {
-              await integrateCardanoNodeAPI(context);
-          }
+            if(await integrateCardanoNodeAPI(context)){
+              if (OpenWalletManagementWebview.panel) {
+                new OpenWalletManagementWebview(context, _extensionUri).initialize();
+        
+              }}}
           return;
+      }else if(networks.length===1){
+        const action = await vscode.window.showInformationMessage(
+          "required more than one to switch network . Would you like to add one now?",
+          "Yes", "No"
+      );
+      if (action === "Yes") {
+        if(await integrateCardanoNodeAPI(context)){
+          if (OpenWalletManagementWebview.panel) {
+            new OpenWalletManagementWebview(context, _extensionUri).initialize();
+    
+          }
+        }
+   
+       }
+         return;
+      
       }
 
       // Create quick pick items with additional information
@@ -200,7 +192,7 @@ export function registerNetworkCommand(context: vscode.ExtensionContext) {
 }
 let statusBarItem: vscode.StatusBarItem;
 
-function updateStatusBar(network: string) {
+export function updateStatusBar(network: string) {
   if (statusBarItem) {
       statusBarItem.text = `$(plug) Cardano: ${network}`;
   }
@@ -210,13 +202,12 @@ export function createStatusBarItem(extensionContext: vscode.ExtensionContext) {
   statusBarItem.command = 'cardano.switchNetwork';
   statusBarItem.tooltip = "Click to switch Cardano network";
   statusBarItem.show();
-
   const firstConfig = getFirstNetworkConfig(extensionContext);
   updateStatusBar(firstConfig?.network || "No Network");
 
   extensionContext.subscriptions.push(statusBarItem);
 }
-export async function deleteNetworkConfig(networkToDelete: string, extensionContext: vscode.ExtensionContext): Promise<boolean> {
+export async function deleteNetworkConfig(networkToDelete: string, extensionContext: vscode.ExtensionContext,_extensionUri:vscode.Uri): Promise<boolean> {
   try {
       // Get the current network configurations
       const currentConfigs = await getNetworkConfigs(extensionContext);
@@ -229,18 +220,14 @@ export async function deleteNetworkConfig(networkToDelete: string, extensionCont
       
       // If the deleted network was the currently active one, update the status bar
       const firstConfig = getFirstNetworkConfig(extensionContext);
+      if (OpenWalletManagementWebview.panel) {
+        new OpenWalletManagementWebview(extensionContext, _extensionUri).initialize();
+
+      }
       updateStatusBar(firstConfig?.network || "No Network");
       
-      // If Blockfrost instance was using the deleted network, reset it
-      if (blockfrostInstance) {
-          const health = await blockfrostInstance.health().catch(() => null);
-          if (!health?.is_healthy) {
-              blockfrostInstance = null;
-          }
-      }
-      
+ 
       vscode.window.showInformationMessage(`✅ Successfully deleted ${networkToDelete} network configuration`);
-      setTimeout(reloadWindow, 1000);
 
       return true;
   } catch (error: any) {
@@ -250,7 +237,7 @@ export async function deleteNetworkConfig(networkToDelete: string, extensionCont
   }
 }
 
-export function registerDeleteNetworkCommand(context: vscode.ExtensionContext) {
+export function registerDeleteNetworkCommand(context: vscode.ExtensionContext,_extensionUri:vscode.Uri) {
   context.subscriptions.push(vscode.commands.registerCommand('cardanovsc.deleteNetwork', async () => {
       const networks = await getNetworkConfigs(context);
       
@@ -264,11 +251,23 @@ export function registerDeleteNetworkCommand(context: vscode.ExtensionContext) {
       });
 
       if (selectedNetwork) {
-          await deleteNetworkConfig(selectedNetwork, context);
+          await deleteNetworkConfig(selectedNetwork, context,_extensionUri);
       }
   }));
 }
-function reloadWindow() {
-  // Execute the 'workbench.action.reloadWindow' command
-  vscode.commands.executeCommand('workbench.action.reloadWindow');
+
+
+export async function valApiKey(apiKey: string, network: string): Promise<boolean> {
+  try {
+      const url = `https://cardano-${network}.blockfrost.io/api/v0/blocks/latest`;
+
+      const response = await axios.get(url, {
+          headers: { 'project_id': apiKey }
+      });
+
+      return response.status === 200;
+  } catch (error: any) {
+      return false;
+  }
 }
+

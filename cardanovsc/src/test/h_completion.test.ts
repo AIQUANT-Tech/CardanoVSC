@@ -1,18 +1,15 @@
 import * as assert from "assert";
 import * as vscode from "vscode";
 
-suite("Haskell Completion Contributor Tests", () => {
+suite("Haskell Completion Contributor Test Suite", () => {
   test("Module Import Completions", async () => {
-    console.log('Starting "Module Import Completions" test...');
 
     const document = await vscode.workspace.openTextDocument({
       language: "haskell",
       content: "import ",
     });
-    console.log("Test document created successfully.");
 
     await vscode.window.showTextDocument(document);
-    console.log("Document displayed in the editor.");
 
     const completions = await getCompletions(
       document,
@@ -24,8 +21,6 @@ suite("Haskell Completion Contributor Tests", () => {
       completions.some((item: string) => item === "import"),
       'Completions should contain "import"'
     );
-
-    console.log("auto completion test completed successfully! ");
   });
 });
 
@@ -39,7 +34,6 @@ async function getCompletions(
   document: vscode.TextDocument,
   position: vscode.Position
 ): Promise<any> {
-  console.log("Fetching completion items...");
   const completionList =
     await vscode.commands.executeCommand<vscode.CompletionList>(
       "vscode.executeCompletionItemProvider",
@@ -51,6 +45,5 @@ async function getCompletions(
       return completionList.items.map((item) => item.label);
   }
 
-  console.log("No completion items found.");
   return [];
 }
