@@ -270,7 +270,6 @@ import {
       }
       
       this.cleanupProcess();
-      diagnosticCollection.clear();
       this.sendEvent(new TerminatedEvent());
       this.sendResponse(response);
     }

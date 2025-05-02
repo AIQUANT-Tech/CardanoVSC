@@ -1,7 +1,7 @@
 
 import * as vscode from 'vscode';
 import { HaskellDebugSession } from './debugAdapter';
-import { startGhcidIfNeeded, startGhcidOnHaskellOpen } from './diagnostic';
+import {  startGhcidIfNeeded, startGhcidOnHaskellOpen } from './diagnostic';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -35,6 +35,7 @@ export function activate(context: vscode.ExtensionContext) {
         context.subscriptions.push(
             vscode.workspace.onDidOpenTextDocument((document) => {
                 if (document.languageId === 'haskell') {
+                    
                     startGhcidIfNeeded();
                 }
             })
@@ -43,6 +44,7 @@ export function activate(context: vscode.ExtensionContext) {
         context.subscriptions.push(
             vscode.workspace.onDidChangeTextDocument((e) => {
                 if (e.document.languageId === 'haskell') {
+               
                     startGhcidIfNeeded();
                 }
             })
@@ -99,6 +101,7 @@ class HaskellConfigurationProvider implements vscode.DebugConfigurationProvider 
                 activeFile: editor.document.fileName,
                 stopOnEntry: false,
                 showIO: true,
+                skipFeatures: true,
                 cwd: vscode.workspace.workspaceFolders?.[0]?.uri.fsPath
             };
         }
