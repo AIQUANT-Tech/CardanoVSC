@@ -9,13 +9,54 @@
   "categories": [
     "Other"
   ],
-  "activationEvents": [],
+  "activationEvents": [
+    "onDebugResolve:haskell"
+  ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
         "command": "cardanovsc-debugger.helloWorld",
         "title": "Hello World"
+      }
+    ],
+    "breakpoints": [
+      {
+        "language": "haskell"
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "haskell",
+        "label": "Haskell Debugger",
+        "program": "./out/debugAdapter.js",
+        "runtime": "node",
+        "languages": [
+          "haskell"
+        ],
+        "configurationAttributes": {
+          "launch": {
+            "required": [
+              "program"
+            ],
+            "properties": {
+              "program": {
+                "type": "string",
+                "description": "Path to the Haskell program to debug"
+              },
+              "stopOnEntry": {
+                "type": "boolean",
+                "default": false,
+                "description": "Automatically stop after launch."
+              },
+              "showIO": {
+                "type": "boolean",
+                "default": true,
+                "description": "Display I/O output from the program"
+              }
+            }
+          }
+        }
       }
     ]
   },
@@ -28,14 +69,19 @@
     "test": "vscode-test"
   },
   "devDependencies": {
-    "@types/vscode": "^1.99.0",
     "@types/mocha": "^10.0.10",
     "@types/node": "20.x",
+    "@types/vscode": "^1.99.0",
     "@typescript-eslint/eslint-plugin": "^8.17.0",
     "@typescript-eslint/parser": "^8.17.0",
-    "eslint": "^9.16.0",
-    "typescript": "^5.7.2",
     "@vscode/test-cli": "^0.0.10",
-    "@vscode/test-electron": "^2.4.1"
+    "@vscode/test-electron": "^2.4.1",
+    "eslint": "^9.16.0",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "@vscode/debugadapter": "^1.68.0",
+    "@vscode/debugprotocol": "^1.68.0",
+    "vscode-debugadapter": "^1.51.0"
   }
 }
