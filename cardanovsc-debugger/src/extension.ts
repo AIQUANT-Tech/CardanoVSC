@@ -1,7 +1,7 @@
 
 import * as vscode from 'vscode';
 import { HaskellDebugSession } from './debugAdapter';
-import { startGhcidOnHaskellOpen } from './diagnostic';
+import { startGhcidIfNeeded, startGhcidOnHaskellOpen } from './diagnostic';
 
 export function activate(context: vscode.ExtensionContext) {
 
@@ -12,6 +12,7 @@ export function activate(context: vscode.ExtensionContext) {
 	});
 
 	context.subscriptions.push(disposable);
+
     try {
         // Register configuration provider
         const configProvider = new HaskellConfigurationProvider();
@@ -29,6 +30,24 @@ export function activate(context: vscode.ExtensionContext) {
         vscode.window.showErrorMessage('Failed to initialize Haskell debugger');
     }
     startGhcidOnHaskellOpen(context);
+
+        // Start ghcid when a Haskell file is opened or changed
+        context.subscriptions.push(
+            vscode.workspace.onDidOpenTextDocument((document) => {
+                if (document.languageId === 'haskell') {
+                    startGhcidIfNeeded();
+                }
+            })
+        );
+     
+        context.subscriptions.push(
+            vscode.workspace.onDidChangeTextDocument((e) => {
+                if (e.document.languageId === 'haskell') {
+                    startGhcidIfNeeded();
+                }
+            })
+        );
+     
 
 }
 
