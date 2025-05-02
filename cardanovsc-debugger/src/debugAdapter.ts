@@ -58,7 +58,6 @@ import {
       try {
         let stdoutBuffer = "";
         let stderrBuffer = "";
-        diagnosticCollection.clear();
         const editor = vscode.window.activeTextEditor;
         args.activeFile = editor?.document.fileName;
         this.launchArgs = args;
