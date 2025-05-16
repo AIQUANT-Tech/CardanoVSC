@@ -29,6 +29,7 @@
   "activationEvents": [
     
   ],
+ 
    "main": "./out/extension.js",
   "contributes": {
 
