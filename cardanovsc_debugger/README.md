@@ -62,13 +62,24 @@ npm run test
 
 ```
 └── 📁cardanovsc_debugger
-    └── 📁__mocks__
-        └── vscode.js
     └── 📁.vscode
         └── extensions.json
         └── launch.json
         └── settings.json
         └── tasks.json
+    └── 📁images
+        └── click_run_and_debug_button.png
+        └── click_to_start.png
+        └── create_config.png
+        └── debug_demo.png
+        └── debug_error.png
+        └── debug_variable.png
+        └── fetch_utxo_demo.gif
+        └── select_configg.png
+        └── start_debug.png
+        └── start_just_click_runButton.gif
+        └── start_with_config.gif
+        └── vscode_debug_button.png
     └── 📁media
         └── cardanovscdebugger.png
         └── cardanovscdebugger.svg
@@ -82,6 +93,8 @@ npm run test
             └── extractHaskellFunctions.ts
             └── webview.ts
         └── 📁test
+            └── 📁__mocks__
+                └── vscode.js
             └── extension.test.ts
             └── diagnostic.test.ts
             └── debugAdapter.test.ts
@@ -183,35 +196,35 @@ $ cabal init
 ###### There are two ways :-
 ####  first method
 
-![debug_button](https://raw.githubusercontent.com/aiquant2/cardanovsc_debugger/refs/heads/feature/docs/vscode_debug_button.png)
+![debug_button](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/cardanovsc_debugger/docs/vscode_debug_button.png)
 
-![run_button](https://raw.githubusercontent.com/aiquant2/cardanovsc_debugger/refs/heads/feature/docs/click_run_and_debug_button.png)
+![run_button](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/cardanovsc_debugger/docs/click_run_and_debug_button.png)
 
-![click_run and debug](https://raw.githubusercontent.com/aiquant2/cardanovsc_debugger/refs/heads/feature/docs/start_just_click_runButton.gif)
+![click_run and debug](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/cardanovsc_debugger/docs/start_just_click_runButton.gif)
 
 #### Second method
-![debug_button](https://raw.githubusercontent.com/aiquant2/cardanovsc_debugger/refs/heads/feature/docs/vscode_debug_button.png)
+![debug_button](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/cardanovsc_debugger/docs/vscode_debug_button.png)
 
-![click create config](https://raw.githubusercontent.com/aiquant2/cardanovsc_debugger/refs/heads/feature/docs/create_config.png)
-
-
+![click create config](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/cardanovsc_debugger/docs/create_config.png)
 
 
-![Select Debug Configuration](https://raw.githubusercontent.com/aiquant2/cardanovsc_debugger/refs/heads/feature/docs/select_configg.png)
 
 
-![click ](https://raw.githubusercontent.com/aiquant2/cardanovsc_debugger/refs/heads/feature/docs/click_to_start.png)
+![Select Debug Configuration](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/cardanovsc_debugger/docs/select_configg.png)
 
-![gif](https://raw.githubusercontent.com/aiquant2/cardanovsc_debugger/refs/heads/feature/docs/start_with_config.gif)
+
+![click ](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/cardanovsc_debugger/docs/click_to_start.png)
+
+![gif](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/cardanovsc_debugger/docs/start_with_config.gif)
 
 ### 🧩 Debug Demo
 
 - When the VSCode debug button is clicked, any errors in the program are displayed in both the Debug Console and directly within the code editor.
 
-![debug_error](https://raw.githubusercontent.com/aiquant2/cardanovsc_debugger/refs/heads/feature/docs/debug_error.png)
+![debug_error](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/cardanovsc_debugger/docs/debug_error.png)
 - During debugging, the file data appears in the Variables section of VSCode. Argument values are updated dynamically as you step into functions.
 
-![debug_variable](https://raw.githubusercontent.com/aiquant2/cardanovsc_debugger/refs/heads/feature/docs/debug_variable.png)
+![debug_variable](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/cardanovsc_debugger/docs/debug_variable.png)
 
 ## 🧩Command - Get latest UTXO Details
 The command  is used to fetch and visualize the latest UTXO (Unspent Transaction Output) of a Cardano script address using the Blockfrost API.
@@ -236,7 +249,7 @@ If the network configuration is missing, the command will not execute and will d
 - Enter the Cardano script address (e.g., addr1...).
 
 
-![utxo](https://raw.githubusercontent.com/aiquant2/cardanovsc_debugger/refs/heads/feature/docs/fetch_utxo_demo.gif)
+![utxo](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/cardanovsc_debugger/docs/fetch_utxo_demo.gif)
 
 
 ## 🧪 Troubleshooting

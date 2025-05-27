@@ -223,11 +223,11 @@ describe("HaskellDebugSession", () => {
         ],
       });
 
-      // launchRequest called once with response and launchArgs
+     
       expect(launchRequestSpy).toHaveBeenCalledTimes(1);
       expect(launchRequestSpy).toHaveBeenCalledWith(response, session["launchArgs"]);
 
-      // sendResponse called once with response
+      
       expect(sendResponseSpy).toHaveBeenCalledTimes(1);
       expect(sendResponseSpy).toHaveBeenCalledWith(response);
     });
@@ -260,10 +260,10 @@ describe("HaskellDebugSession", () => {
 
       session["setBreakPointsRequest"](response, args);
 
-      // Internal breakpoints updated correctly
+      
       expect(session["_breakpoints"]).toEqual([15]);
 
-      // sendErrorResponse called once with response and error details
+     
       expect(sendErrorResponseSpy).toHaveBeenCalledTimes(1);
       expect(sendErrorResponseSpy).toHaveBeenCalledWith(response, {
         id: 1004,

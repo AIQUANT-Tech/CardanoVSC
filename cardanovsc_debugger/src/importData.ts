@@ -1,6 +1,5 @@
 import * as vscode from "vscode";
 
-// Define the expected return type (adjust based on actual API)
 export interface NetworkConfig {
   network: string;
   apiKey: string;

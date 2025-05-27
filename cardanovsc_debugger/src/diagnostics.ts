@@ -53,7 +53,7 @@ export function startGhcidOnHaskellOpen(context: vscode.ExtensionContext) {
     startGhcidIfNeeded();
   }
 
-  // Cleanup on deactivation
+ 
   context.subscriptions.push({
     dispose: () => {
       stopGhcid();
@@ -61,7 +61,7 @@ export function startGhcidOnHaskellOpen(context: vscode.ExtensionContext) {
     },
   });
 
-  // Update decorations when active editor changes
+  
   context.subscriptions.push(
     vscode.window.onDidChangeActiveTextEditor(updateErrorDecorations)
   );
@@ -154,7 +154,6 @@ function processGhcidOutput(lines: string[]) {
     const fileUri = vscode.Uri.file(filePath);
     const lineNum = Math.max(0, currentError.line - 1);
     const colNum = Math.max(0, currentError.col - 1);
-    // Try to find the document to get the line text
     const document = vscode.workspace.textDocuments.find(
       (doc) => doc.uri.fsPath === fileUri.fsPath
     );
@@ -166,9 +165,8 @@ function processGhcidOutput(lines: string[]) {
     if (document) {
       try {
         const lineText = document.lineAt(lineNum).text;
-        // Special handling for import statements
+        
         if (lineText.trim().startsWith("import")) {
-          // Highlight the entire import statement including "import" keyword
           const importStart = lineText.indexOf("import");
           range = new vscode.Range(
             lineNum,
@@ -176,23 +174,23 @@ function processGhcidOutput(lines: string[]) {
             lineNum,
             lineText.length
           );
-          // Keep the original message but add "Import error" prefix
+         
           cleanedMessage = `Import error: ${cleanedMessage}`;
         } else {
-          // Default behavior for non-import errors
+          
           let endCol = colNum + 1;
-          // Try to find the end of the identifier
+         
           while (endCol < lineText.length && !/\s/.test(lineText[endCol])) {
             endCol++;
           }
           range = new vscode.Range(lineNum, colNum, lineNum, endCol);
         }
       } catch {
-        // Fallback if line number is out of bounds
+        
         range = new vscode.Range(lineNum, colNum, lineNum, colNum + 1);
       }
     } else {
-      // Fallback if document not found
+      
       range = new vscode.Range(lineNum, colNum, lineNum, colNum + 1);
     }
     const diagnostic = new vscode.Diagnostic(
@@ -220,7 +218,7 @@ function processGhcidOutput(lines: string[]) {
     if (line.includes("Loading...") || line.includes("Ok, modules loaded:")) {
       continue;
     }
-    // More comprehensive error pattern matching
+   
     const errorMatch = line.match(
       /^(.+?):(\d+):(\d+)(?:-(\d+))?:\s*(error|warning|\[error\]|\[warning\]):?\s*(.*)/
     );
