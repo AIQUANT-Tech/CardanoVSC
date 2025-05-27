@@ -18,7 +18,6 @@ async function integrateCardanoAPI(
       vscode.window.showErrorMessage("API key is required!");
       return false;
     }
-    console.log("API key received");
 
     // Validate the API key by sending a test request via curl
     const isValidApiKey = await validateApiKey(apiKey);
@@ -34,12 +33,9 @@ async function integrateCardanoAPI(
 
     if (extensionContext && extensionContext.globalState) {
       extensionContext.globalState.update("cardano.apiKey", apiKey);
-      console.log("Global state updated");
 
       // Show confirmation message
-      vscode.window.showInformationMessage(
-        'API integration successful!'
-      );
+      vscode.window.showInformationMessage("API integration successful!");
     } else {
       console.error("GlobalState is not available in extensionContext");
       vscode.window.showErrorMessage("Failed to update global state.");
@@ -52,8 +48,10 @@ async function integrateCardanoAPI(
   }
 }
 
-
-export function executeCurlCommand(apiUrl: string, apiKey: string | undefined): Promise<any> {
+export function executeCurlCommand(
+  apiUrl: string,
+  apiKey: string | undefined
+): Promise<any> {
   return new Promise((resolve, reject) => {
     const curlCommand = `curl -X GET "${apiUrl}" \
   --header "apiKey: ${apiKey}" \
@@ -75,7 +73,6 @@ export function executeCurlCommand(apiUrl: string, apiKey: string | undefined): 
   });
 }
 
-
 async function validateApiKey(apiKey: string): Promise<boolean> {
   const baseUrl = "https://api.cardanoscan.io/api/v1"; // Corrected base URL for the API
   const endpoint = `${baseUrl}/block/latest`; // Replace with actual endpoint for validation
@@ -83,7 +80,6 @@ async function validateApiKey(apiKey: string): Promise<boolean> {
   try {
     const response = await executeCurlCommand(endpoint, apiKey);
     if (response.hash) {
-      console.log("Valid API key!");
       return true;
     } else {
       console.error("Unexpected response format");
@@ -96,8 +92,3 @@ async function validateApiKey(apiKey: string): Promise<boolean> {
 }
 
 export { integrateCardanoAPI, validateApiKey };
-
-
-
-
-

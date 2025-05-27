@@ -33,7 +33,6 @@ export async function initializeLucid(
       return null;
     }
 
-
     return lucid;
   } catch (error: any) {
     vscode.window.showErrorMessage(
@@ -165,8 +164,7 @@ export async function createWallet(
     }
 
     const lucid = await initializeLucid(selectedNetwork, apiKey);
-    console.log(lucid);
-
+    
     const mnemonic = lucid.utils.generateSeedPhrase();
 
     const password = await vscode.window.showInputBox({
