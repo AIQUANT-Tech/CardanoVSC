@@ -127,7 +127,7 @@ npm run test
 - install cabal from ghcup
 link - https://www.haskell.org/ghcup/
  
-For Linux, macOS, FreeBSD or Windows Subsystem 2 for Linux, run this in a terminal:
+For Linux, run this in a terminal:
 ```
 curl --proto '=https' --tlsv1.2 -sSf https://get-ghcup.haskell.org | sh
  
