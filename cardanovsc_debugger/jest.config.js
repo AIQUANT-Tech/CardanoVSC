@@ -4,7 +4,7 @@ module.exports = {
   preset: 'ts-jest',
   testEnvironment: 'node',
   moduleNameMapper: {
-    '^vscode$': '<rootDir>/__mocks__/vscode.js', // <-- THIS is crucial
+    '^vscode$': '<rootDir>/src/test/__mocks__/vscode.js', // <-- THIS is crucial
   },
   roots: ['<rootDir>/src'],
   testMatch: ['**/test/**/*.test.ts'], // Will match test files like src/test/abc.test.ts
