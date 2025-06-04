@@ -3,7 +3,7 @@
   "displayName": "CardanoVSC",
   "description": "supports in cardano development",
 
-  "version": "0.2.0",
+  "version": "0.2.1",
 
   "publisher": "AIQUANT-TECHNOLOGIES",
   "license": "MIT",
@@ -145,8 +145,23 @@
       {
         "command": "cardanovsc.deleteNetwork",
         "title": "cardanovsc: Delete Cardano Network"
+      },
+      {
+        "command": "cardanovsc.compile",
+        "title": "compile contract",
+        "icon":"media/play.png",
+        "category": "cardanovsc"
       }
     ],
+     "menus": {
+      "editor/title": [
+        {
+          "command": "cardanovsc.compile",
+          "when": "editorLangId == haskell",
+          "group": "navigation"
+        }
+      ]
+    },
     "viewsContainers": {
       "activitybar": [
         {
