@@ -58,8 +58,9 @@ npm run test
 ## FOLDER STRUCTURE
 
 ```
-    📁CardanoVSC       
-    └── 📁cardanovsc
+    📁CardanoVSC 
+    └── 📁CardanoVSC_Debugger      
+    └── 📁CardanoVSC
         └── 📁.vscode
             └── extensions.json
             └── launch.json
@@ -136,7 +137,7 @@ npm run test
 The Webview in CardanoVSC provides a dedicated sidebar interface within Visual Studio Code, offering a centralized hub for blockchain api interactions , development tools.
 
 
-![webview](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/cardanovsc/docs/cardanovsc01_sidebar_webview.png)
+![webview](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/CardanoVSC/docs/cardanovsc01_sidebar_webview.png)
 
 
 ### 📜 Commands
@@ -151,13 +152,13 @@ To access these commands, open the Command Palette (`Ctrl+Shift+P`), type `Carda
 
 ![command0](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/.github/images/cardanovsc_command.gif)
 
-![command1](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/cardanovsc/docs/cardanovsc_command01.png)
+![command1](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/CardanoVSC/docs/cardanovsc_command01.png)
 
 ## 🔗 API Integration
 CardanoVSC integrates with Cardano APIs using cardanoscan API keys. 
 CardanoVSC integrates with the Cardano API to provide real-time blockchain interaction directly within the IDE. Developers can fetch blockchain data, such as block details, transaction information, and wallet balances, without leaving Visual Studio Code. The API integration is powered by Cardanoscan API keys, ensuring secure and efficient access to Cardano blockchain data.
 
-![api](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/cardanovsc/docs/api_integration01.png)
+![api](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/CardanoVSC/docs/api_integration01.png)
 
 ## 🔗 Auto Completion
 The Auto Completion feature in CardanoVSC enhances developer productivity by providing intelligent code suggestions as you type. It supports Haskell and Plutus syntax, offering context-aware recommendations for functions, variables, and modules. This feature reduces errors and speeds up coding by predicting and completing code snippets, making it easier to write complex smart contracts and blockchain-related logic.
@@ -185,7 +186,7 @@ Before using wallet management and smart contract deployment, you need to connec
    **🔗 Cardano Node: Preprod** (or **Mainnet/Preview**)
 7. After a successful connection, **reload the VSCode window**.
 
-![node_connection](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/cardanovsc/docs/cardanovsc_node_connection.gif)
+![node_connection](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/CardanoVSC/docs/cardanovsc_node_connection.gif)
 
 ## 📜 Deploying a Smart Contract
 
@@ -220,7 +221,7 @@ Before using wallet management and smart contract deployment, you need to connec
    - The script address is saved to an `.addr` file in the same location as the `.plutus` script.
    - A success message is displayed with the file location and script address .
 
-![deploy](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/cardanovsc/docs/cardanovsc_deployment.gif)
+![deploy](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/CardanoVSC/docs/cardanovsc_deployment.gif)
 
 ### 📌 Additional Features:
 - **Open Folder:** View the location of the saved `.addr` file.
@@ -237,7 +238,7 @@ Before using wallet management and smart contract deployment, you need to connec
 ### 🏦 Wallet Management  
 CardanoVSC allows you to manage your Cardano wallets directly within VS Code. You can create, restore, and check balances securely while ensuring encrypted storage and password protection.  
 
-![wallet_webview](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/cardanovsc/docs/cardanovsc_wellet_webview.png)
+![wallet_webview](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/CardanoVSC/docs/cardanovsc_wellet_webview.png)
 
 ### 🆕 Creating a New Wallet  
 1. Open the **CardanoVSC** sidebar (click the Cardano icon in the Activity Bar).  
@@ -249,7 +250,7 @@ CardanoVSC allows you to manage your Cardano wallets directly within VS Code. Yo
 7. Click **"I've Saved My Seed Phrase"** to complete the setup.  
 8. Wallet details are stored in the working directory inside the `wallet_details/` folder.  
 
-![create](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/cardanovsc/docs/cardanovsc_create_wallet.gif)
+![create](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/CardanoVSC/docs/cardanovsc_create_wallet.gif)
 
 ### 🔄 Restoring an Existing Wallet  
 1. Open **Wallet Management** from the sidebar.  
@@ -264,7 +265,7 @@ CardanoVSC allows you to manage your Cardano wallets directly within VS Code. Yo
 6. Enter your **wallet password** when prompted.  
 7. After successful, Wallet details are stored in the working directory inside the `wallet_details/` folder.  
 
-![restore](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/cardanovsc/docs/cardanovsc_restore_webview.png)
+![restore](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/CardanoVSC/docs/cardanovsc_restore_webview.png)
 
 
 ### 💰 Checking Your Balance  
