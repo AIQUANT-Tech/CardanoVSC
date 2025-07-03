@@ -206,25 +206,25 @@
       },
       {
         "command": "cardanovsc.getLatestBlockDetails",
-        "title": " Get Latest Block Detail",
+        "title": " Latest Block Details",
         "enablement": "cardanoNetwork == 'preprod' || preview",
         "category": "cardanovsc"
       },
       {
         "command": "cardanovsc.getAddressDetails",
-        "title": " Get Specific Address Detail",
+        "title": " Specific Address Details",
         "enablement": "cardanoNetwork == 'preprod' || preview",
         "category": "cardanovsc"
       },
       {
         "command": "cardanovsc.getAddressBalances",
-        "title": " Get Address Balance",
+        "title": " Get Balance by Address",
         "enablement": "cardanoNetwork == 'preprod' || preview",
         "category": "cardanovsc"
       },
       {
         "command": "cardanovsc.getTransactionDetail",
-        "title": " Get Specific Transaction Detail",
+        "title": " Specific Transaction Details",
         "enablement": "cardanoNetwork == 'preprod' || preview",
         "category": "cardanovsc"
       },
@@ -236,13 +236,13 @@
       },
       {
         "command": "cardanovsc.getSpecificAssetDetails",
-        "title": " Get  Specific Asset",
+        "title": " Get Specific Asset",
         "enablement": "cardanoNetwork == 'preprod' || preview",
         "category": "cardanovsc"
       },
       {
         "command": "cardanovsc.getAssetAddresses",
-        "title": " Get Asset Address ",
+        "title": " Get Asset by Address ",
         "enablement": "cardanoNetwork == 'preprod' || preview",
         "category": "cardanovsc"
       },
@@ -260,7 +260,7 @@
       },
       {
         "command": "cardanovsc.getRetiringStakePools",
-        "title": " Get List of getRetiringStakePools ",
+        "title": " Get List of Retiring Stake Pools ",
         "enablement": "cardanoNetwork == 'preprod' || preview",
         "category": "cardanovsc"
       },
