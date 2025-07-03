@@ -5,6 +5,7 @@ import { integrateCardanoAPI } from "./config/cardanoApiIntegration";
 import { MyWebviewViewProvider } from "./webviewProvider";
 import { createStatusBarItem, registerDeleteNetworkCommand, registerNetworkCommand } from "./config/cardanoNodeIntegration";
 import { data } from "./export_data/data";
+import { blockfrostCommand } from "./registerBlockfrostCommand";
 
 
 export function activate(context: vscode.ExtensionContext) {
@@ -29,6 +30,7 @@ export function activate(context: vscode.ExtensionContext) {
     })
   );
   new extensionCommand(context);
+  new blockfrostCommand(context);
   //status bar
   createStatusBarItem(context);
   registerNetworkCommand(context,context.extensionUri);

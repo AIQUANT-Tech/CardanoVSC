@@ -6,6 +6,7 @@ export class extensionCommand {
   private outputChannel: vscode.OutputChannel;
   baseUrl: string = "https://api.cardanoscan.io/api/v1"; // Base URL for API requests
 
+  
   constructor(context: vscode.ExtensionContext) {
     this.extensionContext = context;
     this.outputChannel = vscode.window.createOutputChannel(
@@ -14,7 +15,22 @@ export class extensionCommand {
     this.registerCommands();
   }
 
+  // new 
+
+  public getNetwork(): string | null {
+    const network = this.extensionContext.globalState.get<string>("cardano.network");
+    if (!network) {
+      vscode.window.showErrorMessage("Network is not selected. Please set up API integration.");
+      return null;
+    }
+    return network;
+  }
+  //
+
   private registerCommands(): void {
+
+
+    
     const commands = [
       {
         command: "cardanovsc.get_block_details",
@@ -119,8 +135,8 @@ export class extensionCommand {
         vscode.commands.registerCommand(command, callback)
       );
     });
+  
   }
-
   public getApiKey(): string | null {
     const storedApiKey =
       this.extensionContext.globalState.get<string>("cardano.apiKey");
@@ -159,7 +175,7 @@ export class extensionCommand {
     const curlCommand = `curl -X GET "${apiUrl}" --header "apiKey: ${apiKey}"`;
 
     childprocess.exec(curlCommand, (error, stdout, stderr) => {
-      if (error) {
+      if (error) {const network = this.getNetwork();
         vscode.window.showErrorMessage(`Error: ${stderr || error.message}`);
         return;
       }
@@ -182,9 +198,13 @@ export class extensionCommand {
 
   private getBlockDetails(): void {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
-      return;
-    }
+ 
+    const network = this.getNetwork();
+
+  if (!apiKey || !network) {
+    vscode.window.showErrorMessage("Missing API key or network.");
+    return;
+  }
 
     vscode.window
       .showQuickPick(
@@ -258,11 +278,20 @@ export class extensionCommand {
       });
   }
 
+
+
   private async getPoolDetails(): Promise<void> {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
-      return;
-    }
+
+    const network = this.getNetwork();
+
+  if (!apiKey || !network) {
+    vscode.window.showErrorMessage("Missing API key or network.");
+    return;
+  }
+
+
+  
 
     const poolId = await vscode.window.showInputBox({
       prompt: "Enter the Pool ID (Hex representation, exactly 56 characters)",
@@ -290,9 +319,17 @@ export class extensionCommand {
 
   public getLatestBlockDetails(): void {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
-      return;
-    }
+
+
+    const network = this.getNetwork();
+
+  if (!apiKey || !network) {
+    vscode.window.showErrorMessage("Missing API key or network.");
+    return;
+  }
+
+  
+
 
     const apiUrl = `${this.baseUrl}/block/latest`;
     this.executeCurlCommand(apiUrl, apiKey, (response) => {
@@ -302,10 +339,16 @@ export class extensionCommand {
 
   private async getAddressBalance(): Promise<void> {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
-      return;
-    }
+   
+    const network = this.getNetwork();
 
+  if (!apiKey || !network) {
+    vscode.window.showErrorMessage("Missing API key or network.");
+    return;
+  }
+
+
+  
     const address = await vscode.window.showInputBox({
       prompt: "Enter the Address",
       placeHolder: "e.g., addr1xyz...",
@@ -327,8 +370,11 @@ export class extensionCommand {
       this.displayOutput(response);
     });
   }
+
+
   private async getPoolStats(): Promise<void> {
     const apiKey = this.getApiKey();
+
     if (!apiKey) {
       return;
     }
@@ -358,9 +404,16 @@ export class extensionCommand {
   }
   private async getPoolsList(): Promise<void> {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
-      return;
-    }
+  
+    const network = this.getNetwork();
+
+  if (!apiKey || !network) {
+    vscode.window.showErrorMessage("Missing API key or network.");
+    return;
+  }
+
+
+  
 
     const pageNo = await vscode.window.showInputBox({
       prompt: "Enter the Page Number to fetch (1-10000)",
@@ -388,9 +441,15 @@ export class extensionCommand {
   }
   private async getPoolsExpiring(): Promise<void> {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
+
+    const network = this.getNetwork();
+
+    if (!apiKey || !network) {
+      vscode.window.showErrorMessage("Missing API key or network.");
       return;
     }
+  
+    
 
     const pageNo = await vscode.window.showInputBox({
       prompt: "Enter the Page Number to fetch (1-10000)",
@@ -418,9 +477,17 @@ export class extensionCommand {
   }
   private async getPoolsExpired(): Promise<void> {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
-      return;
-    }
+  
+
+    const network = this.getNetwork();
+
+  if (!apiKey || !network) {
+    vscode.window.showErrorMessage("Missing API key or network.");
+    return;
+  }
+
+
+  
 
     const pageNo = await vscode.window.showInputBox({
       prompt: "Enter the Page Number to fetch (1-10000)",
@@ -448,9 +515,14 @@ export class extensionCommand {
   }
   private async getAssetDetails(): Promise<void> {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
-      return;
-    }
+  
+
+    const network = this.getNetwork();
+
+  if (!apiKey || !network) {
+    vscode.window.showErrorMessage("Missing API key or network.");
+    return;
+  }
 
     // Prompt user to input either assetId or fingerprint
     const assetId = await vscode.window.showInputBox({
@@ -483,9 +555,13 @@ export class extensionCommand {
   }
   private async getAssetsByPolicyId(): Promise<void> {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
-      return;
-    }
+ 
+    const network = this.getNetwork();
+
+  if (!apiKey || !network) {
+    vscode.window.showErrorMessage("Missing API key or network.");
+    return;
+  }
 
     // Prompt user to input the policyId
     const policyId = await vscode.window.showInputBox({
@@ -524,11 +600,21 @@ export class extensionCommand {
       this.displayOutput(response);
     });
   }
+
+  
   private async getAssetsByAddress(): Promise<void> {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
-      return;
-    }
+  
+
+    const network = this.getNetwork();
+
+  if (!apiKey || !network) {
+    vscode.window.showErrorMessage("Missing API key or network.");
+    return;
+  }
+
+
+  
 
     // Prompt user to input the address
     const address = await vscode.window.showInputBox({
@@ -572,9 +658,17 @@ export class extensionCommand {
   }
   private async getTransactionDetails(): Promise<void> {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
-      return;
-    }
+  
+
+    const network = this.getNetwork();
+
+  if (!apiKey || !network) {
+    vscode.window.showErrorMessage("Missing API key or network.");
+    return;
+  }
+
+
+  
 
     // Prompt user to input the transaction hash
     const transactionHash = await vscode.window.showInputBox({
@@ -600,9 +694,17 @@ export class extensionCommand {
   }
   private async getTransactionListByAddress(): Promise<void> {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
-      return;
-    }
+   
+
+    const network = this.getNetwork();
+
+  if (!apiKey || !network) {
+    vscode.window.showErrorMessage("Missing API key or network.");
+    return;
+  }
+
+
+  
 
     // Prompt user to input the address
     const address = await vscode.window.showInputBox({
@@ -646,9 +748,17 @@ export class extensionCommand {
   }
   private async getStakeKeyDetails(): Promise<void> {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
-      return;
-    }
+   
+
+    const network = this.getNetwork();
+
+  if (!apiKey || !network) {
+    vscode.window.showErrorMessage("Missing API key or network.");
+    return;
+  }
+
+
+  
 
     // Prompt user to input the reward address
     const rewardAddress = await vscode.window.showInputBox({
@@ -674,9 +784,17 @@ export class extensionCommand {
   }
   private async getAddressesAssociatedWithStakeKey(): Promise<void> {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
-      return;
-    }
+  
+
+    const network = this.getNetwork();
+
+  if (!apiKey || !network) {
+    vscode.window.showErrorMessage("Missing API key or network.");
+    return;
+  }
+
+
+  
 
     // Prompt user to input the reward address
     const rewardAddress = await vscode.window.showInputBox({
@@ -721,10 +839,17 @@ export class extensionCommand {
   }
   private async getNetworkDetails(): Promise<void> {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
-      return;
-    }
+   
 
+    const network = this.getNetwork();
+
+  if (!apiKey || !network) {
+    vscode.window.showErrorMessage("Missing API key or network.");
+    return;
+  }
+
+
+  
     const apiUrl = `${this.baseUrl}/network/state`;
     this.executeCurlCommand(apiUrl, apiKey, (response) => {
       this.displayOutput(response);
@@ -732,9 +857,17 @@ export class extensionCommand {
   }
   private async getNetworkProtocolDetails(): Promise<void> {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
-      return;
-    }
+  
+
+    const network = this.getNetwork();
+
+  if (!apiKey || !network) {
+    vscode.window.showErrorMessage("Missing API key or network.");
+    return;
+  }
+
+
+  
 
     const apiUrl = `${this.baseUrl}/network/protocolParams`;
     this.executeCurlCommand(apiUrl, apiKey, (response) => {
@@ -743,9 +876,17 @@ export class extensionCommand {
   }
   private async getCCHotDetails(): Promise<void> {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
-      return;
-    }
+   
+
+    const network = this.getNetwork();
+
+  if (!apiKey || !network) {
+    vscode.window.showErrorMessage("Missing API key or network.");
+    return;
+  }
+
+
+  
 
     // Ask the user for the hotHex parameter
     const hotHex = await vscode.window.showInputBox({
@@ -768,9 +909,17 @@ export class extensionCommand {
   }
   private async getCCMemberDetails(): Promise<void> {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
-      return;
-    }
+   
+
+    const network = this.getNetwork();
+
+  if (!apiKey || !network) {
+    vscode.window.showErrorMessage("Missing API key or network.");
+    return;
+  }
+
+
+  
 
     // Ask the user for the coldHex parameter
     const coldHex = await vscode.window.showInputBox({
@@ -793,9 +942,17 @@ export class extensionCommand {
   }
   private async getCommitteeInformation(): Promise<void> {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
-      return;
-    }
+   
+
+    const network = this.getNetwork();
+
+  if (!apiKey || !network) {
+    vscode.window.showErrorMessage("Missing API key or network.");
+    return;
+  }
+
+
+  
 
     const apiUrl = `${this.baseUrl}/governance/committee`;
 
@@ -806,9 +963,17 @@ export class extensionCommand {
   }
   private async getCommitteeMembers(): Promise<void> {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
-      return;
-    }
+  
+
+    const network = this.getNetwork();
+
+  if (!apiKey || !network) {
+    vscode.window.showErrorMessage("Missing API key or network.");
+    return;
+  }
+
+
+  
 
     // Ask the user for the page number
     const pageNoInput = await vscode.window.showInputBox({
@@ -841,9 +1006,17 @@ export class extensionCommand {
   }
   private async getDRepInformation(): Promise<void> {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
-      return;
-    }
+  
+
+    const network = this.getNetwork();
+
+  if (!apiKey || !network) {
+    vscode.window.showErrorMessage("Missing API key or network.");
+    return;
+  }
+
+
+  
 
     // Ask the user for the dRepId (DRep hex string)
     const dRepIdInput = await vscode.window.showInputBox({
@@ -866,9 +1039,17 @@ export class extensionCommand {
   }
   private async getDRepsList(): Promise<void> {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
-      return;
-    }
+    
+
+    const network = this.getNetwork();
+
+  if (!apiKey || !network) {
+    vscode.window.showErrorMessage("Missing API key or network.");
+    return;
+  }
+
+
+  
 
     // Ask the user for the search term (to filter dReps)
     const searchTermInput = await vscode.window.showInputBox({
@@ -907,9 +1088,17 @@ export class extensionCommand {
   }
   private async getGovernanceAction(): Promise<void> {
     const apiKey = this.getApiKey();
-    if (!apiKey) {
-      return;
-    }
+   
+
+    const network = this.getNetwork();
+
+  if (!apiKey || !network) {
+    vscode.window.showErrorMessage("Missing API key or network.");
+    return;
+  }
+
+
+  
 
     // Ask the user for the actionId (Hex string representation)
     const actionIdInput = await vscode.window.showInputBox({
