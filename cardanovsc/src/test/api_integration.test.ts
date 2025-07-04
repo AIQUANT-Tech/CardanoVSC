@@ -7,6 +7,7 @@ import {
   integrateCardanoAPI,
   validateApiKey,
 } from "../config/cardanoApiIntegration";
+import { network } from "@blockfrost/blockfrost-js/lib/endpoints/api/network";
 
 import("chai").then((chai) => {
   const expect = chai.expect;
@@ -51,7 +52,7 @@ import("chai").then((chai) => {
     test("should return true for valid API key", async () => {
       if (apiKey) {
         const result = await validateApiKey(
-          apiKey
+          apiKey,
         );
 
         expect(result).to.be.true;
@@ -59,7 +60,7 @@ import("chai").then((chai) => {
     });
     test("should return false for invalid API key", async () => {
       const result = await validateApiKey(
-        "075b3c7ae74bf72046d609"
+        "075b3c7ae74bf72046d609",
 
       );
 
