@@ -1,6 +1,6 @@
 # ⚡ CardanoVSC 🚀
 
-[![Version](https://vsmarketplacebadges.dev/version/AIQUANT-TECHNOLOGIES.cardanovsc.png)](https://marketplace.visualstudio.com/items?itemName=AIQUANT-TECHNOLOGIES.cardanovsc) [![Downloads](https://vsmarketplacebadges.dev/downloads/AIQUANT-TECHNOLOGIES.cardanovsc.png)](<(https://marketplace.visualstudio.com/items?itemName=AIQUANT-TECHNOLOGIES.cardanovsc)>) [![Installs](https://vsmarketplacebadges.dev/installs/AIQUANT-TECHNOLOGIES.cardanovsc.png)](https://marketplace.visualstudio.com/items?itemName=AIQUANT-TECHNOLOGIES.cardanovsc) [![Rating](https://vsmarketplacebadges.dev/rating-star/AIQUANT-TECHNOLOGIES.cardanovsc.svg)](https://marketplace.visualstudio.com/items?itemName=AIQUANT-TECHNOLOGIES.cardanovsc)
+[![Version](https://vsmarketplacebadges.dev/version/AIQUANT-TECHNOLOGIES.cardanovsc.png)](https://marketplace.visualstudio.com/items?itemName=AIQUANT-TECHNOLOGIES.cardanovsc) [![Downloads](https://vsmarketplacebadges.dev/downloads/AIQUANT-TECHNOLOGIES.cardanovsc.png)](<(https://marketplace.visualstudio.com/items?itemName=AIQUANT-TECHNOLOGIES.cardanovsc)>) [![Installs](https://vsmarketplacebadges.dev/installs/AIQUANT-TECHNOLOGIES.cardanovsc.png)](https://marketplace.visualstudio.com/items?itemName=AIQUANT-TECHNOLOGIES.cardanovsc) [![Rating](https://vsmarketplacebadges.dev/rating-star/AIQUANT-TECHNOLOGIES.cardanovsc.png)](https://marketplace.visualstudio.com/items?itemName=AIQUANT-TECHNOLOGIES.cardanovsc)
 
 ## ✨ Features
 
@@ -85,8 +85,21 @@ To access these commands, open the Command Palette (`Ctrl+Shift+P`), type `Carda
 
 ## 🔗 API Integration
 
-CardanoVSC integrates with Cardano APIs using cardanoscan API keys.
-CardanoVSC integrates with the Cardano API to provide real-time blockchain interaction directly within the IDE. Developers can fetch blockchain data, such as block details, transaction information, and wallet balances, without leaving Visual Studio Code. The API integration is powered by Cardanoscan API keys, ensuring secure and efficient access to Cardano blockchain data.
+CardanoVSC integrates with the Cardano blockchain through both **CardanoScan** and **Blockfrost** APIs to provide real-time blockchain interaction directly within Visual Studio Code.
+
+When setting up the extension, developers are prompted to select a Cardano network and enter the appropriate API key:
+
+- ✅ **Mainnet**: Uses a **CardanoScan** API key for secure and efficient access to the production blockchain.
+- ✅ **Preprod** and **Preview**: Use **Blockfrost** API keys for interaction with Cardano test networks.
+
+Once configured, CardanoVSC enables developers to:
+
+- Fetch and display block details
+- Query transaction information
+- View wallet balances and address data
+
+All interactions happen directly within the IDE, without requiring browser-based tools. API keys are securely stored in the extension’s global state and validated before use to ensure a reliable development experience.
+
 
 ![api](https://raw.githubusercontent.com/AIQUANT-Tech/CardanoVSC/refs/heads/main/CardanoVSC/docs/api_integration01.png)
 

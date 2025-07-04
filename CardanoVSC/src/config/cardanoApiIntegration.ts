@@ -1,94 +1,123 @@
+
 import * as vscode from "vscode";
 import { exec } from "child_process";
+import { extensionCommand } from "../command/registerCommand";
 
+// === Entry Function ===
 async function integrateCardanoAPI(
-  vscode: any,
+  vscodeModule: typeof vscode,
   extensionContext: vscode.ExtensionContext
 ): Promise<boolean | undefined> {
-  vscode.window.showInformationMessage("API integration");
-
   try {
-    // Ask the user to enter their API key
-    const apiKey = await vscode.window.showInputBox({
-      prompt: "Enter your CardanoScan API key",
+    const network = await vscodeModule.window.showQuickPick(
+      ["preprod", "preview", "mainnet"],
+      {
+        placeHolder: "Select Cardano Network",
+        ignoreFocusOut: true,
+      }
+    );
+
+    if (!network) {
+      vscodeModule.window.showWarningMessage("Network selection cancelled.");
+      return false;
+    }
+
+    const apiKey = await vscodeModule.window.showInputBox({
+      prompt: `Enter your ${network === "mainnet" ? "CardanoScan" : "Blockfrost"
+        } API Key for ${network}`,
       ignoreFocusOut: true,
     });
 
     if (!apiKey) {
-      vscode.window.showErrorMessage("API key is required!");
+      vscodeModule.window.showErrorMessage("API key is required.");
       return false;
     }
 
-    // Validate the API key by sending a test request via curl
-    const isValidApiKey = await validateApiKey(apiKey);
-
-    if (!isValidApiKey) {
-      vscode.window.showErrorMessage(
-        "Invalid API key! Please check and try again."
-      );
-      return true;
+    // === Validation ===
+    const isValid = await validateApiKey(network, apiKey);
+    if (!isValid) {
+      vscodeModule.window.showErrorMessage("Invalid API Key!");
+      return false;
     }
 
-    // Only update globalState after API key is valid
 
-    if (extensionContext && extensionContext.globalState) {
-      extensionContext.globalState.update("cardano.apiKey", apiKey);
+    // === Save to Global State ===
+    vscode.commands.executeCommand("setContext", "cardanoNetwork", network);
 
-      // Show confirmation message
-      vscode.window.showInformationMessage("API integration successful!");
-    } else {
-      console.error("GlobalState is not available in extensionContext");
-      vscode.window.showErrorMessage("Failed to update global state.");
-    }
-  } catch (error: any) {
-    console.error("An error occurred:", error.message || error);
-    vscode.window.showErrorMessage(
-      `An error occurred: ${error.message || error}`
+    extensionContext.globalState.update("cardano.apiKey", apiKey);
+    extensionContext.globalState.update("cardano.network", network);
+    extensionContext.globalState.update("cardano.provider", network === "mainnet" ? "cardanoscan" : "blockfrost");
+
+
+    vscodeModule.window.showInformationMessage(
+      `Successfully connected to ${network} using ${network === "mainnet" ? "CardanoScan" : "Blockfrost"
+      }`
     );
+  } catch (err: any) {
+    console.error(err.message || err);
+    vscode.window.showErrorMessage(`Error: ${err.message || err}`);
+  }
+}
+
+export async function validateApiKey(
+  network: string,
+  apiKey: string
+): Promise<boolean> {
+  let apiUrl: string;
+  let headers: Record<string, string> = {};
+
+  if (network === "mainnet") {
+    // === CardanoScan mainnet ===
+    apiUrl = "https://api.cardanoscan.io/api/v1/block/latest";
+    headers = {
+      apiKey: apiKey,
+      Accept: "application/json",
+    };
+  } else {
+    // === Blockfrost for testnets ===
+    const projectId = apiKey;
+    const blockfrostNetwork = network === "preprod" ? "preprod" : "preview";
+    apiUrl = `https://cardano-${blockfrostNetwork}.blockfrost.io/api/v0/blocks/latest`;
+    headers = {
+      project_id: projectId,
+      Accept: "application/json",
+    };
+  }
+
+  try {
+    const response = await executeCurlCommand(apiUrl, headers);
+    return !!response.hash;
+  } catch (err) {
+    console.error("API Validation Error:", err);
+    return false;
   }
 }
 
 export function executeCurlCommand(
   apiUrl: string,
-  apiKey: string | undefined
+  headers: Record<string, string>
 ): Promise<any> {
   return new Promise((resolve, reject) => {
-    const curlCommand = `curl -X GET "${apiUrl}" \
-  --header "apiKey: ${apiKey}" \
-  --header "Accept: application/json" \
-  --header "User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"`;
+    const headerStrings = Object.entries(headers)
+      .map(([key, value]) => `--header "${key}: ${value}"`)
+      .join(" ");
+
+    const curlCommand = `curl -X GET "${apiUrl}" ${headerStrings}`;
 
     exec(curlCommand, (error, stdout, stderr) => {
       if (error) {
-        reject(new Error(stderr || error.message));
+        reject(stderr || error.message);
+        return;
       }
 
       try {
         const jsonResponse = JSON.parse(stdout);
         resolve(jsonResponse);
       } catch (parseError) {
-        reject(new Error("Failed to parse API response as JSON."));
+        reject("Failed to parse JSON");
       }
     });
   });
 }
 
-async function validateApiKey(apiKey: string): Promise<boolean> {
-  const baseUrl = "https://api.cardanoscan.io/api/v1"; // Corrected base URL for the API
-  const endpoint = `${baseUrl}/block/latest`; // Replace with actual endpoint for validation
-
-  try {
-    const response = await executeCurlCommand(endpoint, apiKey);
-    if (response.hash) {
-      return true;
-    } else {
-      console.error("Unexpected response format");
-      return false;
-    }
-  } catch (error: any) {
-    console.error(error.message);
-    return false;
-  }
-}
-
-export { integrateCardanoAPI, validateApiKey };
+export { integrateCardanoAPI };

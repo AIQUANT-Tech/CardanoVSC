@@ -64,7 +64,7 @@ npm run test
 ## 📂 FOLDER STRUCTURE
 
 ```
-└── 📁cardanovsc_debugger
+└── 📁CardanoVSC_Debugger
     └── 📁.vscode
         └── extensions.json
         └── launch.json

@@ -18,6 +18,7 @@ import("chai").then((chai) => {
     let showInputBoxStub: sinon.SinonStub;
     let globalStateUpdateStub: sinon.SinonStub;
     const apiKey: string | undefined = process.env.CARDANO_API_KEY; // Fetch API key from .env
+    const network: string | undefined = process.env.CARDANO_NETWORK; // Fetch API key from .env
 
     setup(() => {
       // Stub user input methods
@@ -49,8 +50,9 @@ import("chai").then((chai) => {
       expect(result).to.be.false;
     });
     test("should return true for valid API key", async () => {
-      if (apiKey) {
+      if (apiKey && network) {
         const result = await validateApiKey(
+          network,
           apiKey
         );
 
@@ -59,6 +61,8 @@ import("chai").then((chai) => {
     });
     test("should return false for invalid API key", async () => {
       const result = await validateApiKey(
+
+        "preprod",
         "075b3c7ae74bf72046d609"
 
       );
@@ -68,6 +72,7 @@ import("chai").then((chai) => {
 
     test("should return false on API error", async () => {
       const result = await validateApiKey(
+        "preprod",
         "075b3c7a458f72046d609"
 
       );
