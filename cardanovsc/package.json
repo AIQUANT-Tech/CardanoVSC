@@ -303,6 +303,120 @@
         "title": " Get Transaction Delegation Certificates",
         "enablement": "cardanoNetwork == 'preprod' || cardanoNetwork == preview",
         "category": "cardanovsc"
+      },
+      {
+        "command": "cardanovsc.getAddressUtxos",
+        "title": " Get Address Utxos",
+        "enablement": "cardanoNetwork == 'preprod' ||  cardanoNetwork == preview",
+        "category": "cardanovsc"
+      },
+      {
+        "command": "cardanovsc.getAddressAssetUtxos",
+        "title": " Get Address UTXOs for Specific Asset",
+        "enablement": "cardanoNetwork == 'preprod' ||  cardanoNetwork == preview",
+        "category": "cardanovsc"
+      },
+      {
+        "command": "cardanovsc.getAddressTransactions",
+        "title": " Get Transaction of Address",
+        "enablement": "cardanoNetwork == 'preprod' ||  cardanoNetwork == preview",
+        "category": "cardanovsc"
+      },
+      {
+        "command": "cardanovsc.getLatestBlockTxsWithCbor",
+        "title": " Get Latest Block Transactions with CBOR",
+        "enablement": "cardanoNetwork == 'preprod' ||  cardanoNetwork == preview",
+        "category": "cardanovsc"
+      },
+      {
+        "command": "cardanovsc.getBlockBySlot",
+        "title": " Get Specific Block in Slot",
+        "enablement": "cardanoNetwork == 'preprod' ||  cardanoNetwork == preview",
+        "category": "cardanovsc"
+      },
+      {
+        "command": "cardanovsc.getBlockTransactions",
+        "title": " Get Block Transaction",
+        "enablement": "cardanoNetwork == 'preprod' ||  cardanoNetwork == preview",
+        "category": "cardanovsc"
+      },
+      {
+        "command": "cardanovsc.getBlockTransactionsWithCbor",
+        "title": " Get Block Transaction Wirh CBOR",
+        "enablement": "cardanoNetwork == 'preprod' ||  cardanoNetwork == preview",
+        "category": "cardanovsc"
+      },
+      {
+        "command": "cardanovsc.getLatestEpoch",
+        "title": " Get Latest Epoch ",
+        "enablement": "cardanoNetwork == 'preprod' ||  cardanoNetwork == preview",
+        "category": "cardanovsc"
+      },
+      {
+        "command": "cardanovsc.getLatestEpochProtocolParameters",
+        "title": " Get Latest Epoch Protocol Parameters ",
+        "enablement": "cardanoNetwork == 'preprod' ||  cardanoNetwork == preview",
+        "category": "cardanovsc"
+      },
+      {
+        "command": "cardanovsc.getSpecificEpoch",
+        "title": " Get Specific Epoch ",
+        "enablement": "cardanoNetwork == 'preprod' ||  cardanoNetwork == preview",
+        "category": "cardanovsc"
+      },
+      {
+        "command": "cardanovsc.getNextEpochs",
+        "title": " Get Next Epochs ",
+        "enablement": "cardanoNetwork == 'preprod' ||  cardanoNetwork == preview",
+        "category": "cardanovsc"
+      },
+      {
+        "command": "cardanovsc.getPreviousEpochs",
+        "title": " Get Previous Epochs ",
+        "enablement": "cardanoNetwork == 'preprod' ||  cardanoNetwork == preview",
+        "category": "cardanovsc"
+      },
+      {
+        "command": "cardanovsc.getEpochStakeDistribution",
+        "title": " Get Epoch Stake Distribution ",
+        "enablement": "cardanoNetwork == 'preprod' ||  cardanoNetwork == preview",
+        "category": "cardanovsc"
+      },
+      {
+        "command": "cardanovsc.getDReps",
+        "title": " Get Delegate Representatives ",
+        "enablement": "cardanoNetwork == 'preprod' ||  cardanoNetwork == preview",
+        "category": "cardanovsc"
+      },
+      {
+        "command": "cardanovsc.getSpecificDRep",
+        "title": " Get Specific DRep",
+        "enablement": "cardanoNetwork == 'preprod' ||  cardanoNetwork == preview",
+        "category": "cardanovsc"
+      },
+      {
+        "command": "cardanovsc.getDRepDelegators",
+        "title": " Get DRep Delegators",
+        "enablement": "cardanoNetwork == 'preprod' ||  cardanoNetwork == preview",
+        "category": "cardanovsc"
+      },
+      {
+        "command": "cardanovsc.getDRepMetadata",
+        "title": " Get DRep MetaData",
+        "enablement": "cardanoNetwork == 'preprod' ||  cardanoNetwork == preview",
+        "category": "cardanovsc"
+      },
+      {
+        "command": "cardanovsc.getNetworkInformation",
+        "title": " Get Network Information",
+        "enablement": "cardanoNetwork == 'preprod' ||  cardanoNetwork == preview",
+        "category": "cardanovsc"
+      },
+      {
+        "command": "cardanovsc.getTransactionMetadata",
+        "title": " Get Transaction MetaData",
+        "enablement": "cardanoNetwork == 'preprod' ||  cardanoNetwork == preview",
+        "category": "cardanovsc"
       }
     ],
     "viewsContainers": {
