@@ -23,9 +23,8 @@ async function integrateCardanoAPI(
     }
 
     const apiKey = await vscodeModule.window.showInputBox({
-      prompt: `Enter your ${
-        network === "mainnet" ? "CardanoScan" : "Blockfrost"
-      } API Key for ${network}`,
+      prompt: `Enter your ${network === "mainnet" ? "CardanoScan" : "Blockfrost"
+        } API Key for ${network}`,
       ignoreFocusOut: true,
     });
 
@@ -48,11 +47,10 @@ async function integrateCardanoAPI(
     extensionContext.globalState.update("cardano.apiKey", apiKey);
     extensionContext.globalState.update("cardano.network", network);
     extensionContext.globalState.update("cardano.provider", network === "mainnet" ? "cardanoscan" : "blockfrost");
- 
+
 
     vscodeModule.window.showInformationMessage(
-      `Successfully connected to ${network} using ${
-        network === "mainnet" ? "CardanoScan" : "Blockfrost"
+      `Successfully connected to ${network} using ${network === "mainnet" ? "CardanoScan" : "Blockfrost"
       }`
     );
   } catch (err: any) {

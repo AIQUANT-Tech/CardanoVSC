@@ -7,7 +7,6 @@ import {
   integrateCardanoAPI,
   validateApiKey,
 } from "../config/cardanoApiIntegration";
-import { network } from "@blockfrost/blockfrost-js/lib/endpoints/api/network";
 
 import("chai").then((chai) => {
   const expect = chai.expect;
