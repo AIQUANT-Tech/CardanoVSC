@@ -1,7 +1,7 @@
 
 import * as vscode from "vscode";
 import { exec } from "child_process";
-import { extensionCommand } from "../registerCommand";
+import { extensionCommand } from "../command/registerCommand";
 
 // === Entry Function ===
 async function integrateCardanoAPI(

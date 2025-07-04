@@ -451,8 +451,8 @@ export class blockfrostCommand {
       network === "preprod"
         ? this.preprod_baseUrl
         : network === "preview"
-        ? this.preview_baseUrl
-        : null;
+          ? this.preview_baseUrl
+          : null;
 
     if (!baseUrl) {
       vscode.window.showErrorMessage("Unsupported network.");
@@ -803,8 +803,8 @@ export class blockfrostCommand {
                   network === "preprod"
                     ? this.preprod_baseUrl
                     : network === "preview"
-                    ? this.preview_baseUrl
-                    : "";
+                      ? this.preview_baseUrl
+                      : "";
 
                 if (!baseUrl) {
                   vscode.window.showErrorMessage("Unsupported network.");
@@ -845,8 +845,8 @@ export class blockfrostCommand {
           network === "preprod"
             ? this.preprod_baseUrl
             : network === "preview"
-            ? this.preview_baseUrl
-            : "";
+              ? this.preview_baseUrl
+              : "";
 
         if (!baseUrl) {
           vscode.window.showErrorMessage("Unsupported network.");
@@ -885,8 +885,8 @@ export class blockfrostCommand {
           network === "preprod"
             ? this.preprod_baseUrl
             : network === "preview"
-            ? this.preview_baseUrl
-            : "";
+              ? this.preview_baseUrl
+              : "";
 
         if (!baseUrl) {
           vscode.window.showErrorMessage("Unsupported network.");
@@ -926,8 +926,8 @@ export class blockfrostCommand {
           network === "preprod"
             ? this.preprod_baseUrl
             : network === "preview"
-            ? this.preview_baseUrl
-            : "https://cardano-mainnet.blockfrost.io/api/v0"; // Default to mainnet
+              ? this.preview_baseUrl
+              : "https://cardano-mainnet.blockfrost.io/api/v0"; // Default to mainnet
 
         const apiUrl = `${baseUrl}/txs/${txHash}/utxos`;
 
@@ -940,12 +940,12 @@ export class blockfrostCommand {
   private getAddressUtxos(): void {
     const apiKey = this.getApiKey();
     const network = this.getNetwork();
-  
+
     if (!apiKey || !network) {
       vscode.window.showErrorMessage("Missing API key or network.");
       return;
     }
-  
+
     vscode.window
       .showInputBox({
         prompt: "Enter the wallet address (Bech32 format)",
@@ -956,23 +956,23 @@ export class blockfrostCommand {
           vscode.window.showErrorMessage("Wallet address is required.");
           return;
         }
-  
+
         const baseUrl =
           network === "preprod"
             ? this.preprod_baseUrl
             : network === "preview"
-            ? this.preview_baseUrl
-            : "https://cardano-mainnet.blockfrost.io/api/v0"; // Default to mainnet
-  
+              ? this.preview_baseUrl
+              : "https://cardano-mainnet.blockfrost.io/api/v0"; // Default to mainnet
+
         const apiUrl = `${baseUrl}/addresses/${address}/utxos`;
-  
+
         this.executeCurlCommand(apiUrl, apiKey, (response) => {
           this.displayOutput(response);
         });
       });
   }
 
-  
+
   private getTransactionDelegationCerts(): void {
     const apiKey = this.getApiKey();
     const network = this.getNetwork();
@@ -998,8 +998,8 @@ export class blockfrostCommand {
           network === "preprod"
             ? this.preprod_baseUrl
             : network === "preview"
-            ? this.preview_baseUrl
-            : "https://cardano-mainnet.blockfrost.io/api/v0";
+              ? this.preview_baseUrl
+              : "https://cardano-mainnet.blockfrost.io/api/v0";
 
         const apiUrl = `${baseUrl}/txs/${txHash}/delegations`;
 
@@ -1012,61 +1012,12 @@ export class blockfrostCommand {
   private getAddressAssetUtxos(): void {
     const apiKey = this.getApiKey();
     const network = this.getNetwork();
-  
-    if (!apiKey || !network) {
-      vscode.window.showErrorMessage("Missing API key or network.");
-      return;
-    }
-  
-    vscode.window
-      .showInputBox({
-        prompt: "Enter the wallet address (Bech32 format)",
-        placeHolder: "e.g., addr1qx...",
-        ignoreFocusOut:true
-      })
-      .then((address) => {
-        if (!address) {
-          vscode.window.showErrorMessage("Wallet address is required.");
-          return;
-        }
-  
-        vscode.window
-          .showInputBox({
-            prompt: "Enter the Asset ID (policy_id + hex-encoded asset_name)",
-            placeHolder: "e.g., b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e7574636f696e",
-            ignoreFocusOut:true
-          })
-          .then((assetId) => {
-            if (!assetId) {
-              vscode.window.showErrorMessage("Asset ID is required.");
-              return;
-            }
-  
-            const baseUrl =
-              network === "preprod"
-                ? this.preprod_baseUrl
-                : network === "preview"
-                ? this.preview_baseUrl
-                : "https://cardano-mainnet.blockfrost.io/api/v0"; // Default to mainnet
-  
-            const apiUrl = `${baseUrl}/addresses/${address}/utxos/${assetId}`;
-  
-            this.executeCurlCommand(apiUrl, apiKey, (response) => {
-              this.displayOutput(response);
-            });
-          });
-      });
-  }
 
-  private getAddressTransactions(): void {
-    const apiKey = this.getApiKey();
-    const network = this.getNetwork();
-  
     if (!apiKey || !network) {
       vscode.window.showErrorMessage("Missing API key or network.");
       return;
     }
-  
+
     vscode.window
       .showInputBox({
         prompt: "Enter the wallet address (Bech32 format)",
@@ -1078,16 +1029,65 @@ export class blockfrostCommand {
           vscode.window.showErrorMessage("Wallet address is required.");
           return;
         }
-  
+
+        vscode.window
+          .showInputBox({
+            prompt: "Enter the Asset ID (policy_id + hex-encoded asset_name)",
+            placeHolder: "e.g., b0d07d45fe9514f80213f4020e5a61241458be626841cde717cb38a76e7574636f696e",
+            ignoreFocusOut: true
+          })
+          .then((assetId) => {
+            if (!assetId) {
+              vscode.window.showErrorMessage("Asset ID is required.");
+              return;
+            }
+
+            const baseUrl =
+              network === "preprod"
+                ? this.preprod_baseUrl
+                : network === "preview"
+                  ? this.preview_baseUrl
+                  : "https://cardano-mainnet.blockfrost.io/api/v0"; // Default to mainnet
+
+            const apiUrl = `${baseUrl}/addresses/${address}/utxos/${assetId}`;
+
+            this.executeCurlCommand(apiUrl, apiKey, (response) => {
+              this.displayOutput(response);
+            });
+          });
+      });
+  }
+
+  private getAddressTransactions(): void {
+    const apiKey = this.getApiKey();
+    const network = this.getNetwork();
+
+    if (!apiKey || !network) {
+      vscode.window.showErrorMessage("Missing API key or network.");
+      return;
+    }
+
+    vscode.window
+      .showInputBox({
+        prompt: "Enter the wallet address (Bech32 format)",
+        placeHolder: "e.g., addr1qx...",
+        ignoreFocusOut: true
+      })
+      .then((address) => {
+        if (!address) {
+          vscode.window.showErrorMessage("Wallet address is required.");
+          return;
+        }
+
         const baseUrl =
           network === "preprod"
             ? this.preprod_baseUrl
             : network === "preview"
-            ? this.preview_baseUrl
-            : "https://cardano-mainnet.blockfrost.io/api/v0"; // Default to mainnet
-  
+              ? this.preview_baseUrl
+              : "https://cardano-mainnet.blockfrost.io/api/v0"; // Default to mainnet
+
         const apiUrl = `${baseUrl}/addresses/${address}/transactions`;
-  
+
         this.executeCurlCommand(apiUrl, apiKey, (response) => {
           this.displayOutput(response);
         });
@@ -1097,56 +1097,56 @@ export class blockfrostCommand {
   private getLatestBlockTxsWithCbor(): void {
     const apiKey = this.getApiKey();
     const network = this.getNetwork();
-  
+
     if (!apiKey || !network) {
       vscode.window.showErrorMessage("Missing API key or network.");
       return;
     }
-  
+
     const baseUrl =
       network === "preprod"
         ? this.preprod_baseUrl
         : network === "preview"
-        ? this.preview_baseUrl
-        : "https://cardano-mainnet.blockfrost.io/api/v0"; // Default to mainnet
-  
+          ? this.preview_baseUrl
+          : "https://cardano-mainnet.blockfrost.io/api/v0"; // Default to mainnet
+
     const apiUrl = `${baseUrl}/blocks/latest/txs/cbor`;
-  
+
     this.executeCurlCommand(apiUrl, apiKey, (response) => {
       this.displayOutput(response);
     });
   }
-  
+
   private getBlockBySlot(): void {
     const apiKey = this.getApiKey();
     const network = this.getNetwork();
-  
+
     if (!apiKey || !network) {
       vscode.window.showErrorMessage("Missing API key or network.");
       return;
     }
-  
+
     vscode.window.showInputBox({
       prompt: "Enter the slot number of the block",
       placeHolder: "e.g., 30895909",
-      ignoreFocusOut:true,
+      ignoreFocusOut: true,
       validateInput: (value) => {
         return isNaN(Number(value)) || Number(value) < 0
           ? "Please enter a valid non-negative slot number."
           : null;
       },
     }).then((slot) => {
-      if (!slot) return;
-  
+      if (!slot) { return; }
+
       const baseUrl =
         network === "preprod"
           ? this.preprod_baseUrl
           : network === "preview"
-          ? this.preview_baseUrl
-          : "https://cardano-mainnet.blockfrost.io/api/v0"; // Default to mainnet
-  
+            ? this.preview_baseUrl
+            : "https://cardano-mainnet.blockfrost.io/api/v0"; // Default to mainnet
+
       const apiUrl = `${baseUrl}/blocks/slot/${slot}`;
-  
+
       this.executeCurlCommand(apiUrl, apiKey, (response) => {
         this.displayOutput(response);
       });
@@ -1156,12 +1156,12 @@ export class blockfrostCommand {
   private getBlockTransactions(): void {
     const apiKey = this.getApiKey();
     const network = this.getNetwork();
-  
+
     if (!apiKey || !network) {
       vscode.window.showErrorMessage("Missing API key or network.");
       return;
     }
-  
+
     vscode.window.showInputBox({
       prompt: "Enter the block hash or block number",
       placeHolder: "e.g., 4873401 or 4ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a",
@@ -1170,32 +1170,32 @@ export class blockfrostCommand {
         return value.trim() === "" ? "Block hash or number is required." : null;
       }
     }).then((input) => {
-      if (!input) return;
-  
+      if (!input) { return; }
+
       const baseUrl =
         network === "preprod"
           ? this.preprod_baseUrl
           : network === "preview"
-          ? this.preview_baseUrl
-          : "https://cardano-mainnet.blockfrost.io/api/v0";
-  
+            ? this.preview_baseUrl
+            : "https://cardano-mainnet.blockfrost.io/api/v0";
+
       const apiUrl = `${baseUrl}/blocks/${input}/txs`;
-  
+
       this.executeCurlCommand(apiUrl, apiKey, (response) => {
         this.displayOutput(response);
       });
     });
   }
-  
+
   private getBlockTransactionsWithCbor(): void {
     const apiKey = this.getApiKey();
     const network = this.getNetwork();
-  
+
     if (!apiKey || !network) {
       vscode.window.showErrorMessage("Missing API key or network.");
       return;
     }
-  
+
     vscode.window.showInputBox({
       prompt: "Enter the block hash or block number",
       placeHolder: "e.g., 4873401 or 4ea1ba291e8eef538635a53e59fddba7810d1679631cc3aed7c8e6c4091a516a",
@@ -1203,43 +1203,43 @@ export class blockfrostCommand {
         return value.trim() === "" ? "Block hash or number is required." : null;
       }
     }).then((input) => {
-      if (!input) return;
-  
+      if (!input) { return; }
+
       const baseUrl =
         network === "preprod"
           ? this.preprod_baseUrl
           : network === "preview"
-          ? this.preview_baseUrl
-          : "https://cardano-mainnet.blockfrost.io/api/v0";
-  
+            ? this.preview_baseUrl
+            : "https://cardano-mainnet.blockfrost.io/api/v0";
+
       const apiUrl = `${baseUrl}/blocks/${input}/txs/cbor`;
-  
+
       this.executeCurlCommand(apiUrl, apiKey, (response) => {
         this.displayOutput(response);
       });
     });
   }
-  
 
-  
+
+
   private getLatestEpoch(): void {
     const apiKey = this.getApiKey();
     const network = this.getNetwork();
-  
+
     if (!apiKey || !network) {
       vscode.window.showErrorMessage("Missing API key or network.");
       return;
     }
-  
+
     const baseUrl =
       network === "preprod"
         ? this.preprod_baseUrl
         : network === "preview"
-        ? this.preview_baseUrl
-        : "https://cardano-mainnet.blockfrost.io/api/v0"; // default to mainnet
-  
+          ? this.preview_baseUrl
+          : "https://cardano-mainnet.blockfrost.io/api/v0"; // default to mainnet
+
     const apiUrl = `${baseUrl}/epochs/latest`;
-  
+
     this.executeCurlCommand(apiUrl, apiKey, (response) => {
       this.displayOutput(response);
     });
@@ -1248,21 +1248,21 @@ export class blockfrostCommand {
   private getLatestEpochProtocolParameters(): void {
     const apiKey = this.getApiKey();
     const network = this.getNetwork();
-  
+
     if (!apiKey || !network) {
       vscode.window.showErrorMessage("Missing API key or network.");
       return;
     }
-  
+
     const baseUrl =
       network === "preprod"
         ? this.preprod_baseUrl
         : network === "preview"
-        ? this.preview_baseUrl
-        : "https://cardano-mainnet.blockfrost.io/api/v0"; // default to mainnet
-  
+          ? this.preview_baseUrl
+          : "https://cardano-mainnet.blockfrost.io/api/v0"; // default to mainnet
+
     const apiUrl = `${baseUrl}/epochs/latest/parameters`;
-  
+
     this.executeCurlCommand(apiUrl, apiKey, (response) => {
       this.displayOutput(response);
     });
@@ -1271,12 +1271,12 @@ export class blockfrostCommand {
   private getSpecificEpoch(): void {
     const apiKey = this.getApiKey();
     const network = this.getNetwork();
-  
+
     if (!apiKey || !network) {
       vscode.window.showErrorMessage("Missing API key or network.");
       return;
     }
-  
+
     vscode.window.showInputBox({
       prompt: "Enter the epoch number (e.g., 225)",
       placeHolder: "Epoch number",
@@ -1285,33 +1285,33 @@ export class blockfrostCommand {
         return isNaN(num) || num < 0 ? "Please enter a valid epoch number." : null;
       }
     }).then((epochNumber) => {
-      if (!epochNumber) return;
-  
+      if (!epochNumber) { return; }
+
       const baseUrl =
         network === "preprod"
           ? this.preprod_baseUrl
           : network === "preview"
-          ? this.preview_baseUrl
-          : "https://cardano-mainnet.blockfrost.io/api/v0";
-  
+            ? this.preview_baseUrl
+            : "https://cardano-mainnet.blockfrost.io/api/v0";
+
       const apiUrl = `${baseUrl}/epochs/${epochNumber}`;
-  
+
       this.executeCurlCommand(apiUrl, apiKey, (response) => {
         this.displayOutput(response);
       });
     });
   }
-  
+
 
   private getNextEpochs(): void {
     const apiKey = this.getApiKey();
     const network = this.getNetwork();
-  
+
     if (!apiKey || !network) {
       vscode.window.showErrorMessage("Missing API key or network.");
       return;
     }
-  
+
     vscode.window.showInputBox({
       prompt: "Enter the epoch number to get next epochs from (e.g., 225)",
       placeHolder: "Epoch number",
@@ -1320,32 +1320,32 @@ export class blockfrostCommand {
         return isNaN(num) || num < 0 ? "Please enter a valid epoch number." : null;
       }
     }).then((epochNumber) => {
-      if (!epochNumber) return;
-  
+      if (!epochNumber) { return; }
+
       const baseUrl =
         network === "preprod"
           ? this.preprod_baseUrl
           : network === "preview"
-          ? this.preview_baseUrl
-          : "https://cardano-mainnet.blockfrost.io/api/v0";
-  
+            ? this.preview_baseUrl
+            : "https://cardano-mainnet.blockfrost.io/api/v0";
+
       const apiUrl = `${baseUrl}/epochs/${epochNumber}/next`;
-  
+
       this.executeCurlCommand(apiUrl, apiKey, (response) => {
         this.displayOutput(response);
       });
     });
   }
-  
+
   private getPreviousEpochs(): void {
     const apiKey = this.getApiKey();
     const network = this.getNetwork();
-  
+
     if (!apiKey || !network) {
       vscode.window.showErrorMessage("Missing API key or network.");
       return;
     }
-  
+
     vscode.window.showInputBox({
       prompt: "Enter the epoch number to fetch previous epochs (e.g., 225)",
       placeHolder: "Epoch number",
@@ -1354,32 +1354,32 @@ export class blockfrostCommand {
         return isNaN(num) || num <= 0 ? "Please enter a valid positive epoch number." : null;
       }
     }).then((epochNumber) => {
-      if (!epochNumber) return;
-  
+      if (!epochNumber) { return; }
+
       const baseUrl =
         network === "preprod"
           ? this.preprod_baseUrl
           : network === "preview"
-          ? this.preview_baseUrl
-          : "https://cardano-mainnet.blockfrost.io/api/v0";
-  
+            ? this.preview_baseUrl
+            : "https://cardano-mainnet.blockfrost.io/api/v0";
+
       const apiUrl = `${baseUrl}/epochs/${epochNumber}/previous`;
-  
+
       this.executeCurlCommand(apiUrl, apiKey, (response) => {
         this.displayOutput(response);
       });
     });
   }
-  
+
   private getEpochStakeDistribution(): void {
     const apiKey = this.getApiKey();
     const network = this.getNetwork();
-  
+
     if (!apiKey || !network) {
       vscode.window.showErrorMessage("Missing API key or network.");
       return;
     }
-  
+
     vscode.window.showInputBox({
       prompt: "Enter the epoch number (e.g., 225)",
       placeHolder: "Epoch number",
@@ -1388,32 +1388,32 @@ export class blockfrostCommand {
         return isNaN(num) || num < 0 ? "Please enter a valid epoch number." : null;
       }
     }).then((epochNumber) => {
-      if (!epochNumber) return;
-  
+      if (!epochNumber) { return; }
+
       const baseUrl =
         network === "preprod"
           ? this.preprod_baseUrl
           : network === "preview"
-          ? this.preview_baseUrl
-          : "https://cardano-mainnet.blockfrost.io/api/v0";
-  
+            ? this.preview_baseUrl
+            : "https://cardano-mainnet.blockfrost.io/api/v0";
+
       const apiUrl = `${baseUrl}/epochs/${epochNumber}/stakes`;
-  
+
       this.executeCurlCommand(apiUrl, apiKey, (response) => {
         this.displayOutput(response);
       });
     });
   }
-  
+
   private getDReps(): void {
     const apiKey = this.getApiKey();
     const network = this.getNetwork();
-  
+
     if (!apiKey || !network) {
       vscode.window.showErrorMessage("Missing API key or network.");
       return;
     }
-  
+
     vscode.window.showInputBox({
       prompt: "Enter number of DReps per page (1-100)",
       placeHolder: "e.g., 10",
@@ -1422,23 +1422,23 @@ export class blockfrostCommand {
         return isNaN(num) || num < 1 || num > 100 ? "Enter a number between 1 and 100." : null;
       }
     }).then((countInput) => {
-      if (!countInput) return;
+      if (!countInput) { return; }
       const count = parseInt(countInput);
-  
+
       vscode.window.showQuickPick(["asc", "desc"], {
         placeHolder: "Select order (asc = oldest first, desc = newest first)"
       }).then((order) => {
-        if (!order) return;
-  
+        if (!order) { return; }
+
         const baseUrl =
           network === "preprod"
             ? this.preprod_baseUrl
             : network === "preview"
-            ? this.preview_baseUrl
-            : "https://cardano-mainnet.blockfrost.io/api/v0";
-  
+              ? this.preview_baseUrl
+              : "https://cardano-mainnet.blockfrost.io/api/v0";
+
         const apiUrl = `${baseUrl}/governance/dreps?count=${count}&order=${order}`;
-  
+
         this.executeCurlCommand(apiUrl, apiKey, (response) => {
           this.displayOutput(response);
         });
@@ -1449,12 +1449,12 @@ export class blockfrostCommand {
   private getSpecificDRep(): void {
     const apiKey = this.getApiKey();
     const network = this.getNetwork();
-  
+
     if (!apiKey || !network) {
       vscode.window.showErrorMessage("Missing API key or network.");
       return;
     }
-  
+
     vscode.window.showInputBox({
       prompt: "Enter the DRep ID (Bech32 or hexadecimal)",
       placeHolder: "e.g., drep15cfxz9exyn5rx0807zvxfrvslrjqfchrd4d47kv9e0f46ued"
@@ -1463,32 +1463,32 @@ export class blockfrostCommand {
         vscode.window.showErrorMessage("DRep ID is required.");
         return;
       }
-  
+
       const baseUrl =
         network === "preprod"
           ? this.preprod_baseUrl
           : network === "preview"
-          ? this.preview_baseUrl
-          : "https://cardano-mainnet.blockfrost.io/api/v0";
-  
+            ? this.preview_baseUrl
+            : "https://cardano-mainnet.blockfrost.io/api/v0";
+
       const apiUrl = `${baseUrl}/governance/dreps/${drepId}`;
-  
+
       this.executeCurlCommand(apiUrl, apiKey, (response) => {
         this.displayOutput(response);
       });
     });
   }
-  
+
 
   private getDRepDelegators(): void {
     const apiKey = this.getApiKey();
     const network = this.getNetwork();
-  
+
     if (!apiKey || !network) {
       vscode.window.showErrorMessage("Missing API key or network.");
       return;
     }
-  
+
     vscode.window.showInputBox({
       prompt: "Enter the DRep ID (Bech32 or hex)",
       placeHolder: "e.g., drep1mvdu8slennngja7w4un6knwezufra70887zuxpprd64jxfveahn"
@@ -1497,117 +1497,117 @@ export class blockfrostCommand {
         vscode.window.showErrorMessage("DRep ID is required.");
         return;
       }
-  
+
       const baseUrl =
         network === "preprod"
           ? this.preprod_baseUrl
           : network === "preview"
-          ? this.preview_baseUrl
-          : "https://cardano-mainnet.blockfrost.io/api/v0";
-  
+            ? this.preview_baseUrl
+            : "https://cardano-mainnet.blockfrost.io/api/v0";
+
       const apiUrl = `${baseUrl}/governance/dreps/${drepId}/delegators`;
-  
+
       this.executeCurlCommand(apiUrl, apiKey, (response) => {
         this.displayOutput(response);
       });
     });
   }
-  
+
   private getDRepMetadata(): void {
     const apiKey = this.getApiKey();
     const network = this.getNetwork();
-  
+
     if (!apiKey || !network) {
       vscode.window.showErrorMessage("Missing API key or network.");
       return;
     }
-  
+
     vscode.window.showInputBox({
       prompt: "Enter the DRep ID (Bech32 or hex)",
       placeHolder: "e.g., drep15cfxz9exyn5rx0807zvxfrvslrjqfchrd4d47kv9e0f46uedqtc",
-      ignoreFocusOut :true
+      ignoreFocusOut: true
     }).then((drepId) => {
       if (!drepId) {
         vscode.window.showErrorMessage("DRep ID is required.");
         return;
       }
-  
+
       const baseUrl =
         network === "preprod"
           ? this.preprod_baseUrl
           : network === "preview"
-          ? this.preview_baseUrl
-          : "https://cardano-mainnet.blockfrost.io/api/v0";
-  
+            ? this.preview_baseUrl
+            : "https://cardano-mainnet.blockfrost.io/api/v0";
+
       const apiUrl = `${baseUrl}/governance/dreps/${drepId}/metadata`;
-  
+
       this.executeCurlCommand(apiUrl, apiKey, (response) => {
         this.displayOutput(response);
       });
     });
   }
-  
+
 
   private getNetworkInformation(): void {
     const apiKey = this.getApiKey();
     const network = this.getNetwork();
-  
+
     if (!apiKey || !network) {
       vscode.window.showErrorMessage("Missing API key or network.");
       return;
     }
-  
+
     const baseUrl =
       network === "preprod"
         ? this.preprod_baseUrl
         : network === "preview"
-        ? this.preview_baseUrl
-        : "https://cardano-mainnet.blockfrost.io/api/v0";
-  
+          ? this.preview_baseUrl
+          : "https://cardano-mainnet.blockfrost.io/api/v0";
+
     const apiUrl = `${baseUrl}/network`;
-  
+
     this.executeCurlCommand(apiUrl, apiKey, (response) => {
       this.displayOutput(response);
     });
   }
-  
+
   private getTransactionMetadata(): void {
     const apiKey = this.getApiKey();
     const network = this.getNetwork();
-  
+
     if (!apiKey || !network) {
       vscode.window.showErrorMessage("Missing API key or network.");
       return;
     }
-  
+
     vscode.window
       .showInputBox({
         prompt: "Enter the transaction hash",
         placeHolder:
           "e.g., 6e5f825c82c1c6d6b77f2a14092f3b78c8f1b66db6f4cf8caec1555b6f967b3b",
-          ignoreFocusOut :true
+        ignoreFocusOut: true
       })
       .then((txHash) => {
         if (!txHash) {
           vscode.window.showErrorMessage("Transaction hash is required.");
           return;
         }
-  
+
         const baseUrl =
           network === "preprod"
             ? this.preprod_baseUrl
             : network === "preview"
-            ? this.preview_baseUrl
-            : "https://cardano-mainnet.blockfrost.io/api/v0";
-  
+              ? this.preview_baseUrl
+              : "https://cardano-mainnet.blockfrost.io/api/v0";
+
         const apiUrl = `${baseUrl}/txs/${txHash}/metadata`;
-  
+
         this.executeCurlCommand(apiUrl, apiKey, (response) => {
           this.displayOutput(response);
         });
       });
   }
-  
-  
-  
+
+
+
 }
