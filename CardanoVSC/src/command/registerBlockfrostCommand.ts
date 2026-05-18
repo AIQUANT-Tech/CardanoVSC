@@ -4,9 +4,8 @@ import * as childprocess from "child_process";
 export class blockfrostCommand {
   private extensionContext: vscode.ExtensionContext;
   private outputChannel: vscode.OutputChannel;
-  preprod_baseUrl: string = "https://cardano-preprod.blockfrost.io/api/v0"; // Base URL for API requests
-
-  preview_baseUrl: string = "https://cardano-preview.blockfrost.io/api/v0"; // Base URL for API requests
+  preprod_baseUrl: string = "https://cardano-preprod.blockfrost.io/api/v0";
+  preview_baseUrl: string = "https://cardano-preview.blockfrost.io/api/v0";
 
   constructor(context: vscode.ExtensionContext) {
     this.extensionContext = context;
@@ -15,8 +14,6 @@ export class blockfrostCommand {
     );
     this.registerCommands();
   }
-
-  // new
 
   public getNetwork(): string | null {
     const network =
@@ -29,7 +26,6 @@ export class blockfrostCommand {
     }
     return network;
   }
-  //
 
   private registerCommands(): void {
     const commands = [
@@ -196,15 +192,12 @@ export class blockfrostCommand {
       this.extensionContext.globalState.get<string>("cardano.apiKey");
 
     if (!storedApiKey) {
-      // Notify the user and execute the API integration command
       vscode.window.showErrorMessage(
-        "API key not found! Starting API integration setup..."
+        "API key not found. Starting API integration setup..."
       );
 
-      // Execute the API integration command
       vscode.commands.executeCommand("cardano.apiIntegration");
 
-      // Check again after the command completes
       const updatedApiKey =
         this.extensionContext.globalState.get<string>("cardano.apiKey");
 
@@ -365,7 +358,7 @@ export class blockfrostCommand {
       if (lovelaceEntry) {
         const ada = parseInt(lovelaceEntry.quantity) / 1_000_000;
         this.outputChannel.clear();
-        this.outputChannel.appendLine(`💰 ADA Balance for ${address}:\n`);
+        this.outputChannel.appendLine(`ADA Balance for ${address}:`);
         this.outputChannel.appendLine(`→ ${ada.toLocaleString()} ADA`);
         this.outputChannel.show();
       } else {
@@ -412,11 +405,10 @@ export class blockfrostCommand {
     }
 
     const apiUrl = `${baseUrl}/txs/${txHash}`;
-    console.log(apiUrl);
 
     this.executeCurlCommand(apiUrl, apiKey, (response) => {
       this.outputChannel.clear();
-      this.outputChannel.appendLine(`🔍 Transaction Details for: ${txHash}\n`);
+      this.outputChannel.appendLine(`Transaction Details for: ${txHash}`);
       this.outputChannel.appendLine(JSON.stringify(response, null, 2));
       this.outputChannel.show();
     });
@@ -463,7 +455,7 @@ export class blockfrostCommand {
 
     this.executeCurlCommand(apiUrl, apiKey, (response) => {
       this.outputChannel.clear();
-      this.outputChannel.appendLine(`📜 Assets under policy ID: ${policyId}`);
+      this.outputChannel.appendLine(`Assets under policy ID: ${policyId}`);
       this.outputChannel.appendLine(JSON.stringify(response, null, 2));
       this.outputChannel.show();
     });
@@ -927,7 +919,7 @@ export class blockfrostCommand {
             ? this.preprod_baseUrl
             : network === "preview"
               ? this.preview_baseUrl
-              : "https://cardano-mainnet.blockfrost.io/api/v0"; // Default to mainnet
+              : "https://cardano-mainnet.blockfrost.io/api/v0";
 
         const apiUrl = `${baseUrl}/txs/${txHash}/utxos`;
 
@@ -962,7 +954,7 @@ export class blockfrostCommand {
             ? this.preprod_baseUrl
             : network === "preview"
               ? this.preview_baseUrl
-              : "https://cardano-mainnet.blockfrost.io/api/v0"; // Default to mainnet
+              : "https://cardano-mainnet.blockfrost.io/api/v0";
 
         const apiUrl = `${baseUrl}/addresses/${address}/utxos`;
 
@@ -1047,7 +1039,7 @@ export class blockfrostCommand {
                 ? this.preprod_baseUrl
                 : network === "preview"
                   ? this.preview_baseUrl
-                  : "https://cardano-mainnet.blockfrost.io/api/v0"; // Default to mainnet
+                  : "https://cardano-mainnet.blockfrost.io/api/v0";
 
             const apiUrl = `${baseUrl}/addresses/${address}/utxos/${assetId}`;
 
@@ -1084,7 +1076,7 @@ export class blockfrostCommand {
             ? this.preprod_baseUrl
             : network === "preview"
               ? this.preview_baseUrl
-              : "https://cardano-mainnet.blockfrost.io/api/v0"; // Default to mainnet
+              : "https://cardano-mainnet.blockfrost.io/api/v0";
 
         const apiUrl = `${baseUrl}/addresses/${address}/transactions`;
 
@@ -1108,7 +1100,7 @@ export class blockfrostCommand {
         ? this.preprod_baseUrl
         : network === "preview"
           ? this.preview_baseUrl
-          : "https://cardano-mainnet.blockfrost.io/api/v0"; // Default to mainnet
+          : "https://cardano-mainnet.blockfrost.io/api/v0";
 
     const apiUrl = `${baseUrl}/blocks/latest/txs/cbor`;
 
@@ -1143,7 +1135,7 @@ export class blockfrostCommand {
           ? this.preprod_baseUrl
           : network === "preview"
             ? this.preview_baseUrl
-            : "https://cardano-mainnet.blockfrost.io/api/v0"; // Default to mainnet
+            : "https://cardano-mainnet.blockfrost.io/api/v0";
 
       const apiUrl = `${baseUrl}/blocks/slot/${slot}`;
 
@@ -1236,7 +1228,7 @@ export class blockfrostCommand {
         ? this.preprod_baseUrl
         : network === "preview"
           ? this.preview_baseUrl
-          : "https://cardano-mainnet.blockfrost.io/api/v0"; // default to mainnet
+          : "https://cardano-mainnet.blockfrost.io/api/v0";
 
     const apiUrl = `${baseUrl}/epochs/latest`;
 
@@ -1259,7 +1251,7 @@ export class blockfrostCommand {
         ? this.preprod_baseUrl
         : network === "preview"
           ? this.preview_baseUrl
-          : "https://cardano-mainnet.blockfrost.io/api/v0"; // default to mainnet
+          : "https://cardano-mainnet.blockfrost.io/api/v0";
 
     const apiUrl = `${baseUrl}/epochs/latest/parameters`;
 

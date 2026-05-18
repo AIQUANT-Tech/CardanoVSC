@@ -1,7 +1,6 @@
 
 import vscode from 'vscode';
 import axios from 'axios';
-import { OpenWalletManagementWebview } from '../webview_ui/wallet_webview';
 
 export async function storeNetworkConfig(selectedNetwork: string, apiKey: string, extensionContext: vscode.ExtensionContext) {
   // Get the existing configurations from global state
@@ -38,7 +37,6 @@ export function getFirstNetworkConfig(extensionContext: vscode.ExtensionContext)
   return storedConfigs.length > 0 ? storedConfigs[0] : null;
 }
 
-// Retrieve the stored network configurations from global state
 export async function getNetworkConfigs(extensionContext: vscode.ExtensionContext): Promise<{ network: string, apiKey: string }[]> {
     const configs = extensionContext.globalState.get<{ network: string, apiKey: string }[]>('cardano.node');
     return Array.isArray(configs) ? configs : []; // Ensure an array is always returned
@@ -46,32 +44,32 @@ export async function getNetworkConfigs(extensionContext: vscode.ExtensionContex
 
 
 export async function integrateCardanoNodeAPI(extensionContext: vscode.ExtensionContext): Promise<boolean> {
-    vscode.window.showInformationMessage("🚀 Starting Cardano Node API integration...");
+    vscode.window.showInformationMessage("Starting Cardano Node API integration...");
 
     try {
         // Prompt user to select a network
         const selectedNetwork = await vscode.window.showQuickPick(
             ["Mainnet", "Preprod", "Preview"],
             {
-                placeHolder: "🌐 Select the network for Cardano Node",
+                placeHolder: "Select the network for Cardano Node",
                 canPickMany: false
             }
         );
 
         if (!selectedNetwork) {
-            vscode.window.showErrorMessage("⚠️ No network selected!");
+            vscode.window.showErrorMessage("No network selected.");
             return false;
         }
 
         // Prompt user to input Blockfrost API key
         const apiKey = await vscode.window.showInputBox({
-            prompt: "🔑 Enter your Blockfrost API key",
+            prompt: "Enter your Blockfrost API key",
             ignoreFocusOut: true,
             validateInput: (value) => (value ? "" : "API key is required!")
         });
 
         if (!apiKey) {
-            vscode.window.showErrorMessage("⚠️ API key is required!");
+            vscode.window.showErrorMessage("API key is required.");
             return false;
         }
 
@@ -82,7 +80,7 @@ export async function integrateCardanoNodeAPI(extensionContext: vscode.Extension
         );
         return false;
       }else{
-        vscode.window.showInformationMessage(`🎉 Successfully connected cardano node  on ${selectedNetwork}! through blockfrost`);
+        vscode.window.showInformationMessage(`Successfully connected cardano node on ${selectedNetwork} through blockfrost`);
 
       }
 
@@ -101,7 +99,7 @@ export async function integrateCardanoNodeAPI(extensionContext: vscode.Extension
   
     const selectedConfig = networkConfigs.find(config => config.network === network);
     if (!selectedConfig) {
-      vscode.window.showErrorMessage(`❌ Configuration not found for ${network}`);
+      vscode.window.showErrorMessage(`Configuration not found for ${network}`);
       return false;
     }
   
@@ -110,25 +108,20 @@ export async function integrateCardanoNodeAPI(extensionContext: vscode.Extension
     try {
       // Test the connection
       const isValidApiKey = await valApiKey(selectedConfig.apiKey,selectedConfig.network);
-      if (isValidApiKey) {   
-        vscode.window.showInformationMessage(`🎉 Successfully connected to ${network} network!`);
-         // Reorder the selected network to be at the front and update global state
+      if (isValidApiKey) {
+        vscode.window.showInformationMessage(`Connected to ${network} network`);
         const reorderedConfigs = networkConfigs.filter(config => config.network !== network);
         reorderedConfigs.unshift(selectedConfig);
         await extensionContext.globalState.update('cardano.node', reorderedConfigs);
         const firstConfig = getFirstNetworkConfig(extensionContext);
-           
         updateStatusBar(firstConfig?.network || "No Network");
-        if (OpenWalletManagementWebview.panel) {
-          new OpenWalletManagementWebview(extensionContext, _extensionUri).initialize();
-        }
         return true;
       } else {
-        vscode.window.showErrorMessage(`😷 Failed to connect to ${network} network.`);
+        vscode.window.showErrorMessage(`Failed to connect to ${network} network.`);
         return false;
       }
     } catch (error: any) {
-      vscode.window.showErrorMessage(`❌ Error connecting to ${network}: ${error.message || error}`);
+      vscode.window.showErrorMessage(`Error connecting to ${network}: ${error.message || error}`);
       return false;
     }
   }
@@ -145,27 +138,18 @@ export function registerNetworkCommand(context: vscode.ExtensionContext,_extensi
           );
           
           if (action === "Yes") {
-            if(await integrateCardanoNodeAPI(context)){
-              if (OpenWalletManagementWebview.panel) {
-                new OpenWalletManagementWebview(context, _extensionUri).initialize();
-        
-              }}}
+            await integrateCardanoNodeAPI(context);
+          }
           return;
-      }else if(networks.length===1){
+      } else if(networks.length===1){
         const action = await vscode.window.showInformationMessage(
-          "required more than one to switch network . Would you like to add one now?",
+          "At least two networks are needed to switch. Would you like to add one now?",
           "Yes", "No"
       );
       if (action === "Yes") {
-        if(await integrateCardanoNodeAPI(context)){
-          if (OpenWalletManagementWebview.panel) {
-            new OpenWalletManagementWebview(context, _extensionUri).initialize();
-    
-          }
-        }
-   
-       }
-         return;
+        await integrateCardanoNodeAPI(context);
+      }
+      return;
       
       }
 
@@ -218,21 +202,15 @@ export async function deleteNetworkConfig(networkToDelete: string, extensionCont
       // Update the global state with the remaining configurations
       await extensionContext.globalState.update('cardano.node', updatedConfigs);
       
-      // If the deleted network was the currently active one, update the status bar
       const firstConfig = getFirstNetworkConfig(extensionContext);
-      if (OpenWalletManagementWebview.panel) {
-        new OpenWalletManagementWebview(extensionContext, _extensionUri).initialize();
-
-      }
       updateStatusBar(firstConfig?.network || "No Network");
       
  
-      vscode.window.showInformationMessage(`✅ Successfully deleted ${networkToDelete} network configuration`);
+      vscode.window.showInformationMessage(`Deleted ${networkToDelete} network configuration`);
 
       return true;
   } catch (error: any) {
-      vscode.window.showErrorMessage(`❌ Failed to delete network configuration: ${error.message || error}`);
-      console.error("Delete network error:", error);
+      vscode.window.showErrorMessage(`Failed to delete network configuration: ${error.message || error}`);
       return false;
   }
 }

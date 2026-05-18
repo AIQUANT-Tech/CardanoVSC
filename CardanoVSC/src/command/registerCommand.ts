@@ -15,8 +15,6 @@ export class extensionCommand {
     this.registerCommands();
   }
 
-  // new 
-
   public getNetwork(): string | null {
     const network = this.extensionContext.globalState.get<string>("cardano.network");
     if (!network) {
@@ -25,7 +23,6 @@ export class extensionCommand {
     }
     return network;
   }
-  //
 
   private registerCommands(): void {
 
@@ -142,15 +139,12 @@ export class extensionCommand {
       this.extensionContext.globalState.get<string>("cardano.apiKey");
 
     if (!storedApiKey) {
-      // Notify the user and execute the API integration command
       vscode.window.showErrorMessage(
-        "API key not found! Starting API integration setup..."
+        "API key not found. Starting API integration setup..."
       );
 
-      // Execute the API integration command
       vscode.commands.executeCommand("cardano.apiIntegration");
 
-      // Check again after the command completes
       const updatedApiKey =
         this.extensionContext.globalState.get<string>("cardano.apiKey");
 
@@ -175,7 +169,7 @@ export class extensionCommand {
     const curlCommand = `curl -X GET "${apiUrl}" --header "apiKey: ${apiKey}"`;
 
     childprocess.exec(curlCommand, (error, stdout, stderr) => {
-      if (error) {const network = this.getNetwork();
+      if (error) {
         vscode.window.showErrorMessage(`Error: ${stderr || error.message}`);
         return;
       }

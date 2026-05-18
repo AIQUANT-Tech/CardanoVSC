@@ -3,46 +3,33 @@ import * as fs from "fs/promises";
 import * as path from "path";
 import { getFirstNetworkConfig, getNetworkConfigs, integrateCardanoNodeAPI } from "../config/cardanoNodeIntegration";
 import { initializeLucid } from "./implementation";
-import { OpenWalletManagementWebview } from "../webview_ui/wallet_webview";
 
 export async function selectFile(context: vscode.ExtensionContext,_extensionUri:vscode.Uri) {
   try {
-    // 1️⃣ Check network availability
     const networks = await getNetworkConfigs(context);
     if (!networks || networks.length === 0) {
       const action = await vscode.window.showErrorMessage(
         "No Cardano network configured. Would you like to configure one now?",
         "Configure Network", "Cancel"
       );
-      
       if (action === "Configure Network") {
-       const check= await integrateCardanoNodeAPI(context);
-        if(check){
-                 if (OpenWalletManagementWebview.panel) {
-                   new OpenWalletManagementWebview(context, _extensionUri).initialize();
-       
-                 }
-               }
+        await integrateCardanoNodeAPI(context);
       }
       return;
     }
-    
-    // 2️⃣ Select and parse Plutus file
+
     const { scriptJson, scriptPath } = await selectPlutusFile();
     if (!scriptJson || !scriptPath) {return;}
 
-    // 3️⃣ Initialize Lucid with network config
     const firstConfig = getFirstNetworkConfig(context);
     if (!firstConfig) {throw new Error("Failed to get network configuration.");}
 
     const lucid = await initializeLucid(firstConfig.network, firstConfig.apiKey);
     if (!lucid) {throw new Error("Failed to initialize Lucid.");}
 
-    // 4️⃣ Generate address
     const scriptAddress = generateScriptAddress(lucid, scriptJson.cborHex);
     const addrFilePath = getAddrFilePath(scriptPath);
 
-    // 5️⃣ Check if file exists and confirm overwrite
     if (await fileExists(addrFilePath)) {
       const overwrite = await vscode.window.showWarningMessage(
         `Address file "${path.basename(addrFilePath)}" already exists. Overwrite?`,
@@ -56,18 +43,10 @@ export async function selectFile(context: vscode.ExtensionContext,_extensionUri:
       }
     }
 
-    // 6️⃣ Save address file
     await saveAddressFile(addrFilePath, scriptAddress);
- // Show additional detailed information
-const fullPath = path.resolve(addrFilePath);
-const addressPreview = scriptAddress.length > 30 
-    ? `${scriptAddress.substring(0, 15)}...${scriptAddress.slice(-15)}`
-    : scriptAddress;
-
+    const fullPath = path.resolve(addrFilePath);
     vscode.window.showInformationMessage(
-      `✅ Script address generated successfully.................................
-        📁 Location: ${fullPath}          
-        `,
+      `Script address generated. Location: ${fullPath}`,
       "Open Folder",
       "Copy Address"
     ).then((selection) => {
@@ -81,11 +60,10 @@ const addressPreview = scriptAddress.length > 30
     
 
   } catch (error: any) {
-    vscode.window.showErrorMessage(`❌ Error: ${error.message}`);
+    vscode.window.showErrorMessage(`Error: ${error.message}`);
   }
 }
 
-// 🛠️ Helper function to check file existence
 async function fileExists(filePath: string): Promise<boolean> {
   try {
     await fs.access(filePath);
@@ -95,12 +73,10 @@ async function fileExists(filePath: string): Promise<boolean> {
   }
 }
 
-// 🗺️ Get .addr file path
 function getAddrFilePath(plutusPath: string): string {
   return plutusPath.replace(/\.plutus$/i, '.addr');
 }
 
-// 💾 Save address to file
 async function saveAddressFile(filePath: string, address: string) {
   try {
     await fs.writeFile(filePath, address);
@@ -109,7 +85,6 @@ async function saveAddressFile(filePath: string, address: string) {
   }
 }
 
-// 📜 Select and parse Plutus file
 export async function selectPlutusFile(): Promise<{ scriptJson: any | null, scriptPath: string | null }> {
   const scriptUri = await vscode.window.showOpenDialog({
     canSelectMany: false,
@@ -149,7 +124,6 @@ export async function selectPlutusFile(): Promise<{ scriptJson: any | null, scri
   }
 }
 
-// 🔑 Generate script address
 export function generateScriptAddress(lucid: any, cborHex: string): string {
   if (!cborHex || typeof cborHex !== 'string') {
     throw new Error("Invalid CBOR hex format");

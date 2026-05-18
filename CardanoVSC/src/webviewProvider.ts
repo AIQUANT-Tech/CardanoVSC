@@ -1,7 +1,6 @@
 
 import * as vscode from "vscode";
 import { integrateCardanoAPI } from "./config/cardanoApiIntegration";
-import { OpenWalletManagementWebview } from "./webview_ui/wallet_webview";
 import { integrateCardanoNodeAPI } from "./config/cardanoNodeIntegration";
 import { selectFile } from "./implementation/deployment";
 
@@ -32,19 +31,10 @@ export class MyWebviewViewProvider implements vscode.WebviewViewProvider {
           const valid = await integrateCardanoAPI(vscode, this.context);
           break;
         case "nodeIntegration":
-         const valid_connection= await integrateCardanoNodeAPI(this.context);
-         if(valid_connection){
-          if (OpenWalletManagementWebview.panel) {
-            new OpenWalletManagementWebview(this.context, this._extensionUri).initialize();
-
-          }
-        }
+          await integrateCardanoNodeAPI(this.context);
           break;
         case "openCardanoScan":
           vscode.env.openExternal(vscode.Uri.parse("https://cardanoscan.io/"));
-          break;
-        case "walletManagement":
-          new OpenWalletManagementWebview(this.context, this._extensionUri);
           break;
         case "deployment":
           await selectFile(this.context,this._extensionUri);
@@ -99,7 +89,6 @@ export class MyWebviewViewProvider implements vscode.WebviewViewProvider {
         <button id="apiIntegrationButton">Cardano API Integration</button>
         <button id="openCardanoScan">Go to CardanoScan Website</button>
         <button id="nodeIntegrationButton">Cardano Node Connection</button>
-        <button id="walletManagementButton">Wallet Management</button>
         <button id="deploySmartContract">Deploy Smart Contract</button>
 
         <script>
@@ -109,9 +98,6 @@ export class MyWebviewViewProvider implements vscode.WebviewViewProvider {
           });
           document.getElementById('openCardanoScan').addEventListener('click', () => {
             vscode.postMessage({ command: 'openCardanoScan' });
-          });
-          document.getElementById('walletManagementButton').addEventListener('click', () => {
-            vscode.postMessage({ command: 'walletManagement' });
           });
           document.getElementById('nodeIntegrationButton').addEventListener('click', () => {
             vscode.postMessage({ command: 'nodeIntegration' });

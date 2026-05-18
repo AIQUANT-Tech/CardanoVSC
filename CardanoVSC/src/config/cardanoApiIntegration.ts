@@ -3,7 +3,6 @@ import * as vscode from "vscode";
 import { exec } from "child_process";
 import { extensionCommand } from "../command/registerCommand";
 
-// === Entry Function ===
 async function integrateCardanoAPI(
   vscodeModule: typeof vscode,
   extensionContext: vscode.ExtensionContext
@@ -33,7 +32,6 @@ async function integrateCardanoAPI(
       return false;
     }
 
-    // === Validation ===
     const isValid = await validateApiKey(network, apiKey);
     if (!isValid) {
       vscodeModule.window.showErrorMessage("Invalid API Key!");
@@ -41,7 +39,6 @@ async function integrateCardanoAPI(
     }
 
 
-    // === Save to Global State ===
     vscode.commands.executeCommand("setContext", "cardanoNetwork", network);
 
     extensionContext.globalState.update("cardano.apiKey", apiKey);
@@ -54,7 +51,6 @@ async function integrateCardanoAPI(
       }`
     );
   } catch (err: any) {
-    console.error(err.message || err);
     vscode.window.showErrorMessage(`Error: ${err.message || err}`);
   }
 }
@@ -67,14 +63,12 @@ export async function validateApiKey(
   let headers: Record<string, string> = {};
 
   if (network === "mainnet") {
-    // === CardanoScan mainnet ===
     apiUrl = "https://api.cardanoscan.io/api/v1/block/latest";
     headers = {
       apiKey: apiKey,
       Accept: "application/json",
     };
   } else {
-    // === Blockfrost for testnets ===
     const projectId = apiKey;
     const blockfrostNetwork = network === "preprod" ? "preprod" : "preview";
     apiUrl = `https://cardano-${blockfrostNetwork}.blockfrost.io/api/v0/blocks/latest`;
@@ -87,8 +81,7 @@ export async function validateApiKey(
   try {
     const response = await executeCurlCommand(apiUrl, headers);
     return !!response.hash;
-  } catch (err) {
-    console.error("API Validation Error:", err);
+  } catch {
     return false;
   }
 }
