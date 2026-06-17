@@ -172,9 +172,9 @@
     "@vscode/debugadapter": "^1.68.0",
     "@vscode/debugprotocol": "^1.68.0",
     "await-notify": "^1.0.1",
-    "axios": "^1.9.0",
+    "axios": "^1.15.2",
     "chai": "^5.2.0",
-    "lodash": "^4.17.21",
+    "lodash": "^4.18.1",
     "rxjs": "^7.8.2",
     "vscode-debugadapter": "^1.51.0",
     "vscode-debugadapter-testsupport": "^1.51.0"
